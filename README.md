@@ -34,7 +34,7 @@
 
 ## 🧐 About The Project
 
-**HASS Quality Properties** is a high-performance, enterprise-grade real estate management ecosystem template. 
+**HASS Quality Properties** is a high-performance, enterprise-grade real estate management ecosystem. 
 Developed by **MASK INTELLIGENCE**, this platform bridges the gap between premium property owners and discerning buyers/renters through a sophisticated digital interface.
 
 ### The Problem
