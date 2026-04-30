@@ -1,21 +1,23 @@
+'use client';
+
 import { Home, Building2, Phone, Mail, MapPin, Menu, X, Facebook, Instagram, Twitter } from 'lucide-react';
 import WhatsAppIcon from './WhatsAppIcon';
 import CompanyLogo from './CompanyLogo';
 
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const location = useLocation();
+  const pathname = usePathname();
 
-  const isActive = (path: string) => location.pathname === path;
+  const isActive = (path: string) => pathname === path;
 
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'Properties', path: '/properties' },
     { name: 'About Us', path: '/about' },
-    { name: 'Testimonials', path: '/testimonials' },
     { name: 'Contact', path: '/contact' },
   ];
 
@@ -24,7 +26,7 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 flex items-center gap-2">
+            <Link href="/" className="flex-shrink-0 flex items-center gap-2">
               <CompanyLogo className="h-12 w-auto object-contain" />
               <div className="flex flex-col">
                 <span className="font-bold text-xl tracking-tight text-gray-900">HASS QUALITY</span>
@@ -32,13 +34,13 @@ export default function Navbar() {
               </div>
             </Link>
           </div>
-          
+
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link) => (
               <Link
                 key={link.name}
-                to={link.path}
+                href={link.path}
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ${
                   isActive(link.path)
                     ? 'text-emerald-600 bg-emerald-50'
@@ -49,7 +51,7 @@ export default function Navbar() {
               </Link>
             ))}
             <Link
-              to="/contact"
+              href="/contact"
               className="bg-emerald-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-emerald-700 transition-colors shadow-sm"
             >
               Get in Touch
@@ -83,7 +85,7 @@ export default function Navbar() {
             {navLinks.map((link) => (
               <Link
                 key={link.name}
-                to={link.path}
+                href={link.path}
                 onClick={() => setIsOpen(false)}
                 className={`block px-3 py-2 rounded-md text-base font-medium ${
                   isActive(link.path)

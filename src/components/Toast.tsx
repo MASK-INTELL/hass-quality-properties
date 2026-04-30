@@ -1,3 +1,5 @@
+'use client';
+
 import { useState, useCallback, useEffect, createContext, useContext, ReactNode } from 'react';
 import { CheckCircle2, XCircle, AlertCircle, X } from 'lucide-react';
 

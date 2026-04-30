@@ -1,10 +1,20 @@
-import React, { useState, useEffect } from 'react';
+'use client';
+
+import { useState, useEffect } from 'react';
 import { Maximize, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import { Link } from 'react-router-dom';
+import { supabase } from '@/lib/supabase-browser';
+import Link from 'next/link';
+
+interface Property {
+  id: string;
+  title: string;
+  price: string;
+  status: string;
+  image_url: string;
+}
 
 export default function PropertyGallery() {
-  const [galleryItems, setGalleryItems] = useState<any[]>([]);
+  const [galleryItems, setGalleryItems] = useState<Property[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -20,7 +30,7 @@ export default function PropertyGallery() {
 
         if (error) throw error;
         if (data) {
-          setGalleryItems(data.map(p => ({ ...p, imageUrl: p.image_url })));
+          setGalleryItems(data);
         }
       } catch (error) {
         console.error('Error fetching gallery:', error);
@@ -66,19 +76,17 @@ export default function PropertyGallery() {
         </div>
 
         <div className="relative h-[500px] md:h-[600px] rounded-2xl overflow-hidden group">
-          {/* Main Slideshow Image */}
-          <div 
+          <div
             className="absolute inset-0 cursor-pointer transition-transform duration-700 ease-in-out"
             onClick={() => setIsLightboxOpen(true)}
           >
             <img
-              src={currentItem.imageUrl}
+              src={currentItem.image_url}
               alt={currentItem.title}
               className="w-full h-full object-cover"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-            
-            {/* Hover Overlay */}
+
             <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
               <span className="bg-white/20 backdrop-blur-sm text-white px-6 py-3 rounded-full font-medium flex items-center gap-2">
                 <Maximize className="h-5 w-5" /> View Fullscreen
@@ -86,7 +94,6 @@ export default function PropertyGallery() {
             </div>
           </div>
 
-          {/* Property Info Overlay (Hook) */}
           <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 pointer-events-none">
             <div className="pointer-events-auto max-w-3xl">
               <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold mb-4 uppercase tracking-wide shadow-lg">
@@ -99,7 +106,7 @@ export default function PropertyGallery() {
                 {currentItem.price}
               </p>
               <Link
-                to={`/properties/${currentItem.id}`}
+                href={`/properties/${currentItem.id}`}
                 className="inline-block px-8 py-3 bg-white text-gray-900 rounded-lg font-bold hover:bg-gray-100 transition-colors shadow-lg"
               >
                 View Details
@@ -107,7 +114,6 @@ export default function PropertyGallery() {
             </div>
           </div>
 
-          {/* Navigation Controls */}
           <button
             onClick={handlePrev}
             className="absolute left-4 top-1/2 -translate-y-1/2 p-3 rounded-full bg-black/30 text-white hover:bg-black/50 transition-colors backdrop-blur-sm opacity-0 group-hover:opacity-100"
@@ -121,7 +127,6 @@ export default function PropertyGallery() {
             <ChevronRight className="h-8 w-8" />
           </button>
 
-          {/* Progress Indicators */}
           <div className="absolute bottom-8 right-8 flex gap-2">
             {galleryItems.map((_, idx) => (
               <button
@@ -139,10 +144,9 @@ export default function PropertyGallery() {
         </div>
       </div>
 
-      {/* Fullscreen Lightbox */}
       {isLightboxOpen && (
         <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center">
-          <button 
+          <button
             onClick={() => setIsLightboxOpen(false)}
             className="absolute top-6 right-6 text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors z-50"
           >
@@ -153,14 +157,14 @@ export default function PropertyGallery() {
             {currentIndex + 1} / {galleryItems.length}
           </div>
 
-          <button 
+          <button
             onClick={handlePrev}
             className="absolute left-6 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors z-50"
           >
             <ChevronLeft className="h-10 w-10" />
           </button>
-          
-          <button 
+
+          <button
             onClick={handleNext}
             className="absolute right-6 text-white/70 hover:text-white p-3 rounded-full hover:bg-white/10 transition-colors z-50"
           >
@@ -168,9 +172,9 @@ export default function PropertyGallery() {
           </button>
 
           <div className="w-full h-full flex flex-col items-center justify-center p-4 md:p-12" onClick={() => setIsLightboxOpen(false)}>
-            <img 
-              src={currentItem.imageUrl} 
-              alt={`${currentItem.title} - Fullscreen`} 
+            <img
+              src={currentItem.image_url}
+              alt={`${currentItem.title} - Fullscreen`}
               className="max-w-full max-h-[85vh] object-contain select-none"
               onClick={(e) => e.stopPropagation()}
             />

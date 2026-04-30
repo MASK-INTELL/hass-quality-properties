@@ -1,7 +1,7 @@
 import { Building2, Mail, MapPin, Phone } from 'lucide-react';
 import WhatsAppIcon from './WhatsAppIcon';
 import CompanyLogo from './CompanyLogo';
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export default function Footer() {
   return (
@@ -28,19 +28,19 @@ export default function Footer() {
             <h3 className="text-lg font-semibold mb-4 text-emerald-500">Quick Links</h3>
             <ul className="space-y-2">
               <li>
-                <Link to="/" className="text-gray-400 hover:text-white transition-colors text-sm">Home</Link>
+                <Link href="/" className="text-gray-400 hover:text-white transition-colors text-sm">Home</Link>
               </li>
               <li>
-                <Link to="/properties" className="text-gray-400 hover:text-white transition-colors text-sm">Properties</Link>
+                <Link href="/properties" className="text-gray-400 hover:text-white transition-colors text-sm">Properties</Link>
               </li>
               <li>
-                <Link to="/about" className="text-gray-400 hover:text-white transition-colors text-sm">About Us</Link>
+                <Link href="/about" className="text-gray-400 hover:text-white transition-colors text-sm">About Us</Link>
               </li>
               <li>
-                <Link to="/testimonials" className="text-gray-400 hover:text-white transition-colors text-sm">Testimonials</Link>
+                <Link href="/testimonials" className="text-gray-400 hover:text-white transition-colors text-sm">Testimonials</Link>
               </li>
               <li>
-                <Link to="/contact" className="text-gray-400 hover:text-white transition-colors text-sm">Contact</Link>
+                <Link href="/contact" className="text-gray-400 hover:text-white transition-colors text-sm">Contact</Link>
               </li>
             </ul>
           </div>

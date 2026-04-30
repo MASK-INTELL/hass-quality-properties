@@ -1,7 +1,6 @@
-import { createClient } from '@supabase/supabase-js';
+import { createBrowserClient } from '@supabase/ssr';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://qmuuovbalclrxtblythc.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'sb_publishable_-eQChPPGjegVjLfXQwPGuw_mAHvdsh_';
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://qmuuovbalclrxtblythc.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'sb_publishable_-eQChPPGjegVjLfXQwPGuw_mAHvdsh_';
 
-// Create a single supabase client for interacting with your database
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const createClient = () => createBrowserClient(supabaseUrl, supabaseAnonKey);

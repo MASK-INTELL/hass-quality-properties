@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import LogoLightbox from './LogoLightbox';
-import logoUrl from '../assets/logo.png';
+
+const logoUrl = '/logo.png';
 
 interface CompanyLogoProps {
   className?: string;
