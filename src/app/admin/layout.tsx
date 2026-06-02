@@ -25,7 +25,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn && pathname !== '/admin/login' && pathname !== '/admin/sign-up') {
+    if (isLoaded && !isSignedIn && pathname !== '/admin/login') {
       router.push('/admin/login');
     }
   }, [isLoaded, isSignedIn, pathname, router]);
@@ -38,11 +38,11 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!isSignedIn && pathname !== '/admin/login' && pathname !== '/admin/sign-up') {
+  if (!isSignedIn && pathname !== '/admin/login') {
     return null;
   }
 
-  if (pathname === '/admin/login' || pathname === '/admin/sign-up') {
+  if (pathname === '/admin/login') {
     return <>{children}</>;
   }
 
