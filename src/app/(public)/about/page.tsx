@@ -1,4 +1,20 @@
+import type { Metadata } from 'next';
 import { Building2, Users, Target, Award } from 'lucide-react';
+
+export const metadata: Metadata = {
+  title: 'About Us',
+  description: 'Learn about Hass Quality Properties — your trusted real estate partner in Fort Portal Tourism City, Uganda with over 11 years of experience.',
+  openGraph: {
+    title: 'About Hass Quality Properties',
+    description: 'Your trusted real estate partner in Fort Portal Tourism City, Uganda.',
+    url: '/about',
+  },
+  twitter: {
+    title: 'About Hass Quality Properties',
+    description: 'Your trusted real estate partner in Fort Portal Tourism City, Uganda.',
+  },
+  alternates: { canonical: '/about' },
+};
 
 export default function About() {
   return (

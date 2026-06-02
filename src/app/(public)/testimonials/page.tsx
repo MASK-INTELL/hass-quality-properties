@@ -1,10 +1,43 @@
+import type { Metadata } from 'next';
 import { Star, Mail } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import { testimonials } from '@/data/testimonials';
 
+export const metadata: Metadata = {
+  title: 'Client Testimonials',
+  description: 'Read what our clients say about Hass Quality Properties. Over 11 years of trusted real estate service in Fort Portal, Uganda.',
+  openGraph: {
+    title: 'Client Success Stories | Hass Quality Properties',
+    description: 'Read what our clients say about their experience with Hass Quality Properties in Fort Portal, Uganda.',
+    url: '/testimonials',
+  },
+  twitter: {
+    title: 'Client Success Stories | Hass Quality Properties',
+    description: 'Read what our clients say about their experience with us.',
+  },
+  alternates: { canonical: '/testimonials' },
+};
+
+const reviewJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  name: 'Hass Quality Properties',
+  review: testimonials.slice(0, 10).map((t) => ({
+    '@type': 'Review',
+    author: { '@type': 'Person', name: t.name },
+    reviewRating: { '@type': 'Rating', ratingValue: t.rating, bestRating: 5 },
+    reviewBody: t.quote,
+  })),
+};
+
 export default function Testimonials() {
   return (
-    <div className="bg-gray-50 min-h-screen pb-20">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewJsonLd) }}
+      />
+      <div className="bg-gray-50 min-h-screen pb-20">
       {/* Header */}
       <div className="bg-emerald-900 text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -46,7 +79,7 @@ export default function Testimonials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => (
-            <div
+            <article
               key={testimonial.id}
               className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative mt-6"
             >
@@ -69,10 +102,11 @@ export default function Testimonials() {
                   <p className="text-emerald-600 text-sm font-medium">{testimonial.role}</p>
                 </div>
               </div>
-            </div>
+            </article>
           ))}
         </div>
       </div>
     </div>
+    </>
   );
 }

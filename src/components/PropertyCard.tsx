@@ -33,7 +33,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   const favorite = isFavorite(property.id);
 
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
+    <article className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
       <div className="relative h-64 overflow-hidden group">
         <Link href={`/properties/${property.id}`} className="block w-full h-full">
           <img
@@ -128,6 +128,6 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           </Link>
         </div>
       </div>
-    </div>
+    </article>
   );
 }
