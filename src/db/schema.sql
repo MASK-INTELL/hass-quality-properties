@@ -58,7 +58,7 @@ CREATE INDEX IF NOT EXISTS idx_inquiries_created_at    ON inquiries(created_at D
 
 -- === Seed Data: 9 sample properties ===
 
-INSERT INTO properties (title, description, price, location, category, type, status, image_url, images, beds, baths, area, video_url)
+INSERT INTO properties (title, description, price, location, category, type, status, image_url, images, beds, baths, area, video_url, make, model, year, mileage, transmission, fuel_type)
 SELECT * FROM (VALUES
   (
     'Modern Family Home in Booma',
@@ -67,8 +67,8 @@ SELECT * FROM (VALUES
     'Real Estate', 'House', 'For Sale',
     'https://images.unsplash.com/photo-1600596542815-2250657d2fc5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     ARRAY['https://images.unsplash.com/photo-1600596542815-2250657d2fc5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80','https://images.unsplash.com/photo-1600607687931-cebf0746e50e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80','https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'],
-    4, 3, '25 Decimals',
-    'https://www.youtube.com/embed/tgbNymZ7vqY'
+    4, 3, '25 Decimals', 'https://www.youtube.com/embed/tgbNymZ7vqY',
+    NULL, NULL, NULL, NULL, NULL, NULL
   ),
   (
     'Prime Commercial Plot',
@@ -76,7 +76,8 @@ SELECT * FROM (VALUES
     'UGX 150,000,000', 'Fort Portal City Center',
     'Real Estate', 'Land', 'For Sale',
     'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    '{}', NULL, NULL, '50x100 ft', NULL
+    '{}', NULL, NULL, '50x100 ft', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL
   ),
   (
     'Luxury Apartment with Mountain View',
@@ -84,7 +85,8 @@ SELECT * FROM (VALUES
     'UGX 1,500,000 / Month', 'Boma, Fort Portal',
     'Rentals', 'Apartment', 'For Rent',
     'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    '{}', 2, 2, '120 sqm', NULL
+    '{}', 2, 2, '120 sqm', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL
   ),
   (
     'Farm Land in Kyenjojo',
@@ -92,7 +94,8 @@ SELECT * FROM (VALUES
     'UGX 25,000,000 per Acre', 'Kyenjojo District',
     'Real Estate', 'Land', 'For Sale',
     'https://images.unsplash.com/photo-1500076656116-558758c991c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    '{}', NULL, NULL, '10 Acres', NULL
+    '{}', NULL, NULL, '10 Acres', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL
   ),
   (
     'Colonial Style Bungalow',
@@ -100,7 +103,8 @@ SELECT * FROM (VALUES
     'UGX 380,000,000', 'Kabarole Hill',
     'Real Estate', 'House', 'For Sale',
     'https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    '{}', 3, 2, '30 Decimals', NULL
+    '{}', 3, 2, '30 Decimals', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL
   ),
   (
     'Lake View Resort Land',
@@ -108,7 +112,8 @@ SELECT * FROM (VALUES
     'UGX 800,000,000', 'Crater Lakes Region',
     'Real Estate', 'Land', 'For Sale',
     'https://images.unsplash.com/photo-1449156493391-d2cfa28e468b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    '{}', NULL, NULL, '5 Acres', NULL
+    '{}', NULL, NULL, '5 Acres', NULL,
+    NULL, NULL, NULL, NULL, NULL, NULL
   ),
   (
     'Toyota Land Cruiser Prado TX',
@@ -116,7 +121,7 @@ SELECT * FROM (VALUES
     'UGX 120,000,000', 'Fort Portal City Center',
     'Vehicles', 'Car', 'For Sale',
     'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    '{}', NULL, NULL, NULL,
+    '{}', NULL, NULL, NULL, NULL,
     NULL, NULL, 2015, '85,000 km', 'Automatic', 'Diesel'
   ),
   (
@@ -125,7 +130,7 @@ SELECT * FROM (VALUES
     'UGX 45,000,000', 'Booma, Fort Portal',
     'Vehicles', 'Car', 'For Sale',
     'https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    '{}', NULL, NULL, NULL,
+    '{}', NULL, NULL, NULL, NULL,
     NULL, NULL, 2012, '110,000 km', 'Automatic', 'Petrol'
   ),
   (
@@ -134,7 +139,7 @@ SELECT * FROM (VALUES
     'UGX 15,000,000', 'Kabarole',
     'Motorcycles', 'Motorcycle', 'For Sale',
     'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    '{}', NULL, NULL, NULL,
+    '{}', NULL, NULL, NULL, NULL,
     'Yamaha', 'YZ250F', 2019, '2,500 km', 'Manual', 'Petrol'
   )
 ) AS v
