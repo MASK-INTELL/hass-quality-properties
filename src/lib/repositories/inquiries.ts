@@ -36,6 +36,6 @@ export async function markInquiryRead(id: string): Promise<void> {
 }
 
 export async function deleteInquiry(id: string): Promise<boolean> {
-  const result = await sql`DELETE FROM inquiries WHERE id = ${id}`;
-  return result.count > 0;
+  const result = await sql`DELETE FROM inquiries WHERE id = ${id} RETURNING id`;
+  return result.length > 0;
 }

@@ -138,8 +138,8 @@ export async function updateProperty(id: string, data: Partial<Property>): Promi
 }
 
 export async function deleteProperty(id: string): Promise<boolean> {
-  const result = await sql`DELETE FROM properties WHERE id = ${id}`;
-  return result.count > 0;
+  const result = await sql`DELETE FROM properties WHERE id = ${id} RETURNING id`;
+  return result.length > 0;
 }
 
 export async function getPropertiesGallery(limit = 10): Promise<Pick<Property, 'id' | 'title' | 'price' | 'status' | 'image_url'>[]> {
