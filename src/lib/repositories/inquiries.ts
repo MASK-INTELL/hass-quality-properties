@@ -12,7 +12,8 @@ export interface Inquiry {
 }
 
 export async function getAllInquiries(): Promise<Inquiry[]> {
-  return sql`SELECT * FROM inquiries ORDER BY created_at DESC` as Promise<Inquiry[]>;
+  const rows = await sql`SELECT * FROM inquiries ORDER BY created_at DESC`;
+  return rows as Inquiry[];
 }
 
 export async function createInquiry(data: {
@@ -27,7 +28,7 @@ export async function createInquiry(data: {
     VALUES (${data.name}, ${data.email}, ${data.phone || null}, ${data.message}, ${data.property_title || null})
     RETURNING *
   `;
-  return inquiry as Inquiry;
+  return inquiry as unknown as Inquiry;
 }
 
 export async function markInquiryRead(id: string): Promise<void> {
