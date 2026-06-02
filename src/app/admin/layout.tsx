@@ -1,12 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase-browser';
-import type { Session } from '@supabase/supabase-js';
+import { useUser, useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { LayoutDashboard, Building2, MessageSquare, Settings, LogOut, Menu, X, ChevronRight, Image } from 'lucide-react';
+import {
+  LayoutDashboard, Building2, MessageSquare, Settings, LogOut, Menu, X, ChevronRight, Image
+} from 'lucide-react';
 import CompanyLogo from '@/components/CompanyLogo';
+import { useEffect, useState } from 'react';
 
 const navItems = [
   { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
@@ -17,37 +18,19 @@ const navItems = [
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const { isLoaded, isSignedIn, user } = useUser();
+  const { signOut } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
+  const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setLoading(false);
-      if (!session && pathname !== '/admin/login') {
-        router.push('/admin/login');
-      }
-    });
+    if (isLoaded && !isSignedIn && pathname !== '/admin/login') {
+      router.push('/admin/login');
+    }
+  }, [isLoaded, isSignedIn, pathname, router]);
 
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (!session && pathname !== '/admin/login') {
-        router.push('/admin/login');
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [pathname, router]);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push('/admin/login');
-  };
-
-  if (loading) {
+  if (!isLoaded) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600" />
@@ -55,16 +38,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  if (!session && pathname !== '/admin/login') {
+  if (!isSignedIn && pathname !== '/admin/login') {
     return null;
   }
 
-  if (pathname === '/admin/login') {
+  if (pathname === '/admin/login' || pathname === '/admin/sign-up') {
     return <>{children}</>;
   }
 
   const isActive = (item: typeof navItems[0]) =>
     item.exact ? pathname === item.path : pathname.startsWith(item.path);
+
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/admin/login');
+  };
 
   const SidebarContent = () => (
     <>
@@ -98,7 +86,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
       <div className="p-3 border-t border-gray-100 flex-shrink-0">
         <div className="px-3 py-2 mb-1">
-          <p className="text-xs text-gray-400 truncate">{session?.user?.email}</p>
+          <p className="text-xs text-gray-400 truncate">{user?.primaryEmailAddress?.emailAddress}</p>
         </div>
         <button
           onClick={handleSignOut}

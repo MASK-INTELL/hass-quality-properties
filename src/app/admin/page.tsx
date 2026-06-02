@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase-browser';
 import { Building2, Home, Car, TrendingUp, Plus, ArrowRight, Clock } from 'lucide-react';
 
 interface Stats {
@@ -31,22 +30,15 @@ export default function AdminDashboard() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const { data, error } = await supabase
-          .from('properties')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-
-        if (data) {
-          setStats({
-            totalProperties: data.length,
-            forSale: data.filter((p) => p.status === 'For Sale').length,
-            forRent: data.filter((p) => p.status === 'For Rent').length,
-            vehicles: data.filter((p) => p.category === 'Vehicles' || p.category === 'Motorcycles').length,
-          });
-          setRecentProperties(data.slice(0, 5));
-        }
+        const [statsRes, propsRes] = await Promise.all([
+          fetch('/api/admin/stats'),
+          fetch('/api/admin/properties?pageSize=5'),
+        ]);
+        if (!statsRes.ok || !propsRes.ok) throw new Error('Failed to fetch');
+        const statsData = await statsRes.json();
+        const propsData = await propsRes.json();
+        setStats(statsData);
+        setRecentProperties(propsData.data);
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       } finally {

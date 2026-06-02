@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Maximize, X, ChevronLeft, ChevronRight } from 'lucide-react';
-import { supabase } from '@/lib/supabase-browser';
 import Link from 'next/link';
 
 interface Property {
@@ -22,13 +21,10 @@ export default function PropertyGallery() {
   useEffect(() => {
     async function fetchGallery() {
       try {
-        const { data, error } = await supabase
-          .from('properties')
-          .select('*')
-          .limit(10)
-          .order('created_at', { ascending: false });
+        const res = await fetch('/api/properties/gallery');
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
 
-        if (error) throw error;
         if (data) {
           setGalleryItems(data);
         }

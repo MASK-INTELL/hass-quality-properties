@@ -1,9 +1,8 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
-import { supabase } from '@/lib/supabase-browser';
-import { ArrowLeft, Save, Loader2, X, Upload, Link as LinkIcon, CheckCircle2, AlertCircle, Video, Youtube, FileVideo, Trash2 } from 'lucide-react';
+import { useState, useRef } from 'react';
+import { ArrowLeft, Save, Loader2, Upload, Trash2, ImagePlus } from 'lucide-react';
 
 interface PropertyFormData {
   title: string;
@@ -47,7 +46,8 @@ export default function AddProperty() {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState<PropertyFormData>(EMPTY_FORM);
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const mainImageInputRef = useRef<HTMLInputElement>(null);
 
   const set = (field: keyof PropertyFormData, value: string | string[]) => {
     setFormData(prev => {
@@ -57,38 +57,95 @@ export default function AddProperty() {
     });
   };
 
+  const uploadFile = async (file: File): Promise<string> => {
+    const form = new FormData();
+    form.append('file', file);
+
+    const res = await fetch('/api/upload', { method: 'POST', body: form });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.error || 'Upload failed');
+    }
+    const data = await res.json();
+    return data.url;
+  };
+
+  const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingImage(true);
+    setValidationError(null);
+    try {
+      const url = await uploadFile(file);
+      set('imageUrl', url);
+    } catch (err: any) {
+      setValidationError(err.message);
+    } finally {
+      setUploadingImage(false);
+      if (mainImageInputRef.current) mainImageInputRef.current.value = '';
+    }
+  };
+
+  const handleAdditionalImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files?.length) return;
+    setUploadingImage(true);
+    setValidationError(null);
+    try {
+      const urls: string[] = [];
+      for (const file of Array.from(files)) {
+        const url = await uploadFile(file);
+        urls.push(url);
+      }
+      set('additionalImages', [...formData.additionalImages, ...urls]);
+    } catch (err: any) {
+      setValidationError(err.message);
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const removeAdditionalImage = (index: number) => {
+    set('additionalImages', formData.additionalImages.filter((_, i) => i !== index));
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.imageUrl) {
-      setValidationError('Please add a main image.');
+      setValidationError('Please upload a main image.');
       return;
     }
     setValidationError(null);
     setLoading(true);
 
     try {
-      const { error } = await supabase.from('properties').insert([{
-        title: formData.title,
-        description: formData.description,
-        price: formData.price,
-        location: formData.location,
-        category: formData.category,
-        type: formData.type,
-        status: formData.status,
-        image_url: formData.imageUrl,
-        images: formData.additionalImages.length > 0 ? formData.additionalImages : null,
-        video_url: formData.videoUrl || null,
-        beds: formData.beds ? parseInt(formData.beds) : null,
-        baths: formData.baths ? parseInt(formData.baths) : null,
-        area: formData.area || null,
-        make: formData.make || null,
-        model: formData.model || null,
-        year: formData.year ? parseInt(formData.year) : null,
-        mileage: formData.mileage || null,
-        transmission: formData.transmission || null,
-        fuel_type: formData.fuelType || null,
-      }]);
-      if (error) throw error;
+      const res = await fetch('/api/admin/properties', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: formData.title,
+          description: formData.description,
+          price: formData.price,
+          location: formData.location,
+          category: formData.category,
+          type: formData.type,
+          status: formData.status,
+          image_url: formData.imageUrl,
+          images: formData.additionalImages.length > 0 ? formData.additionalImages : null,
+          video_url: formData.videoUrl || null,
+          beds: formData.beds ? parseInt(formData.beds) : null,
+          baths: formData.baths ? parseInt(formData.baths) : null,
+          area: formData.area || null,
+          make: formData.make || null,
+          model: formData.model || null,
+          year: formData.year ? parseInt(formData.year) : null,
+          mileage: formData.mileage || null,
+          transmission: formData.transmission || null,
+          fuel_type: formData.fuelType || null,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Failed to create property');
       router.push('/admin/properties');
     } catch (error: any) {
       setValidationError(error.message || 'Error adding property');
@@ -217,24 +274,75 @@ export default function AddProperty() {
           <h2 className="text-base font-semibold text-gray-900 mb-6">Media</h2>
           <div className="space-y-6">
             <div>
-              <label className={labelClass}>Main Image URL *</label>
-              <input type="url" required value={formData.imageUrl} onChange={e => set('imageUrl', e.target.value)}
-                placeholder="https://images.unsplash.com/..." className={inputClass} />
+              <label className={labelClass}>Main Image *</label>
+              <div className="mt-1 flex items-center gap-4">
+                <label className={`flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-colors ${uploadingImage ? 'opacity-50 pointer-events-none' : ''}`}>
+                  <input
+                    ref={mainImageInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleMainImageUpload}
+                    disabled={uploadingImage}
+                    className="hidden"
+                  />
+                  {uploadingImage ? (
+                    <><Loader2 className="h-5 w-5 animate-spin text-emerald-600" /> Uploading...</>
+                  ) : (
+                    <><Upload className="h-5 w-5 text-gray-500" /> Choose Image</>
+                  )}
+                </label>
+                {formData.imageUrl && (
+                  <button
+                    type="button"
+                    onClick={() => set('imageUrl', '')}
+                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                )}
+              </div>
               {formData.imageUrl && (
-                <div className="mt-2 rounded-xl overflow-hidden border border-gray-200 h-40">
+                <div className="mt-3 rounded-xl overflow-hidden border border-gray-200 h-48 relative">
                   <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
                 </div>
               )}
             </div>
 
             <div>
-              <label className={labelClass}>Additional Images (comma-separated URLs)</label>
-              <textarea value={formData.additionalImages.join('\n')} onChange={e => set('additionalImages', e.target.value.split('\n').filter(Boolean))}
-                placeholder="Paste image URLs, one per line" className={inputClass + ' resize-none'} rows={3} />
+              <label className={labelClass}>Additional Images</label>
+              <div className="mt-1">
+                <label className={`inline-flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-colors ${uploadingImage ? 'opacity-50 pointer-events-none' : ''}`}>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleAdditionalImageUpload}
+                    disabled={uploadingImage}
+                    className="hidden"
+                  />
+                  <ImagePlus className="h-5 w-5 text-gray-500" /> Add Images
+                </label>
+              </div>
+              {formData.additionalImages.length > 0 && (
+                <div className="mt-3 grid grid-cols-4 gap-3">
+                  {formData.additionalImages.map((url, idx) => (
+                    <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-200 h-24">
+                      <img src={url} alt="" className="w-full h-full object-cover" />
+                      <button
+                        type="button"
+                        onClick={() => removeAdditionalImage(idx)}
+                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        <Trash2 className="h-3 w-3" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div>
-              <label className={labelClass}>Video URL (YouTube or direct video link)</label>
+              <label className={labelClass}>Video URL</label>
               <input type="url" value={formData.videoUrl} onChange={e => set('videoUrl', e.target.value)}
                 placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
             </div>
@@ -246,7 +354,7 @@ export default function AddProperty() {
             className="px-6 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors text-sm">
             Cancel
           </button>
-          <button type="submit" disabled={loading}
+          <button type="submit" disabled={loading || uploadingImage}
             className="flex items-center gap-2 bg-emerald-600 text-white px-8 py-2.5 rounded-lg font-medium hover:bg-emerald-700 transition-colors shadow-sm disabled:opacity-75 disabled:cursor-not-allowed text-sm">
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {loading ? 'Saving...' : 'Save Property'}

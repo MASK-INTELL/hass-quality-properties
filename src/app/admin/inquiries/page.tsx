@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase-browser';
 import { Mail, Phone, MapPin, Check, X, Clock, Trash2 } from 'lucide-react';
 
 interface Inquiry {
@@ -28,12 +27,9 @@ export default function AdminInquiries() {
 
   async function fetchInquiries() {
     try {
-      const { data, error } = await supabase
-        .from('inquiries')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+      const res = await fetch('/api/admin/inquiries');
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
       setInquiries(data || []);
     } catch (error) {
       console.error('Error fetching inquiries:', error);
@@ -45,7 +41,7 @@ export default function AdminInquiries() {
   async function markAsRead(inquiry: Inquiry) {
     if (inquiry.read) return;
     try {
-      await supabase.from('inquiries').update({ read: true }).eq('id', inquiry.id);
+      await fetch(`/api/admin/inquiries/${inquiry.id}`, { method: 'PUT' });
       setInquiries(prev => prev.map(i => i.id === inquiry.id ? { ...i, read: true } : i));
     } catch (error) {
       console.error('Error marking as read:', error);
@@ -56,8 +52,8 @@ export default function AdminInquiries() {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      const { error } = await supabase.from('inquiries').delete().eq('id', deleteTarget.id);
-      if (error) throw error;
+      const res = await fetch(`/api/admin/inquiries/${deleteTarget.id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete');
       setInquiries(prev => prev.filter(i => i.id !== deleteTarget.id));
       setDeleteTarget(null);
       if (selectedInquiry?.id === deleteTarget.id) setSelectedInquiry(null);

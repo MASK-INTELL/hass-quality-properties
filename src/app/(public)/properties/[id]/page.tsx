@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { supabase } from '@/lib/supabase-browser';
 import { MapPin, Bed, Bath, Maximize, Check, ArrowLeft, Phone, Building2, ChevronLeft, ChevronRight, X, Download, Share2, Heart, Video } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import PropertyCard from '@/components/PropertyCard';
@@ -48,26 +47,12 @@ export default function PropertyDetails() {
     async function fetchProperty() {
       setLoading(true);
       try {
-        const { data, error } = await supabase
-          .from('properties')
-          .select('*')
-          .eq('id', id)
-          .single();
-
-        if (error) throw error;
+        const res = await fetch(`/api/properties/${id}`);
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
         if (data) {
-          setProperty(data);
-
-          const { data: similarData } = await supabase
-            .from('properties')
-            .select('*')
-            .eq('category', data.category)
-            .neq('id', data.id)
-            .limit(3);
-
-          if (similarData) {
-            setSimilarProperties(similarData);
-          }
+          setProperty(data.property);
+          setSimilarProperties(data.similar || []);
         }
       } catch (error) {
         console.error('Error fetching property:', error);

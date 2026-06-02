@@ -3,7 +3,6 @@
 import { Mail, MapPin, Phone, Send, ExternalLink, Loader2, CheckCircle2 } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import { useState, ChangeEvent, FormEvent } from 'react';
-import { supabase } from '@/lib/supabase-browser';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -28,16 +27,18 @@ export default function Contact() {
     setError(null);
 
     try {
-      const { error: insertError } = await supabase.from('inquiries').insert([{
-        name: formData.name,
-        email: formData.email,
-        phone: formData.phone || null,
-        message: `Subject: ${formData.subject}\n\n${formData.message}`,
-        property_title: null,
-        read: false,
-      }]);
+      const res = await fetch('/api/inquiries', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone || undefined,
+          message: `Subject: ${formData.subject}\n\n${formData.message}`,
+        }),
+      });
 
-      if (insertError) throw insertError;
+      if (!res.ok) throw new Error('Failed to submit');
 
       setSubmitted(true);
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });

@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { supabase } from '@/lib/supabase-browser';
 import { Plus, Search, Filter, Edit, Trash2, Building2, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 const PAGE_SIZE = 10;
@@ -37,22 +36,19 @@ export default function AdminProperties() {
   const fetchProperties = useCallback(async () => {
     setLoading(true);
     try {
-      let query = supabase.from('properties').select('*', { count: 'exact' });
+      const params = new URLSearchParams();
+      params.set('page', page.toString());
+      params.set('pageSize', PAGE_SIZE.toString());
+      if (debouncedSearch) params.set('search', debouncedSearch);
+      if (categoryFilter !== 'All') params.set('category', categoryFilter);
+      if (statusFilter !== 'All') params.set('status', statusFilter);
 
-      if (debouncedSearch) {
-        query = query.or(`title.ilike.%${debouncedSearch}%,location.ilike.%${debouncedSearch}%`);
-      }
-      if (categoryFilter !== 'All') query = query.eq('category', categoryFilter);
-      if (statusFilter !== 'All') query = query.eq('status', statusFilter);
+      const res = await fetch(`/api/admin/properties?${params}`);
+      if (!res.ok) throw new Error('Failed to fetch');
+      const result = await res.json();
 
-      const from = (page - 1) * PAGE_SIZE;
-      query = query.order('created_at', { ascending: false }).range(from, from + PAGE_SIZE - 1);
-
-      const { data, error, count } = await query;
-      if (error) throw error;
-
-      setProperties((data || []).map((p: any) => ({ ...p, imageUrl: p.image_url })));
-      setTotalCount(count || 0);
+      setProperties((result.data || []).map((p: any) => ({ ...p, imageUrl: p.image_url })));
+      setTotalCount(result.total || 0);
     } catch (err) {
       console.error(err);
     } finally {
@@ -66,8 +62,8 @@ export default function AdminProperties() {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      const { error } = await supabase.from('properties').delete().eq('id', deleteTarget.id);
-      if (error) throw error;
+      const res = await fetch(`/api/admin/properties/${deleteTarget.id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed to delete');
       setDeleteTarget(null);
       fetchProperties();
     } catch (err: any) {

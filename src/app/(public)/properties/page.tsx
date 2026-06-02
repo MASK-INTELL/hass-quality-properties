@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
-import { supabase } from '@/lib/supabase-browser';
 import PropertyCard from '@/components/PropertyCard';
 import { Heart, Home, Car } from 'lucide-react';
 import { useFavorites } from '@/hooks/useFavorites';
@@ -34,15 +33,10 @@ export default function Properties() {
   useEffect(() => {
     async function fetchProperties() {
       try {
-        const { data, error } = await supabase
-          .from('properties')
-          .select('*')
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        if (data) {
-          setAllProperties(data);
-        }
+        const res = await fetch('/api/properties');
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        setAllProperties(data);
       } catch (error) {
         console.error('Error fetching properties:', error);
       } finally {

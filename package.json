@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.5.2",
-    "@supabase/supabase-js": "^2.97.0",
+    "@aws-sdk/client-s3": "^3.1059.0",
+    "@aws-sdk/s3-request-presigner": "^3.1059.0",
+    "@clerk/nextjs": "^7.4.2",
+    "@neondatabase/serverless": "^1.1.0",
     "@tailwindcss/postcss": "^4.2.4",
     "lucide-react": "^0.546.0",
     "motion": "^12.23.24",

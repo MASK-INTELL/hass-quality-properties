@@ -5,7 +5,6 @@ import WhatsAppIcon from '@/components/WhatsAppIcon';
 
 import Link from 'next/link';
 import { useRef, useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase-browser';
 import { testimonials } from '@/data/testimonials';
 import PropertyCard from '@/components/PropertyCard';
 import PropertyGallery from '@/components/PropertyGallery';
@@ -32,16 +31,10 @@ export default function Home() {
   useEffect(() => {
     async function fetchFeatured() {
       try {
-        const { data, error } = await supabase
-          .from('properties')
-          .select('*')
-          .limit(3)
-          .order('created_at', { ascending: false });
-
-        if (error) throw error;
-        if (data) {
-          setFeaturedProperties(data);
-        }
+        const res = await fetch('/api/properties/featured');
+        if (!res.ok) throw new Error('Failed to fetch');
+        const data = await res.json();
+        setFeaturedProperties(data);
       } catch (error) {
         console.error('Error fetching featured properties:', error);
       }
