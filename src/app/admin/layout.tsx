@@ -1,6 +1,6 @@
 'use client';
 
-import { useUser, useAuth } from '@clerk/nextjs';
+import { ClerkProvider, useUser, useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -17,7 +17,7 @@ const navItems = [
   { path: '/admin/settings', label: 'Settings', icon: Settings, exact: false },
 ];
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
+function AdminLayoutInner({ children }: { children: React.ReactNode }) {
   const { isLoaded, isSignedIn, user } = useUser();
   const { signOut } = useAuth();
   const pathname = usePathname();
@@ -131,5 +131,13 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         </main>
       </div>
     </div>
+  );
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <ClerkProvider>
+      <AdminLayoutInner>{children}</AdminLayoutInner>
+    </ClerkProvider>
   );
 }

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPropertyById, getSimilarProperties } from '@/lib/repositories/properties';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -14,5 +16,7 @@ export async function GET(
 
   const similar = await getSimilarProperties(property.category, id, 3);
 
-  return NextResponse.json({ property, similar });
+  return NextResponse.json({ property, similar }, {
+    headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120' },
+  });
 }
