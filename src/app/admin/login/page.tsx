@@ -21,19 +21,18 @@ export default function AdminLogin() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-gray-100">
           <SignIn
+            afterSignInUrl="/admin"
             appearance={{
               elements: {
                 rootBox: 'w-full',
                 card: 'shadow-none p-0',
-
-                socialButtonsBlockButton: 'text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50',
+                socialButtons: 'hidden',
+                dividerRow: 'hidden',
                 formButtonPrimary: 'bg-emerald-600 hover:bg-emerald-700 text-sm font-medium rounded-lg',
                 footerActionLink: 'text-emerald-600 hover:text-emerald-700',
                 identityPreviewEditButton: 'text-emerald-600',
                 formFieldInput: 'rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm',
                 formFieldLabel: 'text-sm font-medium text-gray-700',
-                dividerLine: 'bg-gray-200',
-                dividerText: 'text-gray-400 text-xs',
               },
             }}
           />
