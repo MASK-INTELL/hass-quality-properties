@@ -25,8 +25,7 @@ export default function AdminLogin() {
               elements: {
                 rootBox: 'w-full',
                 card: 'shadow-none p-0',
-                headerTitle: 'hidden',
-                headerSubtitle: 'hidden',
+
                 socialButtonsBlockButton: 'text-sm font-medium border border-gray-300 rounded-lg hover:bg-gray-50',
                 formButtonPrimary: 'bg-emerald-600 hover:bg-emerald-700 text-sm font-medium rounded-lg',
                 footerActionLink: 'text-emerald-600 hover:text-emerald-700',
