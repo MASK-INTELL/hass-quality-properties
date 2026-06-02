@@ -26,16 +26,16 @@ export interface Property {
 }
 
 export async function getAllProperties(): Promise<Property[]> {
-  return sql`SELECT * FROM properties ORDER BY created_at DESC`;
+  return sql`SELECT * FROM properties ORDER BY created_at DESC` as Promise<Property[]>;
 }
 
 export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
-  return sql`SELECT * FROM properties ORDER BY created_at DESC LIMIT ${limit}`;
+  return sql`SELECT * FROM properties ORDER BY created_at DESC LIMIT ${limit}` as Promise<Property[]>;
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
   const [property] = await sql`SELECT * FROM properties WHERE id = ${id}`;
-  return property || null;
+  return (property as Property) || null;
 }
 
 export async function getSimilarProperties(
@@ -47,7 +47,7 @@ export async function getSimilarProperties(
     SELECT * FROM properties 
     WHERE category = ${category} AND id != ${excludeId} 
     ORDER BY created_at DESC LIMIT ${limit}
-  `;
+  ` as Promise<Property[]>;
 }
 
 export async function getPropertiesPaginated(
@@ -84,7 +84,7 @@ export async function getPropertiesPaginated(
   const dataQuery = `SELECT * FROM properties ${where} ORDER BY created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
   const data = await sql(dataQuery, ...params, pageSize, offset);
 
-  return { data, total: Number(count) };
+  return { data: data as Property[], total: Number(count) };
 }
 
 export async function createProperty(data: Partial<Property>): Promise<Property> {
@@ -102,7 +102,7 @@ export async function createProperty(data: Partial<Property>): Promise<Property>
       ${data.mileage || null}, ${data.transmission || null}, ${data.fuel_type || null}
     ) RETURNING *
   `;
-  return property;
+  return property as Property;
 }
 
 export async function updateProperty(id: string, data: Partial<Property>): Promise<Property | null> {
@@ -131,7 +131,7 @@ export async function updateProperty(id: string, data: Partial<Property>): Promi
     WHERE id = ${id}
     RETURNING *
   `;
-  return property || null;
+  return (property as Property) || null;
 }
 
 export async function deleteProperty(id: string): Promise<boolean> {
@@ -144,7 +144,7 @@ export async function getPropertiesGallery(limit = 10): Promise<Pick<Property, '
     SELECT id, title, price, status, image_url 
     FROM properties 
     ORDER BY created_at DESC LIMIT ${limit}
-  `;
+  ` as Promise<Pick<Property, 'id' | 'title' | 'price' | 'status' | 'image_url'>[]>;
 }
 
 export async function getDashboardStats(): Promise<{
@@ -161,5 +161,10 @@ export async function getDashboardStats(): Promise<{
       COUNT(*) FILTER (WHERE category IN ('Vehicles', 'Motorcycles'))::int AS "vehicles"
     FROM properties
   `;
-  return result;
+  return result as {
+    totalProperties: number;
+    forSale: number;
+    forRent: number;
+    vehicles: number;
+  };
 }
