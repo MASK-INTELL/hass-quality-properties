@@ -27,12 +27,12 @@ export interface Property {
 
 export async function getAllProperties(): Promise<Property[]> {
   const rows = await sql`SELECT * FROM properties ORDER BY created_at DESC`;
-  return rows as Property[];
+  return rows as unknown as Property[];
 }
 
 export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
   const rows = await sql`SELECT * FROM properties ORDER BY created_at DESC LIMIT ${limit}`;
-  return rows as Property[];
+  return rows as unknown as Property[];
 }
 
 export async function getPropertyById(id: string): Promise<Property | null> {
@@ -50,7 +50,7 @@ export async function getSimilarProperties(
     WHERE category = ${category} AND id != ${excludeId} 
     ORDER BY created_at DESC LIMIT ${limit}
   `;
-  return rows as Property[];
+  return rows as unknown as Property[];
 }
 
 export async function getPropertiesPaginated(
@@ -62,32 +62,28 @@ export async function getPropertiesPaginated(
     status?: string;
   }
 ): Promise<{ data: Property[]; total: number }> {
-  const offset = (page - 1) * pageSize;
-  const conditions: string[] = [];
-  const params: any[] = [];
+  const rows = await sql`SELECT * FROM properties ORDER BY created_at DESC`;
+  const all = rows as unknown as Property[];
+  let filtered = all;
 
   if (filters?.search) {
-    conditions.push(`(title ILIKE $${params.length + 1} OR location ILIKE $${params.length + 1})`);
-    params.push(`%${filters.search}%`);
+    const term = filters.search.toLowerCase();
+    filtered = filtered.filter(
+      p => p.title.toLowerCase().includes(term) || p.location.toLowerCase().includes(term)
+    );
   }
   if (filters?.category && filters.category !== 'All') {
-    conditions.push(`category = $${params.length + 1}`);
-    params.push(filters.category);
+    filtered = filtered.filter(p => p.category === filters.category);
   }
   if (filters?.status && filters.status !== 'All') {
-    conditions.push(`status = $${params.length + 1}`);
-    params.push(filters.status);
+    filtered = filtered.filter(p => p.status === filters.status);
   }
 
-  const where = conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
+  const total = filtered.length;
+  const offset = (page - 1) * pageSize;
+  const data = filtered.slice(offset, offset + pageSize);
 
-  const countQuery = `SELECT COUNT(*) FROM properties ${where}`;
-  const [{ count }] = await sql(countQuery, ...params);
-
-  const dataQuery = `SELECT * FROM properties ${where} ORDER BY created_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`;
-  const data = await sql(dataQuery, ...params, pageSize, offset);
-
-  return { data: data as unknown as Property[], total: Number(count) };
+  return { data, total };
 }
 
 export async function createProperty(data: Partial<Property>): Promise<Property> {
@@ -148,7 +144,7 @@ export async function getPropertiesGallery(limit = 10): Promise<Pick<Property, '
     FROM properties 
     ORDER BY created_at DESC LIMIT ${limit}
   `;
-  return rows as Pick<Property, 'id' | 'title' | 'price' | 'status' | 'image_url'>[];
+  return rows as unknown as Pick<Property, 'id' | 'title' | 'price' | 'status' | 'image_url'>[];
 }
 
 export async function getDashboardStats(): Promise<{

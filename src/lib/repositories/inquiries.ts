@@ -13,7 +13,7 @@ export interface Inquiry {
 
 export async function getAllInquiries(): Promise<Inquiry[]> {
   const rows = await sql`SELECT * FROM inquiries ORDER BY created_at DESC`;
-  return rows as Inquiry[];
+  return rows as unknown as Inquiry[];
 }
 
 export async function createInquiry(data: {
