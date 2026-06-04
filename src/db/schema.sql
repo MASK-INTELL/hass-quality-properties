@@ -37,6 +37,16 @@ CREATE TABLE IF NOT EXISTS properties (
   updated_at    TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS agents (
+  id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name        TEXT NOT NULL,
+  title       TEXT NOT NULL,
+  photo_url   TEXT NOT NULL,
+  sort_order  INTEGER NOT NULL DEFAULT 0,
+  created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE IF NOT EXISTS inquiries (
   id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name           TEXT NOT NULL,
@@ -244,3 +254,13 @@ SELECT * FROM (VALUES
   )
 ) AS v
 WHERE NOT EXISTS (SELECT 1 FROM properties LIMIT 1);
+
+-- === Seed Data: 3 sample agents ===
+
+INSERT INTO agents (name, title, photo_url, sort_order)
+SELECT * FROM (VALUES
+  ('Hassan Kintu', 'Founder & CEO', 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', 1),
+  ('Sarah Nabatanzi', 'Senior Agent', 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', 2),
+  ('David Mugisha', 'Property Consultant', 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', 3)
+) AS v
+WHERE NOT EXISTS (SELECT 1 FROM agents LIMIT 1);

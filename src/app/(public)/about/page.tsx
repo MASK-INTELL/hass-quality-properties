@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getAllStats } from '@/lib/repositories/stats';
+import { getAllAgents } from '@/lib/repositories/agents';
 import { ArrowLeft, Building2, Users, Target, Award, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -21,6 +22,7 @@ export const metadata: Metadata = {
 
 export default async function About() {
   const stats = await getAllStats();
+  const agents = await getAllAgents();
 
   return (
     <div className="bg-white min-h-screen">
@@ -107,7 +109,7 @@ export default async function About() {
             <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center mb-6">
               <Users className="h-6 w-6" />
             </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-3">Our Team</h3>
+            <h3 className="text-xl font-bold text-gray-900 mb-3">Our Professionals</h3>
             <p className="text-gray-600">
               A dedicated team of real estate professionals with deep local knowledge and a passion for helping people find their perfect property match.
             </p>
@@ -123,6 +125,35 @@ export default async function About() {
             </p>
           </div>
         </div>
+
+        {/* Team Gallery */}
+        {agents.length > 0 && (
+          <div className="mb-20">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
+              <p className="text-gray-500 max-w-2xl mx-auto text-lg">
+                Get to know the dedicated professionals behind Hass Quality Properties.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
+              {agents.map((agent) => (
+                <div key={agent.id} className="group text-center">
+                  <div className="relative w-48 h-48 mx-auto mb-5 rounded-full overflow-hidden bg-gray-100 ring-4 ring-gray-50 shadow-lg">
+                    <Image
+                      src={agent.photo_url}
+                      alt={agent.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="192px"
+                    />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900">{agent.name}</h3>
+                  <p className="text-emerald-600 font-medium text-sm mt-1">{agent.title}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* CTA */}
         <div className="text-center mb-20 bg-gradient-to-r from-emerald-600 to-emerald-800 rounded-3xl p-12 text-white">
