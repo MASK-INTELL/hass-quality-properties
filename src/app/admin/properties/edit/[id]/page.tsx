@@ -1,9 +1,10 @@
 'use client';
 
 import { useRouter, useParams } from 'next/navigation';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { ArrowLeft, Save, Loader2, Upload, Trash2, ImagePlus } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, Trash2, FolderOpen, Video } from 'lucide-react';
+import MediaPicker from '@/components/MediaPicker';
 
 interface PropertyFormData {
   title: string;
@@ -15,7 +16,6 @@ interface PropertyFormData {
   status: string;
   imageUrl: string;
   imageAlt: string;
-  imageFilename: string;
   additionalImages: string[];
   additionalAlts: string[];
   videoUrl: string;
@@ -46,8 +46,8 @@ export default function EditProperty() {
   const [fetching, setFetching] = useState(true);
   const [formData, setFormData] = useState<PropertyFormData | null>(null);
   const [validationError, setValidationError] = useState<string | null>(null);
-  const [uploadingImage, setUploadingImage] = useState(false);
-  const mainImageInputRef = useRef<HTMLInputElement>(null);
+  const [isPickerOpen, setIsPickerOpen] = useState(false);
+  const [pickerMode, setPickerMode] = useState<'single' | 'multiple' | 'video'>('single');
 
   useEffect(() => {
     async function fetchProperty() {
@@ -70,7 +70,6 @@ export default function EditProperty() {
             status: data.status || 'For Sale',
             imageUrl: data.image_url || '',
             imageAlt: mainMeta.alt || '',
-            imageFilename: mainMeta.filename || '',
             additionalImages: data.images || [],
             additionalAlts: addAlts.length === (data.images || []).length ? addAlts : (data.images || []).map(() => ''),
             videoUrl: data.video_url || '',
@@ -104,55 +103,25 @@ export default function EditProperty() {
     });
   };
 
-  const uploadFile = async (file: File, filename?: string): Promise<{ url: string; key: string; filename: string }> => {
-    const form = new FormData();
-    form.append('file', file);
-    if (filename) form.append('filename', filename);
-
-    const res = await fetch('/api/upload', { method: 'POST', body: form });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.error || 'Upload failed');
-    }
-    return res.json();
+  const openPicker = (mode: 'single' | 'multiple' | 'video') => {
+    setPickerMode(mode);
+    setIsPickerOpen(true);
   };
 
-  const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    setUploadingImage(true);
-    setValidationError(null);
-    try {
-      const data = await uploadFile(file, formData?.imageFilename || undefined);
-      set('imageUrl', data.url);
-    } catch (err: any) {
-      setValidationError(err.message);
-    } finally {
-      setUploadingImage(false);
-      if (mainImageInputRef.current) mainImageInputRef.current.value = '';
-    }
+  const handlePickerSelect = (item: { url: string }) => {
+    if (!formData) return;
+    set('imageUrl', item.url);
   };
 
-  const handleAdditionalImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files?.length) return;
-    setUploadingImage(true);
-    setValidationError(null);
-    try {
-      const urls: string[] = [];
-      const alts: string[] = [];
-      for (const file of Array.from(files)) {
-        const data = await uploadFile(file);
-        urls.push(data.url);
-        alts.push('');
-      }
-      set('additionalImages', [...(formData?.additionalImages || []), ...urls]);
-      set('additionalAlts', [...(formData?.additionalAlts || []), ...alts]);
-    } catch (err: any) {
-      setValidationError(err.message);
-    } finally {
-      setUploadingImage(false);
-    }
+  const handlePickerSelectMultiple = (items: { url: string }[]) => {
+    if (!formData) return;
+    set('additionalImages', [...formData.additionalImages, ...items.map(i => i.url)]);
+    set('additionalAlts', [...formData.additionalAlts, ...items.map(() => '')]);
+  };
+
+  const handleVideoSelect = (item: { url: string }) => {
+    if (!formData) return;
+    set('videoUrl', item.url);
   };
 
   const removeAdditionalImage = (index: number) => {
@@ -172,7 +141,7 @@ export default function EditProperty() {
     e.preventDefault();
     if (!formData || !id) return;
     if (!formData.imageUrl) {
-      setValidationError('Please upload a main image.');
+      setValidationError('Please select a main image.');
       return;
     }
     setValidationError(null);
@@ -180,11 +149,12 @@ export default function EditProperty() {
 
     try {
       const imageMetadata: { url: string; alt: string; filename: string }[] = [];
+      const filenameFromUrl = (u: string) => u.split('/').pop()?.replace(/-\w{4}\.\w+$/, '') || '';
       if (formData.imageUrl) {
-        imageMetadata.push({ url: formData.imageUrl, alt: formData.imageAlt, filename: formData.imageFilename });
+        imageMetadata.push({ url: formData.imageUrl, alt: formData.imageAlt, filename: filenameFromUrl(formData.imageUrl) });
       }
       formData.additionalImages.forEach((url, i) => {
-        imageMetadata.push({ url, alt: formData.additionalAlts[i] || '', filename: '' });
+        imageMetadata.push({ url, alt: formData.additionalAlts[i] || '', filename: filenameFromUrl(url) });
       });
 
       const res = await fetch(`/api/admin/properties/${id}`, {
@@ -363,53 +333,34 @@ export default function EditProperty() {
           <div className="space-y-6">
             <div>
               <label className={labelClass}>Main Image *</label>
-              <div className="mt-1 flex items-center gap-4">
-                <label className={`flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-colors ${uploadingImage ? 'opacity-50 pointer-events-none' : ''}`}>
-                  <input
-                    ref={mainImageInputRef}
-                    type="file"
-                    accept="image/*"
-                    onChange={handleMainImageUpload}
-                    disabled={uploadingImage}
-                    className="hidden"
-                  />
-                  {uploadingImage ? (
-                    <><Loader2 className="h-5 w-5 animate-spin text-emerald-600" /> Uploading...</>
-                  ) : (
-                    <><Upload className="h-5 w-5 text-gray-500" /> Choose Image</>
-                  )}
-                </label>
+              <div className="mt-1">
+                <button
+                  type="button"
+                  onClick={() => openPicker('single')}
+                  className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-colors"
+                >
+                  <FolderOpen className="h-5 w-5 text-gray-500" />
+                  Browse Media Library
+                </button>
                 {formData.imageUrl && (
                   <button
                     type="button"
                     onClick={() => set('imageUrl', '')}
-                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                    className="ml-2 p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors align-middle"
                   >
                     <Trash2 className="h-5 w-5" />
                   </button>
                 )}
               </div>
-              <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Custom filename (optional)</label>
-                  <input
-                    type="text"
-                    value={formData.imageFilename}
-                    onChange={e => set('imageFilename', e.target.value)}
-                    placeholder="e.g. 4-bedroom-villa-front-view"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs font-medium text-gray-500 mb-1">Alt text (for SEO)</label>
-                  <input
-                    type="text"
-                    value={formData.imageAlt}
-                    onChange={e => set('imageAlt', e.target.value)}
-                    placeholder="e.g. Front view of the 4 bedroom villa"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
-                  />
-                </div>
+              <div className="mt-3">
+                <label className="block text-xs font-medium text-gray-500 mb-1">Alt text (for SEO)</label>
+                <input
+                  type="text"
+                  value={formData.imageAlt}
+                  onChange={e => set('imageAlt', e.target.value)}
+                  placeholder="e.g. Front view of the 4 bedroom villa"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                />
               </div>
               {formData.imageUrl && (
                 <div className="mt-3 rounded-xl overflow-hidden border border-gray-200 h-48 relative">
@@ -421,17 +372,14 @@ export default function EditProperty() {
             <div>
               <label className={labelClass}>Additional Images</label>
               <div className="mt-1">
-                <label className={`inline-flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-emerald-500 hover:bg-emerald-50 transition-colors ${uploadingImage ? 'opacity-50 pointer-events-none' : ''}`}>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    multiple
-                    onChange={handleAdditionalImageUpload}
-                    disabled={uploadingImage}
-                    className="hidden"
-                  />
-                  <ImagePlus className="h-5 w-5 text-gray-500" /> Add Images
-                </label>
+                <button
+                  type="button"
+                  onClick={() => openPicker('multiple')}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-colors"
+                >
+                  <FolderOpen className="h-5 w-5 text-gray-500" />
+                  Browse Media Library
+                </button>
               </div>
               {formData.additionalImages.length > 0 && (
                 <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -462,8 +410,27 @@ export default function EditProperty() {
 
             <div>
               <label className={labelClass}>Video URL</label>
-              <input type="url" value={formData.videoUrl} onChange={e => set('videoUrl', e.target.value)}
-                placeholder="https://www.youtube.com/watch?v=..." className={inputClass} />
+              <div className="mt-1 flex gap-2">
+                <input type="url" value={formData.videoUrl} onChange={e => set('videoUrl', e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=..." className={inputClass + ' flex-1'} />
+                <button
+                  type="button"
+                  onClick={() => openPicker('video')}
+                  className="flex items-center gap-2 px-4 py-2.5 border-2 border-dashed border-gray-300 rounded-lg hover:border-emerald-500 hover:bg-emerald-50 transition-colors shrink-0"
+                >
+                  <Video className="h-5 w-5 text-gray-500" />
+                  Browse
+                </button>
+                {formData.videoUrl && formData.videoUrl.includes('r2.dev') && (
+                  <button
+                    type="button"
+                    onClick={() => set('videoUrl', '')}
+                    className="p-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors shrink-0"
+                  >
+                    <Trash2 className="h-5 w-5" />
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -473,13 +440,27 @@ export default function EditProperty() {
             className="px-6 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition-colors text-sm">
             Cancel
           </button>
-          <button type="submit" disabled={loading || uploadingImage}
+          <button type="submit" disabled={loading}
             className="flex items-center gap-2 bg-emerald-600 text-white px-8 py-2.5 rounded-lg font-medium hover:bg-emerald-700 transition-colors shadow-sm disabled:opacity-75 disabled:cursor-not-allowed text-sm">
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {loading ? 'Saving...' : 'Update Property'}
           </button>
         </div>
       </form>
+
+      <MediaPicker
+        isOpen={isPickerOpen}
+        onClose={() => setIsPickerOpen(false)}
+        mode={pickerMode === 'video' ? 'single' : pickerMode}
+        onSelect={pickerMode === 'video' ? handleVideoSelect : handlePickerSelect}
+        onSelectMultiple={handlePickerSelectMultiple}
+        selectedUrls={
+          pickerMode === 'single'
+            ? formData.imageUrl ? [formData.imageUrl] : []
+            : formData.additionalImages
+        }
+        accept={pickerMode === 'video' ? ['video'] : ['image']}
+      />
     </div>
   );
 }
