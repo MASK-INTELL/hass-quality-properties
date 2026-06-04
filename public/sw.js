@@ -41,7 +41,7 @@ async function cacheFirst(request) {
   if (cached) return cached;
   try {
     const response = await fetch(request);
-    if (response.ok) {
+    if (response.ok && request.method === 'GET') {
       const clone = response.clone();
       caches.open(CACHE).then((cache) => cache.put(request, clone));
     }
@@ -54,7 +54,7 @@ async function cacheFirst(request) {
 async function networkFirst(request) {
   try {
     const response = await fetch(request);
-    if (response.ok) {
+    if (response.ok && request.method === 'GET') {
       const clone = response.clone();
       caches.open(CACHE).then((cache) => cache.put(request, clone));
     }
