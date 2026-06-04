@@ -2,6 +2,7 @@
 
 import { useRouter, useParams } from 'next/navigation';
 import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { ArrowLeft, Save, Loader2, Upload, Trash2, ImagePlus } from 'lucide-react';
 
 interface PropertyFormData {
@@ -361,7 +362,7 @@ export default function EditProperty() {
               </div>
               {formData.imageUrl && (
                 <div className="mt-3 rounded-xl overflow-hidden border border-gray-200 h-48 relative">
-                  <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
+                  <Image fill src={formData.imageUrl} alt="Preview" className="object-cover" sizes="600px" />
                 </div>
               )}
             </div>
@@ -385,7 +386,7 @@ export default function EditProperty() {
                 <div className="mt-3 grid grid-cols-4 gap-3">
                   {formData.additionalImages.map((url, idx) => (
                     <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-200 h-24">
-                      <img src={url} alt="" className="w-full h-full object-cover" />
+                      <Image fill src={url} alt="" className="object-cover" sizes="150px" />
                       <button
                         type="button"
                         onClick={() => removeAdditionalImage(idx)}

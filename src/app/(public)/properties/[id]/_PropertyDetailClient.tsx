@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, Bed, Bath, Maximize, Check, ArrowLeft, Phone, Building2, ChevronLeft, ChevronRight, X, Download, Share2, Heart, Video } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
@@ -167,10 +168,12 @@ export default function PropertyDetails({ id }: { id: string }) {
               className={`relative rounded-xl overflow-hidden cursor-pointer group ${images.length > 1 ? 'md:col-span-3' : 'md:col-span-4'}`}
               onClick={() => setIsLightboxOpen(true)}
             >
-              <img
+              <Image
+                fill
                 src={images[0]}
                 alt={property.title}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                className="object-cover transition-transform duration-500 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 75vw"
               />
             </div>
 
@@ -185,10 +188,12 @@ export default function PropertyDetails({ id }: { id: string }) {
                       setIsLightboxOpen(true);
                     }}
                   >
-                    <img
+                    <Image
+                      fill
                       src={img}
                       alt={`${property.title} - Image ${idx + 2}`}
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      sizes="25vw"
                     />
                   </div>
                 ))}
@@ -230,12 +235,16 @@ export default function PropertyDetails({ id }: { id: string }) {
           )}
 
           <div className="w-full h-full flex items-center justify-center p-4 md:p-12" onClick={() => setIsLightboxOpen(false)}>
-            <img
-              src={images[currentImageIndex]}
-              alt={`${property.title} - Fullscreen`}
-              className="max-w-full max-h-full object-contain select-none"
-              onClick={(e) => e.stopPropagation()}
-            />
+            <div className="relative w-full h-full max-w-7xl max-h-full">
+              <Image
+                fill
+                src={images[currentImageIndex]}
+                alt={`${property.title} - Fullscreen`}
+                className="object-contain select-none"
+                sizes="100vw"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
           </div>
         </div>
       )}

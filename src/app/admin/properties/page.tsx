@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 import { Plus, Search, Filter, Edit, Trash2, Building2, ChevronLeft, ChevronRight, X } from 'lucide-react';
 
 const PAGE_SIZE = 10;
@@ -208,7 +209,7 @@ export default function AdminProperties() {
                       <div className="flex items-center gap-3">
                         <div className="flex-shrink-0 h-10 w-10 rounded-lg overflow-hidden bg-gray-100">
                           {property.imageUrl ? (
-                            <img className="h-10 w-10 object-cover" src={property.imageUrl} alt="" />
+                            <Image className="h-10 w-10 object-cover" src={property.imageUrl} alt="" width={40} height={40} />
                           ) : (
                             <div className="h-full w-full flex items-center justify-center">
                               <Building2 className="h-4 w-4 text-gray-400" />

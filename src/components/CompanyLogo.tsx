@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import LogoLightbox from './LogoLightbox';
 
 const logoUrl = '/logo.png';
@@ -18,12 +19,11 @@ export default function CompanyLogo({ className = "" }: CompanyLogoProps) {
 
   return (
     <>
-      <img 
-        src={logoUrl} 
+      <Image
+        src={logoUrl}
         alt="Hass Quality Properties Logo"
         width={48}
         height={48}
-        loading="eager"
         className={`cursor-pointer transition-transform hover:scale-105 ${className}`}
         onClick={handleClick}
         title="Click to preview logo"

@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { Maximize, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
@@ -76,10 +77,12 @@ export default function PropertyGallery() {
             className="absolute inset-0 cursor-pointer transition-transform duration-700 ease-in-out"
             onClick={() => setIsLightboxOpen(true)}
           >
-            <img
+            <Image
+              fill
               src={currentItem.image_url}
               alt={currentItem.title}
-              className="w-full h-full object-cover"
+              className="object-cover"
+              sizes="100vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
@@ -168,13 +171,17 @@ export default function PropertyGallery() {
           </button>
 
           <div className="w-full h-full flex flex-col items-center justify-center p-4 md:p-12" onClick={() => setIsLightboxOpen(false)}>
-            <img
-              src={currentItem.image_url}
-              alt={`${currentItem.title} - Fullscreen`}
-              className="max-w-full max-h-[85vh] object-contain select-none"
-              onClick={(e) => e.stopPropagation()}
-            />
-            <div className="mt-6 text-center" onClick={(e) => e.stopPropagation()}>
+            <div className="relative w-full max-w-5xl flex-1 max-h-[85vh]">
+              <Image
+                fill
+                src={currentItem.image_url}
+                alt={`${currentItem.title} - Fullscreen`}
+                className="object-contain select-none"
+                sizes="100vw"
+                onClick={(e) => e.stopPropagation()}
+              />
+            </div>
+            <div className="mt-6 text-center flex-shrink-0" onClick={(e) => e.stopPropagation()}>
               <h3 className="text-2xl font-bold text-white mb-2">{currentItem.title}</h3>
               <p className="text-emerald-400 text-xl font-semibold">{currentItem.price}</p>
             </div>

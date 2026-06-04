@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { Building2, Users, Target, Award } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -43,9 +44,11 @@ export default function About() {
           </div>
           <div className="relative">
             <div className="absolute inset-0 bg-emerald-600 rounded-2xl transform rotate-3 opacity-10"></div>
-            <img
+            <Image
               src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
               alt="Office Meeting"
+              width={800}
+              height={530}
               className="relative rounded-2xl shadow-xl w-full object-cover"
             />
           </div>

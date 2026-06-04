@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { MapPin, Bed, Bath, Maximize, ArrowRight, Heart, Video, Gauge, Calendar, Settings2 } from 'lucide-react';
 import Link from 'next/link';
 import { useFavorites } from '@/hooks/useFavorites';
@@ -36,10 +37,12 @@ export default function PropertyCard({ property }: PropertyCardProps) {
     <article className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
       <div className="relative h-64 overflow-hidden group">
         <Link href={`/properties/${property.id}`} className="block w-full h-full">
-          <img
+          <Image
+            fill
             src={property.image_url}
             alt={property.title}
-            className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
+            className="object-cover transform group-hover:scale-105 transition-transform duration-500"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4">
             <p className="text-white font-bold text-lg">{property.price}</p>

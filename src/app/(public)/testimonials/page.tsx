@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Image from 'next/image';
 import { Star, Mail } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import { testimonials } from '@/data/testimonials';
@@ -84,10 +85,12 @@ export default function Testimonials() {
               className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative mt-6"
             >
               <div className="absolute -top-6 left-8">
-                <img
-                  src={testimonial.image}
+                <Image
+                  src="/logo.png"
                   alt={testimonial.name}
-                  className="w-14 h-14 rounded-full border-4 border-white shadow-md object-cover bg-gray-100"
+                  width={56}
+                  height={56}
+                  className="rounded-full border-4 border-white shadow-md object-cover bg-gray-100"
                 />
               </div>
               <div className="mt-8">

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { X, Download, Share2 } from 'lucide-react';
 
 interface LogoLightboxProps {
@@ -85,12 +86,16 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
       </div>
 
       <div className="w-full h-full flex items-center justify-center p-4 md:p-12" onClick={onClose}>
-        <img 
-          src={logoUrl} 
-          alt="Hass Quality Properties Logo Fullscreen" 
-          className="max-w-full max-h-full object-contain select-none bg-white/5 rounded-2xl p-8"
-          onClick={(e) => e.stopPropagation()}
-        />
+        <div className="relative w-full h-full max-w-4xl max-h-full">
+          <Image
+            fill
+            src={logoUrl}
+            alt="Hass Quality Properties Logo Fullscreen"
+            className="object-contain select-none bg-white/5 rounded-2xl p-8"
+            sizes="100vw"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
       </div>
     </div>
   );

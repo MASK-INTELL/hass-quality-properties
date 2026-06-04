@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { ArrowRight, CheckCircle2, Search, Star } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 
@@ -64,10 +65,13 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[600px] flex items-center justify-center">
         <div className="absolute inset-0 z-0">
-          <img
+          <Image
             src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
             alt="Luxury Home in Uganda"
-            className="w-full h-full object-cover"
+            fill
+            className="object-cover"
+            priority
+            sizes="100vw"
           />
           <div className="absolute inset-0 bg-black/50" />
         </div>
@@ -141,9 +145,11 @@ export default function Home() {
             <div className="relative">
               <div className="absolute -top-4 -left-4 w-24 h-24 bg-emerald-100 rounded-full -z-10" />
               <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-emerald-50 rounded-full -z-10" />
-              <img
+              <Image
                 src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
                 alt="Real Estate Agent"
+                width={800}
+                height={500}
                 className="rounded-2xl shadow-2xl w-full object-cover h-[500px]"
               />
             </div>
@@ -196,10 +202,12 @@ export default function Home() {
                 className="min-w-[100%] md:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)] snap-center bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative mt-6"
               >
                 <div className="absolute -top-6 left-8">
-                  <img
-                    src={testimonial.image}
+                  <Image
+                    src="/logo.png"
                     alt={testimonial.name}
-                    className="w-14 h-14 rounded-full border-4 border-white shadow-md object-cover bg-gray-100"
+                    width={56}
+                    height={56}
+                    className="rounded-full border-4 border-white shadow-md object-cover bg-gray-100"
                   />
                 </div>
                 <div className="mt-8">
