@@ -18,7 +18,6 @@ export default function Navbar() {
     { name: 'Home', path: '/' },
     { name: 'Properties', path: '/properties' },
     { name: 'About Us', path: '/about' },
-    { name: 'Contact', path: '/contact' },
   ];
 
   return (
@@ -96,6 +95,13 @@ export default function Navbar() {
                 {link.name}
               </Link>
             ))}
+            <Link
+              href="/contact"
+              onClick={() => setIsOpen(false)}
+              className="block px-3 py-2 rounded-md text-base font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-colors mt-2"
+            >
+              Get in Touch
+            </Link>
             <a
               href="https://wa.me/256771863542"
               target="_blank"
