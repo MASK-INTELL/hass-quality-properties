@@ -33,7 +33,7 @@ export async function getAllProperties(): Promise<Property[]> {
   return rows as unknown as Property[];
 }
 
-export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
+export async function getFeaturedProperties(limit = 6): Promise<Property[]> {
   const rows = await sql`SELECT * FROM properties WHERE featured = true ORDER BY created_at DESC LIMIT ${limit}`;
   return rows as unknown as Property[];
 }
