@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Plus, Search, Filter, Edit, Trash2, Building2, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { Plus, Search, Filter, Edit, Trash2, Building2, ChevronLeft, ChevronRight, X, Star } from 'lucide-react';
 
 const PAGE_SIZE = 10;
 
@@ -61,17 +61,30 @@ export default function AdminProperties() {
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
-    const targetId = deleteTarget.id;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/admin/properties/${targetId}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/properties/${deleteTarget.id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed to delete');
+      setProperties(prev => prev.filter(p => p.id !== deleteTarget.id));
       setDeleteTarget(null);
-      fetchProperties();
-    } catch (err: any) {
-      console.error(err);
+    } catch (error) {
+      console.error('Error deleting property:', error);
     } finally {
       setDeleting(false);
+    }
+  };
+
+  const toggleFeatured = async (id: string, current: boolean) => {
+    try {
+      const res = await fetch(`/api/admin/properties/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ featured: !current }),
+      });
+      if (!res.ok) throw new Error('Failed to toggle featured');
+      setProperties(prev => prev.map(p => p.id === id ? { ...p, featured: !current } : p));
+    } catch (error) {
+      console.error('Error toggling featured:', error);
     }
   };
 
@@ -169,6 +182,7 @@ export default function AdminProperties() {
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Property</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Featured</th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
                 <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
@@ -186,7 +200,7 @@ export default function AdminProperties() {
                         </div>
                       </div>
                     </td>
-                    {[...Array(4)].map((_, j) => (
+                    {[...Array(5)].map((_, j) => (
                       <td key={j} className="px-6 py-4">
                         <div className="h-3.5 w-20 bg-gray-100 rounded animate-pulse" />
                       </td>
@@ -195,7 +209,7 @@ export default function AdminProperties() {
                 ))
               ) : properties.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-16 text-center">
+                  <td colSpan={6} className="px-6 py-16 text-center">
                     <Building2 className="h-10 w-10 text-gray-300 mx-auto mb-3" />
                     <p className="text-gray-500 font-medium">No properties found</p>
                     <p className="text-gray-400 text-sm mt-1">
@@ -229,6 +243,19 @@ export default function AdminProperties() {
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                       {property.price}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <button
+                        onClick={() => toggleFeatured(property.id, property.featured)}
+                        className={`p-1.5 rounded-lg transition-colors ${
+                          property.featured
+                            ? 'text-amber-500 hover:bg-amber-50'
+                            : 'text-gray-300 hover:text-amber-400 hover:bg-gray-50'
+                        }`}
+                        title={property.featured ? 'Unmark featured' : 'Mark as featured'}
+                      >
+                        <Star className={`h-5 w-5 ${property.featured ? 'fill-amber-500' : ''}`} />
+                      </button>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-0.5 inline-flex text-xs font-semibold rounded-full ${

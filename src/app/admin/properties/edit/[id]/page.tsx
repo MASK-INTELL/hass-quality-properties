@@ -16,6 +16,7 @@ interface PropertyFormData {
   status: string;
   imageUrl: string;
   imageAlt: string;
+  featured: boolean;
   additionalImages: string[];
   additionalAlts: string[];
   videoUrl: string;
@@ -70,6 +71,7 @@ export default function EditProperty() {
             status: data.status || 'For Sale',
             imageUrl: data.image_url || '',
             imageAlt: mainMeta.alt || '',
+            featured: data.featured ?? false,
             additionalImages: data.images || [],
             additionalAlts: addAlts.length === (data.images || []).length ? addAlts : (data.images || []).map(() => ''),
             videoUrl: data.video_url || '',
@@ -93,7 +95,7 @@ export default function EditProperty() {
     fetchProperty();
   }, [id]);
 
-  const set = (field: keyof PropertyFormData, value: string | string[]) => {
+  const set = (field: keyof PropertyFormData, value: string | string[] | boolean) => {
     if (!formData) return;
     setFormData(prev => {
       if (!prev) return prev;
@@ -169,6 +171,7 @@ export default function EditProperty() {
           type: formData.type,
           status: formData.status,
           image_url: formData.imageUrl,
+          featured: formData.featured,
           images: formData.additionalImages.length > 0 ? formData.additionalImages : null,
           image_metadata: imageMetadata,
           video_url: formData.videoUrl || null,
@@ -285,6 +288,18 @@ export default function EditProperty() {
               <select value={formData.status} onChange={e => set('status', e.target.value)} className={inputClass}>
                 <option>For Sale</option><option>For Rent</option><option>Sold</option>
               </select>
+            </div>
+            <div className="flex items-center gap-3 pt-6">
+              <input
+                type="checkbox"
+                id="featured"
+                checked={formData.featured}
+                onChange={e => set('featured', e.target.checked)}
+                className="h-4 w-4 rounded border-gray-300 text-amber-500 focus:ring-amber-500"
+              />
+              <label htmlFor="featured" className="text-sm font-medium text-gray-700 cursor-pointer">
+                Featured on homepage
+              </label>
             </div>
           </div>
         </div>

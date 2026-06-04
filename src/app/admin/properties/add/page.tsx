@@ -16,6 +16,7 @@ interface PropertyFormData {
   status: string;
   imageUrl: string;
   imageAlt: string;
+  featured: boolean;
   additionalImages: string[];
   additionalAlts: string[];
   videoUrl: string;
@@ -33,7 +34,7 @@ interface PropertyFormData {
 const EMPTY_FORM: PropertyFormData = {
   title: '', description: '', price: '', location: '',
   category: 'Real Estate', type: 'House', status: 'For Sale',
-  imageUrl: '', imageAlt: '', additionalImages: [], additionalAlts: [], videoUrl: '',
+  imageUrl: '', imageAlt: '', featured: false, additionalImages: [], additionalAlts: [], videoUrl: '',
   beds: '', baths: '', area: '',
   make: '', model: '', year: '', mileage: '', transmission: 'Automatic', fuelType: 'Petrol',
 };
@@ -53,7 +54,7 @@ export default function AddProperty() {
   const [isPickerOpen, setIsPickerOpen] = useState(false);
   const [pickerMode, setPickerMode] = useState<'single' | 'multiple' | 'video'>('single');
 
-  const set = (field: keyof PropertyFormData, value: string | string[]) => {
+  const set = (field: keyof PropertyFormData, value: string | string[] | boolean) => {
     setFormData(prev => {
       const next = { ...prev, [field]: value };
       if (field === 'category' && typeof value === 'string') next.type = (CATEGORY_TYPES[value] || [])[0] || '';
@@ -121,6 +122,7 @@ export default function AddProperty() {
           type: formData.type,
           status: formData.status,
           image_url: formData.imageUrl,
+          featured: formData.featured,
           images: formData.additionalImages.length > 0 ? formData.additionalImages : null,
           image_metadata: imageMetadata,
           video_url: formData.videoUrl || null,
@@ -218,6 +220,18 @@ export default function AddProperty() {
               <select value={formData.status} onChange={e => set('status', e.target.value)} className={inputClass}>
                 <option>For Sale</option><option>For Rent</option><option>Sold</option>
               </select>
+            </div>
+            <div className="flex items-center gap-3 pt-6">
+              <input
+                type="checkbox"
+                id="featured"
+                checked={formData.featured}
+                onChange={e => set('featured', e.target.checked)}
+                className="h-4 w-4 rounded border-gray-300 text-amber-500 focus:ring-amber-500"
+              />
+              <label htmlFor="featured" className="text-sm font-medium text-gray-700 cursor-pointer">
+                Featured on homepage
+              </label>
             </div>
           </div>
         </div>

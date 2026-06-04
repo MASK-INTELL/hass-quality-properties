@@ -11,6 +11,7 @@ export interface Property {
   type: string;
   status: string;
   image_url: string;
+  featured: boolean;
   beds: number | null;
   baths: number | null;
   area: string | null;
@@ -33,7 +34,7 @@ export async function getAllProperties(): Promise<Property[]> {
 }
 
 export async function getFeaturedProperties(limit = 3): Promise<Property[]> {
-  const rows = await sql`SELECT * FROM properties ORDER BY created_at DESC LIMIT ${limit}`;
+  const rows = await sql`SELECT * FROM properties WHERE featured = true ORDER BY created_at DESC LIMIT ${limit}`;
   return rows as unknown as Property[];
 }
 
@@ -93,12 +94,12 @@ export async function createProperty(data: Partial<Property>): Promise<Property>
   const imagesVal = Array.isArray(data.images) ? data.images : null;
   const [property] = await sql`
     INSERT INTO properties (
-      title, description, price, location, category, type, status,
+      title, description, price, location, category, type, status, featured,
       image_url, images, image_metadata, video_url, beds, baths, area,
       make, model, year, mileage, transmission, fuel_type
     ) VALUES (
       ${data.title}, ${data.description}, ${data.price}, ${data.location},
-      ${data.category}, ${data.type}, ${data.status},
+      ${data.category}, ${data.type}, ${data.status}, ${data.featured ?? false},
       ${data.image_url}, ${imagesVal}::text[], ${imageMetadata}, ${data.video_url || null},
       ${data.beds || null}, ${data.baths || null}, ${data.area || null},
       ${data.make || null}, ${data.model || null}, ${data.year || null},
@@ -121,6 +122,7 @@ export async function updateProperty(id: string, data: Partial<Property>): Promi
       type = COALESCE(${data.type}, type),
       status = COALESCE(${data.status}, status),
       image_url = COALESCE(${data.image_url}, image_url),
+      featured = COALESCE(${data.featured}, featured),
       images = COALESCE(${imagesVal}::text[], images),
       image_metadata = COALESCE(${imageMetadata}::jsonb, image_metadata),
       video_url = COALESCE(${data.video_url || null}, video_url),
