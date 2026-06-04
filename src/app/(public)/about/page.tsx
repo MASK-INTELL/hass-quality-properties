@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { getAllStats } from '@/lib/repositories/stats';
-import { ArrowLeft, Building2, Users, Target, Award, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Building2, Users, Target, Award, CheckCircle2, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -121,6 +121,28 @@ export default async function About() {
             <p className="text-gray-600">
               We promise integrity in all our dealings, verified property titles, and a hassle-free process from viewing to ownership transfer.
             </p>
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="text-center mb-20 bg-gradient-to-r from-emerald-600 to-emerald-800 rounded-3xl p-12 text-white">
+          <h2 className="text-3xl font-bold mb-4">Ready to Find Your Dream Property?</h2>
+          <p className="text-emerald-100 mb-8 max-w-2xl mx-auto text-lg">
+            Whether you&apos;re buying, selling, or renting, we&apos;re here to help you every step of the way.
+          </p>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <Link
+              href="/properties"
+              className="inline-flex items-center gap-2 bg-white text-emerald-700 px-8 py-3 rounded-xl font-semibold hover:bg-emerald-50 transition-colors"
+            >
+              Browse Properties <ArrowRight className="h-5 w-5" />
+            </Link>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-2 border-2 border-white/30 text-white px-8 py-3 rounded-xl font-semibold hover:bg-white/10 transition-colors"
+            >
+              Get in Touch
+            </Link>
           </div>
         </div>
 
