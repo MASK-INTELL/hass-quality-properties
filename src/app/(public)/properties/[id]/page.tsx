@@ -4,6 +4,8 @@ import sql from '@/lib/db';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PropertyDetailClient from './_PropertyDetailClient';
 
+export const revalidate = 3600;
+
 const BASE_URL = 'https://hass-quality-properties.vercel.app';
 
 interface Props {

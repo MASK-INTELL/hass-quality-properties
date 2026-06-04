@@ -186,6 +186,11 @@ export default function EditProperty() {
       });
 
       if (!res.ok) throw new Error('Failed to update property');
+      fetch('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: `/properties/${id}` }),
+      }).catch(() => {});
       router.push('/admin/properties');
     } catch (error: any) {
       setValidationError(error.message || 'Error updating property');

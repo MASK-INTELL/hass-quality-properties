@@ -61,10 +61,16 @@ export default function AdminProperties() {
 
   const handleDelete = async () => {
     if (!deleteTarget) return;
+    const targetId = deleteTarget.id;
     setDeleting(true);
     try {
-      const res = await fetch(`/api/admin/properties/${deleteTarget.id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/admin/properties/${targetId}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Failed to delete');
+      fetch('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: `/properties/${targetId}` }),
+      }).catch(() => {});
       setDeleteTarget(null);
       fetchProperties();
     } catch (err: any) {
