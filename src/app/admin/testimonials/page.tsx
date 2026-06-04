@@ -96,19 +96,6 @@ export default function AdminTestimonialsPage() {
     fetchTestimonials();
   }, []);
 
-  const revalidatePaths = () => {
-    fetch('/api/revalidate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ path: '/about' }),
-    }).catch(() => {});
-    fetch('/api/revalidate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ path: '/testimonials' }),
-    }).catch(() => {});
-  };
-
   const handleSave = async (data: { name: string; role: string; quote: string; rating: number }) => {
     if (modalTestimonial) {
       const res = await fetch(`/api/admin/testimonials/${modalTestimonial.id}`, {
@@ -118,7 +105,6 @@ export default function AdminTestimonialsPage() {
       });
       if (res.ok) {
         await fetchTestimonials();
-        revalidatePaths();
       }
     } else {
       const res = await fetch('/api/admin/testimonials', {
@@ -128,7 +114,6 @@ export default function AdminTestimonialsPage() {
       });
       if (res.ok) {
         await fetchTestimonials();
-        revalidatePaths();
       }
     }
     setModalTestimonial(undefined);
@@ -139,7 +124,6 @@ export default function AdminTestimonialsPage() {
     const res = await fetch(`/api/admin/testimonials/${deleteTarget.id}`, { method: 'DELETE' });
     if (res.ok) {
       await fetchTestimonials();
-      revalidatePaths();
     }
     setDeleteTarget(null);
   };

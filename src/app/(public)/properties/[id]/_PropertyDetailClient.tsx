@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { MapPin, Bed, Bath, Maximize, Check, ArrowLeft, Phone, Building2, ChevronLeft, ChevronRight, X, Download, Share2, Heart, Video } from 'lucide-react';
+import { MapPin, Bed, Bath, Maximize, ArrowLeft, Phone, Building2, ChevronLeft, ChevronRight, X, Share2, Heart, Video } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import PropertyCard from '@/components/PropertyCard';
 import { useFavorites } from '@/hooks/useFavorites';
@@ -18,23 +18,26 @@ interface Property {
   type: string;
   status: string;
   image_url: string;
-  beds?: string;
-  baths?: string;
-  area?: string;
-  make?: string;
-  model?: string;
-  year?: string;
-  mileage?: string;
-  transmission?: string;
-  fuel_type?: string;
-  video_url?: string;
-  images?: string[];
+  beds?: string | number | null;
+  baths?: string | number | null;
+  area?: string | null;
+  make?: string | null;
+  model?: string | null;
+  year?: string | number | null;
+  mileage?: string | null;
+  transmission?: string | null;
+  fuel_type?: string | null;
+  video_url?: string | null;
+  images?: string[] | null;
 }
 
-export default function PropertyDetails({ id }: { id: string }) {
-  const [property, setProperty] = useState<Property | null>(null);
-  const [similarProperties, setSimilarProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
+export default function PropertyDetails({
+  property,
+  similarProperties,
+}: {
+  property: Property | null;
+  similarProperties: Property[];
+}) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [showShareToast, setShowShareToast] = useState(false);
@@ -48,29 +51,6 @@ export default function PropertyDetails({ id }: { id: string }) {
   }, []);
 
   const { isFavorite, toggleFavorite } = useFavorites();
-
-  useEffect(() => {
-    async function fetchProperty() {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/properties/${id}`);
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-        if (data) {
-          setProperty(data.property);
-          setSimilarProperties(data.similar || []);
-        }
-      } catch (error) {
-        console.error('Error fetching property:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    if (id) {
-      fetchProperty();
-      setCurrentImageIndex(0);
-    }
-  }, [id]);
 
   const images = property?.images?.length ? property.images : (property?.image_url ? [property.image_url] : []);
 
@@ -104,10 +84,15 @@ export default function PropertyDetails({ id }: { id: string }) {
     }
   };
 
-  if (loading) {
+  if (!property) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600"></div>
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Property Not Found</h2>
+          <Link href={backHref} className="text-emerald-600 hover:text-emerald-700 font-semibold flex items-center justify-center gap-2">
+            <ArrowLeft className="h-5 w-5" /> Back to Properties
+          </Link>
+        </div>
       </div>
     );
   }

@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import sql from '@/lib/db';
+import { getPropertyById, getSimilarProperties } from '@/lib/repositories/properties';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PropertyDetailClient from './_PropertyDetailClient';
-
-export const revalidate = 3600;
 
 const BASE_URL = 'https://hass-quality-properties.vercel.app';
 
@@ -12,27 +10,9 @@ interface Props {
   params: Promise<{ id: string }>;
 }
 
-async function getProperty(id: string) {
-  try {
-    const rows = await sql`SELECT * FROM properties WHERE id = ${id}`;
-    const properties = rows as unknown as {
-      id: string; title: string; description: string; price: string;
-      location: string; category: string; type: string; status: string;
-      image_url: string; beds: number | null; baths: number | null;
-      area: string | null; images: string[] | null; make: string | null;
-      model: string | null; year: number | null; mileage: string | null;
-      transmission: string | null; fuel_type: string | null;
-      video_url: string | null; created_at: string; updated_at: string;
-    }[];
-    return properties[0] || null;
-  } catch {
-    return null;
-  }
-}
-
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const property = await getProperty(id);
+  const property = await getPropertyById(id);
 
   if (!property) {
     return { title: 'Property Not Found' };
@@ -62,11 +42,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function PropertyPage({ params }: Props) {
   const { id } = await params;
-  const property = await getProperty(id);
+  const property = await getPropertyById(id);
 
   if (!property) {
     notFound();
   }
+
+  const similarProperties = await getSimilarProperties(property.category, id, 3);
 
   const images = property.images?.length ? property.images : (property.image_url ? [property.image_url] : []);
   const mainImage = images[0] || '/logo.png';
@@ -118,7 +100,7 @@ export default async function PropertyPage({ params }: Props) {
           { label: property.title },
         ]}
       />
-      <PropertyDetailClient id={id} />
+      <PropertyDetailClient property={property as any} similarProperties={similarProperties as any} />
     </>
   );
 }

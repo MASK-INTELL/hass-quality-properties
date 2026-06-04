@@ -80,14 +80,6 @@ export default function AdminStatsPage() {
     fetchStats();
   }, []);
 
-  const revalidateAbout = () => {
-    fetch('/api/revalidate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ path: '/about' }),
-    }).catch(() => {});
-  };
-
   const handleSave = async (data: { label: string; value: string }) => {
     if (modalStat) {
       const res = await fetch(`/api/admin/stats/${modalStat.id}`, {
@@ -97,7 +89,6 @@ export default function AdminStatsPage() {
       });
       if (res.ok) {
         await fetchStats();
-        revalidateAbout();
       }
     } else {
       const res = await fetch('/api/admin/stats', {
@@ -107,7 +98,6 @@ export default function AdminStatsPage() {
       });
       if (res.ok) {
         await fetchStats();
-        revalidateAbout();
       }
     }
     setModalStat(undefined);
@@ -118,7 +108,6 @@ export default function AdminStatsPage() {
     const res = await fetch(`/api/admin/stats/${deleteTarget.id}`, { method: 'DELETE' });
     if (res.ok) {
       await fetchStats();
-      revalidateAbout();
     }
     setDeleteTarget(null);
   };

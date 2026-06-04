@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { revalidatePath } from 'next/cache';
 import { getPropertiesPaginated, createProperty } from '@/lib/repositories/properties';
 
 export async function GET(request: NextRequest) {
@@ -22,6 +23,10 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const property = await createProperty(body);
+    revalidatePath('/api/properties');
+    revalidatePath('/api/properties/featured');
+    revalidatePath('/api/properties/gallery');
+    revalidatePath('/about');
     return NextResponse.json(property, { status: 201 });
   } catch (error) {
     console.error('Error creating property:', error);

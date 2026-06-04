@@ -1,10 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import sql from '@/lib/db';
 import { Star, Mail } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
-
-export const revalidate = 3600;
+import sql from '@/lib/db';
 
 interface Testimonial {
   id: string;

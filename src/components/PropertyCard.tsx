@@ -14,15 +14,15 @@ interface Property {
   image_url: string;
   category: string;
   type: string;
-  beds?: string;
-  baths?: string;
-  area?: string;
-  make?: string;
-  model?: string;
-  year?: string;
-  mileage?: string;
-  transmission?: string;
-  video_url?: string;
+  beds?: string | number | null;
+  baths?: string | number | null;
+  area?: string | null;
+  make?: string | null;
+  model?: string | null;
+  year?: string | number | null;
+  mileage?: string | null;
+  transmission?: string | null;
+  video_url?: string | null;
 }
 
 interface PropertyCardProps {

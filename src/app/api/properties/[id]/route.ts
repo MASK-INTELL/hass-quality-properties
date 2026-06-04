@@ -1,8 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPropertyById, getSimilarProperties } from '@/lib/repositories/properties';
 
-export const dynamic = 'force-dynamic';
-
 export async function GET(
   _request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

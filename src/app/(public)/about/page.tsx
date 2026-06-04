@@ -4,8 +4,6 @@ import Link from 'next/link';
 import { getAllStats } from '@/lib/repositories/stats';
 import { ArrowLeft, Building2, Users, Target, Award, CheckCircle2 } from 'lucide-react';
 
-export const revalidate = 3600;
-
 export const metadata: Metadata = {
   title: 'About Us',
   description: 'Learn about Hass Quality Properties — your trusted real estate partner in Fort Portal Tourism City, Uganda with over 11 years of experience.',
