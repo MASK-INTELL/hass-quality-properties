@@ -8,6 +8,7 @@ interface Stat {
   label: string;
   value: string;
   sort_order: number;
+  source?: string;
 }
 
 interface StatModalProps {
@@ -151,16 +152,27 @@ export default function AdminStatsPage() {
                   <span className="flex-shrink-0 w-7 h-7 rounded-full bg-emerald-100 text-emerald-700 text-xs font-bold flex items-center justify-center">{index + 1}</span>
                   <div>
                     <p className="text-sm font-medium text-gray-900">{stat.label}</p>
-                    <p className="text-sm text-emerald-600 font-semibold">{stat.value}</p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm text-emerald-600 font-semibold">{stat.value}</p>
+                      {stat.source?.startsWith('auto_') && (
+                        <span className="text-xs bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-medium" title={stat.source === 'auto_listings' ? 'Auto-counted from properties' : 'Auto-counted from testimonials'}>
+                          Auto
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
-                  <button onClick={() => setModalStat(stat)} className="p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Edit">
-                    <Edit3 className="h-4 w-4" />
-                  </button>
-                  <button onClick={() => setDeleteTarget(stat)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
-                    <Trash2 className="h-4 w-4" />
-                  </button>
+                  {!stat.source?.startsWith('auto_') && (
+                    <>
+                      <button onClick={() => setModalStat(stat)} className="p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Edit">
+                        <Edit3 className="h-4 w-4" />
+                      </button>
+                      <button onClick={() => setDeleteTarget(stat)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </>
+                  )}
                 </div>
               </div>
             ))}

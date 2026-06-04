@@ -1,8 +1,20 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import sql from '@/lib/db';
 import { Star, Mail } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
-import { testimonials } from '@/data/testimonials';
+
+export const revalidate = 3600;
+
+interface Testimonial {
+  id: string;
+  name: string;
+  role: string;
+  quote: string;
+  rating: number;
+  created_at: string;
+  updated_at: string;
+}
 
 export const metadata: Metadata = {
   title: 'Client Testimonials',
@@ -19,24 +31,25 @@ export const metadata: Metadata = {
   alternates: { canonical: '/testimonials' },
 };
 
-const reviewJsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'Organization',
-  name: 'Hass Quality Properties',
-  review: testimonials.slice(0, 10).map((t) => ({
-    '@type': 'Review',
-    author: { '@type': 'Person', name: t.name },
-    reviewRating: { '@type': 'Rating', ratingValue: t.rating, bestRating: 5 },
-    reviewBody: t.quote,
-  })),
-};
-
-export default function Testimonials() {
+export default async function Testimonials() {
+  const testimonials = await sql`SELECT * FROM testimonials ORDER BY created_at DESC` as unknown as Testimonial[];
   return (
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(reviewJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Hass Quality Properties',
+            review: testimonials.slice(0, 10).map((t) => ({
+              '@type': 'Review',
+              author: { '@type': 'Person', name: t.name },
+              reviewRating: { '@type': 'Rating', ratingValue: t.rating, bestRating: 5 },
+              reviewBody: t.quote,
+            })),
+          }),
+        }}
       />
       <div className="bg-gray-50 min-h-screen pb-20">
       {/* Header */}

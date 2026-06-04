@@ -4,7 +4,7 @@ import { ClerkProvider, useUser, useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
-  LayoutDashboard, Building2, MessageSquare, Settings, LogOut, Menu, X, ChevronRight, Image, BarChart3
+  LayoutDashboard, Building2, MessageSquare, Settings, LogOut, Menu, X, ChevronRight, Image, BarChart3, MessageCircle
 } from 'lucide-react';
 import CompanyLogo from '@/components/CompanyLogo';
 import { useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ const navItems = [
   { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
   { path: '/admin/properties', label: 'Properties', icon: Building2, exact: false },
   { path: '/admin/inquiries', label: 'Inquiries', icon: MessageSquare, exact: false },
+  { path: '/admin/testimonials', label: 'Testimonials', icon: MessageCircle, exact: false },
   { path: '/admin/stats', label: 'Site Stats', icon: BarChart3, exact: false },
   { path: '/admin/media', label: 'Media', icon: Image, exact: false },
   { path: '/admin/settings', label: 'Settings', icon: Settings, exact: false },

@@ -147,6 +147,11 @@ export default function AddProperty() {
       });
 
       if (!res.ok) throw new Error('Failed to create property');
+      fetch('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: '/about' }),
+      }).catch(() => {});
       router.push('/admin/properties');
     } catch (error: any) {
       setValidationError(error.message || 'Error adding property');

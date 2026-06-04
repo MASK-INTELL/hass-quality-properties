@@ -65,6 +65,83 @@ SELECT * FROM (VALUES
 ) AS v
 WHERE NOT EXISTS (SELECT 1 FROM stats LIMIT 1);
 
+-- === Testimonials Table ===
+
+CREATE TABLE IF NOT EXISTS testimonials (
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name       TEXT NOT NULL,
+  role       TEXT NOT NULL,
+  quote      TEXT NOT NULL,
+  rating     INT NOT NULL DEFAULT 5 CHECK (rating >= 1 AND rating <= 5),
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+INSERT INTO testimonials (name, role, quote, rating)
+SELECT * FROM (VALUES
+  ('Sarah Akello','First-Time Homeowner','I was terrified of being scammed, which is so common in real estate. Hass Quality Properties walked me through the title verification step-by-step. I am now a proud homeowner in Booma!',5),
+  ('John Tumusiime','Property Investor','I have bought three commercial properties through them. Their local expertise in Fort Portal is unmatched. They know where the city is expanding before anyone else does.',5),
+  ('Mary Katusiime','Business Owner','Professional, reliable, and honest. They helped me secure a prime commercial spot for my restaurant in just two weeks. Outstanding speed and service.',5),
+  ('David Otim','Land Buyer','The transparency is what hooked me. They showed me the land, provided the exact coordinates, and handled the transfer process without any hidden fees.',5),
+  ('Grace Namaganda','Expat Relocating','Moving back to Uganda after 10 years abroad was daunting. Hass Quality Properties found me a fully furnished rental that felt like home immediately.',5),
+  ('Peter Mugisha','Vehicle Buyer','Not only do they do real estate, but they helped me import a pristine Toyota Hilux. The paperwork was flawless. Highly recommend their vehicle division.',5),
+  ('Dr. Alice Kemigisha','Medical Professional','With my busy schedule at the hospital, I did not have time to property hunt. They curated a list of 5 perfect homes, and I bought the second one I saw.',5),
+  ('Michael Byaruhanga','Retiree','I wanted a quiet piece of land overlooking the Rwenzori Mountains for my retirement. They found a gem that was not even listed publicly yet.',5),
+  ('Juliet Nansubuga','Retail Entrepreneur','They negotiated a fantastic lease rate for my boutique in the city center. Their agents truly advocate for their clients best interests.',5),
+  ('Robert Kigozi','Real Estate Developer','As a developer, I need large tracts of clear land. Hass Quality Properties does the due diligence so I do not have to. A true B2B partner.',5),
+  ('Esther Asiimwe','Family Home Buyer','We needed a home near good schools for our three kids. The agent was so patient, showing us over 10 properties until we found the one.',5),
+  ('James Kato','Motorcycle Enthusiast','Bought my Yamaha dirt bike through them. The mechanical inspection report they provided gave me 100% confidence in the purchase.',5),
+  ('Sarah Nakato','Diaspora Investor','Investing from London is risky, but Hass Quality Properties provided video tours, drone footage, and legal verification. I trust them completely.',5),
+  ('Emmanuel Ssenyonga','First-Time Buyer','I had a very tight budget. Instead of turning me away, they found a beautiful starter plot slightly outside the city that is already appreciating.',5),
+  ('Betty Kyomugisha','Landlord','They manage three of my rental properties. The tenants are always vetted properly, and I receive my reports and payments on time, every month.',5),
+  ('William Businge','Commercial Farmer','Finding 50 acres of fertile agricultural land with water access was tough until I contacted Hass. They closed the deal in record time.',5),
+  ('Catherine Atuhaire','Luxury Home Buyer','The level of discretion and professionalism they showed while helping us acquire our estate was world-class. Truly the best in Fort Portal.',5),
+  ('Joseph Mukasa','Student Housing Investor','They advised me to invest in hostels near the university. Best financial decision I have ever made. Their market foresight is brilliant.',5),
+  ('Florence Nabirye','Widow','After my husband passed, I needed to downsize. They handled the sale of my large home and the purchase of a smaller one with such deep compassion.',5),
+  ('Paul Kanyike','Logistics Manager','We needed a fleet of 5 delivery trucks. Hass Quality Properties sourced them, inspected them, and delivered them under budget.',5),
+  ('Agnes Mutesi','Airbnb Host','They helped me find the perfect apartment to turn into an Airbnb. They even advised on the best neighborhoods for tourist foot traffic.',5),
+  ('Richard Ssebaggala','Construction CEO','We buy all our development plots through Hass. Their legal team ensures every title is clean, saving us from endless court battles.',5),
+  ('Prossy Najjuma','Single Mother','I thought buying a home on a single income was impossible. They connected me with a great mortgage partner and found a home within my means.',5),
+  ('Ivan Kintu','Tech Entrepreneur','Everything was digital! I signed contracts online, viewed properties via video call, and transferred funds securely. Very modern agency.',5),
+  ('Lillian Apio','Restaurant Owner','They did not just find me a building; they found a location with the exact zoning, parking, and foot traffic my restaurant needed to thrive.',5),
+  ('Moses Ochieng','Car Enthusiast','Traded in my old SUV for a newer model. The valuation was fair, and the swap was completed in a single afternoon. Zero hassle.',5),
+  ('Dr. Susan Kembabazi','Clinic Founder','Setting up a new clinic requires specific facilities. Hass Quality Properties found a building that saved us thousands in renovation costs.',5),
+  ('Simon Peter','NGO Director','We needed office space for 50 staff members with high-speed internet access. They delivered exactly what we asked for within a week.',5),
+  ('Justine Namuli','Property Seller','My house sat on the market for 8 months with another broker. Hass took over, took professional photos, and sold it in 3 weeks.',5),
+  ('Arthur Mwebaze','Warehouse Owner','Industrial real estate is tricky, but their team knows the zoning laws inside and out. A highly competent group of professionals.',5),
+  ('Brenda Kiconco','Newlywed','They helped us find our first apartment together. The agent actually listened to our needs instead of just pushing expensive places.',5),
+  ('Charles Lwanga','Fleet Operator','Bought three commercial vans for my business. The vehicles were exactly as described, no hidden mechanical issues. Honest brokers.',5),
+  ('Diana Nkemba','Vacation Home Buyer','We wanted a getaway home near the crater lakes. The property they found us is breathtaking. It is our family favorite place on earth.',5),
+  ('Edward Ssekandi','Land Speculator','I buy land to hold and sell later. Hass Quality Properties always tips me off on the upcoming growth corridors in the region.',5),
+  ('Fiona Mutoni','Boutique Hotel Owner','They sourced a historic property that we converted into a boutique hotel. Their vision for what a property could be is inspiring.',5),
+  ('George Kutesa','Civil Servant','I appreciate their strict adherence to the law. Every document was stamped, verified, and legally binding. I slept peacefully knowing my money was safe.',5),
+  ('Harriet Nankya','Bakery Owner','They found me a commercial kitchen space that already had the heavy-duty electrical wiring I needed. Saved me a fortune!',5),
+  ('Isaac Musinguzi','First-Time Seller','I had no idea how to price my land. They gave me a free, accurate valuation and got me 15% more than I originally expected.',5),
+  ('Jane Frances','Corporate Executive','Relocating for work is stressful. Hass had a luxury apartment ready for me to view the day I landed. I signed the lease the next morning.',5),
+  ('Kenneth Opolot','Agriculture Investor','Bought 100 acres for a maize farm. They even helped me verify the soil quality and water table before closing the deal. Above and beyond.',5),
+  ('Lucy Akoth','Interior Designer','I buy fixer-uppers, renovate, and flip them. Hass Quality Properties is my go-to source for finding undervalued properties with great bones.',5),
+  ('Martin Sserwadda','Transport Business','Financing a commercial truck was proving difficult until Hass connected me with their partner bank. I was on the road making money in weeks.',5),
+  ('Nelly Babirye','Event Planner','I needed a large compound for hosting outdoor events. They found a stunning property with manicured gardens that my clients absolutely love.',5),
+  ('Oliver Kizza','Expat Teacher','They made sure my rental contract was fair and protected me as a tenant. It is rare to find an agency that cares about the renter just as much as the landlord.',5),
+  ('Patrick Ndawula','Hardware Store Owner','Secured a prime corner plot for my new hardware branch. The visibility is incredible, and my sales have doubled since moving there.',5),
+  ('Queen Kemigisha','Salon Owner','The agent negotiated a grace period on my rent while I was renovating the salon space. That kind of advocacy is priceless for a small business.',5),
+  ('Raymond Okello','Tour Operator','Bought two safari land cruisers through them. They understood exactly what modifications I needed for the national parks. Excellent service.',5),
+  ('Stella Namanya','Retiring Teacher','I invested my pension into two rental units they recommended. The passive income is steady, and they handle all the maintenance headaches.',5),
+  ('Timothy Kasozi','Tech Worker','Working remotely means I need a quiet home with fiber internet. They knew exactly which neighborhoods in Fort Portal could accommodate me.',5),
+  ('Victoria Nansikombi','Family Estate Executor','Selling our late parents estate was emotional and legally complex. Hass Quality Properties handled it with incredible tact, patience, and legal expertise.',5)
+) AS v
+WHERE NOT EXISTS (SELECT 1 FROM testimonials LIMIT 1);
+
+-- === Source column for stats + auto seeds ===
+
+ALTER TABLE stats ADD COLUMN IF NOT EXISTS source TEXT NOT NULL DEFAULT 'manual';
+
+UPDATE stats SET source = 'auto_listings' WHERE label = 'Listings Available' AND source = 'manual';
+
+INSERT INTO stats (label, value, sort_order, source)
+SELECT 'Client Testimonials', '0', 5, 'auto_testimonials'
+WHERE NOT EXISTS (SELECT 1 FROM stats WHERE label = 'Client Testimonials');
+
 -- === Indexes ===
 
 CREATE INDEX IF NOT EXISTS idx_properties_category     ON properties(category);

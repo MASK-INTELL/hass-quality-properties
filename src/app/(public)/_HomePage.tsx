@@ -6,7 +6,6 @@ import WhatsAppIcon from '@/components/WhatsAppIcon';
 
 import Link from 'next/link';
 import { useRef, useEffect, useState } from 'react';
-import { testimonials } from '@/data/testimonials';
 import PropertyCard from '@/components/PropertyCard';
 import PropertyGallery from '@/components/PropertyGallery';
 
@@ -27,6 +26,7 @@ interface Property {
 
 export default function Home() {
   const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
+  const [testimonials, setTestimonials] = useState<any[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -41,7 +41,19 @@ export default function Home() {
       }
     }
     fetchFeatured();
+    fetchTestimonials();
   }, []);
+
+  async function fetchTestimonials() {
+    try {
+      const res = await fetch('/api/testimonials');
+      if (!res.ok) throw new Error('Failed to fetch');
+      const data = await res.json();
+      setTestimonials(data);
+    } catch (error) {
+      console.error('Error fetching testimonials:', error);
+    }
+  }
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -153,7 +165,7 @@ export default function Home() {
             className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-8 no-scrollbar"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
-            {testimonials.slice(0, 10).map((testimonial) => (
+            {(testimonials.length > 0 ? testimonials : []).slice(0, 10).map((testimonial) => (
               <article
                 key={testimonial.id}
                 className="min-w-[100%] md:min-w-[calc(50%-12px)] lg:min-w-[calc(33.333%-16px)] snap-center bg-white p-8 rounded-2xl shadow-sm border border-gray-100 relative mt-6"

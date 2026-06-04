@@ -71,6 +71,11 @@ export default function AdminProperties() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ path: `/properties/${targetId}` }),
       }).catch(() => {});
+      fetch('/api/revalidate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: '/about' }),
+      }).catch(() => {});
       setDeleteTarget(null);
       fetchProperties();
     } catch (err: any) {

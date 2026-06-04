@@ -5,13 +5,28 @@ export interface Stat {
   label: string;
   value: string;
   sort_order: number;
+  source: string;
   created_at: string;
   updated_at: string;
 }
 
 export async function getAllStats(): Promise<Stat[]> {
   const rows = await sql`SELECT * FROM stats ORDER BY sort_order ASC`;
-  return rows as unknown as Stat[];
+  const stats = rows as unknown as Stat[];
+
+  for (const stat of stats) {
+    if (stat.source === 'auto_listings') {
+      const [row] = await sql`SELECT COUNT(*)::int AS count FROM properties WHERE status IN ('For Sale', 'For Rent')`;
+      const { count } = row as unknown as { count: number };
+      stat.value = String(count);
+    } else if (stat.source === 'auto_testimonials') {
+      const [row] = await sql`SELECT COUNT(*)::int AS count FROM testimonials`;
+      const { count } = row as unknown as { count: number };
+      stat.value = String(count);
+    }
+  }
+
+  return stats;
 }
 
 export async function createStat(data: { label: string; value: string; sort_order?: number }): Promise<Stat> {
