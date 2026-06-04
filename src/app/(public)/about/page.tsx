@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import sql from '@/lib/db';
+import { getAllStats } from '@/lib/repositories/stats';
 import { ArrowLeft, Building2, Users, Target, Award, CheckCircle2 } from 'lucide-react';
 
 export const revalidate = 3600;
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 };
 
 export default async function About() {
-  const stats = await sql`SELECT label, value FROM stats ORDER BY sort_order ASC` as unknown as { label: string; value: string }[];
+  const stats = await getAllStats();
 
   return (
     <div className="bg-white min-h-screen">
