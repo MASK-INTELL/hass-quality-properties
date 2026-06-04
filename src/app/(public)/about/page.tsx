@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
+import sql from '@/lib/db';
 import { ArrowLeft, Building2, Users, Target, Award, CheckCircle2 } from 'lucide-react';
 
 export const metadata: Metadata = {
@@ -18,7 +19,9 @@ export const metadata: Metadata = {
   alternates: { canonical: '/about' },
 };
 
-export default function About() {
+export default async function About() {
+  const stats = await sql`SELECT label, value FROM stats ORDER BY sort_order ASC` as unknown as { label: string; value: string }[];
+
   return (
     <div className="bg-white min-h-screen">
       {/* Hero Header */}
@@ -132,26 +135,18 @@ export default function About() {
         </div>
 
         {/* Stats */}
-        <div className="bg-emerald-900 rounded-3xl p-12 text-white text-center">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <div className="text-4xl font-bold mb-2">11+</div>
-              <div className="text-emerald-200 text-sm uppercase tracking-wider">Years of Experience</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">100+</div>
-              <div className="text-emerald-200 text-sm uppercase tracking-wider">Properties Sold</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">200+</div>
-              <div className="text-emerald-200 text-sm uppercase tracking-wider">Happy Clients</div>
-            </div>
-            <div>
-              <div className="text-4xl font-bold mb-2">50+</div>
-              <div className="text-emerald-200 text-sm uppercase tracking-wider">Listings Available</div>
+        {stats.length > 0 && (
+          <div className="bg-emerald-900 rounded-3xl p-12 text-white text-center">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              {stats.map((stat) => (
+                <div key={stat.label}>
+                  <div className="text-4xl font-bold mb-2">{stat.value}</div>
+                  <div className="text-emerald-200 text-sm uppercase tracking-wider">{stat.label}</div>
+                </div>
+              ))}
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

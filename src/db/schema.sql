@@ -47,6 +47,24 @@ CREATE TABLE IF NOT EXISTS inquiries (
   created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE IF NOT EXISTS stats (
+  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  label      TEXT NOT NULL,
+  value      TEXT NOT NULL,
+  sort_order INT NOT NULL DEFAULT 0,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+INSERT INTO stats (label, value, sort_order)
+SELECT * FROM (VALUES
+  ('Years of Experience', '11+', 1),
+  ('Properties Sold', '100+', 2),
+  ('Happy Clients', '200+', 3),
+  ('Listings Available', '50+', 4)
+) AS v
+WHERE NOT EXISTS (SELECT 1 FROM stats LIMIT 1);
+
 -- === Indexes ===
 
 CREATE INDEX IF NOT EXISTS idx_properties_category     ON properties(category);
