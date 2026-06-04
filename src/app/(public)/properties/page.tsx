@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import PropertiesPage from './_PropertiesPage';
 
 export const metadata: Metadata = {
@@ -17,5 +18,9 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <PropertiesPage />;
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gray-50 py-12"><div className="max-w-7xl mx-auto px-4 text-center text-gray-500">Loading properties...</div></div>}>
+      <PropertiesPage />
+    </Suspense>
+  );
 }

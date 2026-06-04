@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, Bed, Bath, Maximize, Check, ArrowLeft, Phone, Building2, ChevronLeft, ChevronRight, X, Download, Share2, Heart, Video } from 'lucide-react';
@@ -38,6 +38,14 @@ export default function PropertyDetails({ id }: { id: string }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [showShareToast, setShowShareToast] = useState(false);
+  const [backHref, setBackHref] = useState('/properties');
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem('propertiesSearchParams');
+    if (saved) {
+      setBackHref(`/properties${saved}`);
+    }
+  }, []);
 
   const { isFavorite, toggleFavorite } = useFavorites();
 
@@ -109,7 +117,7 @@ export default function PropertyDetails({ id }: { id: string }) {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <h2 className="text-2xl font-bold text-gray-900 mb-4">Property Not Found</h2>
-          <Link href="/properties" className="text-emerald-600 hover:text-emerald-700 font-semibold flex items-center justify-center gap-2">
+          <Link href={backHref} className="text-emerald-600 hover:text-emerald-700 font-semibold flex items-center justify-center gap-2">
             <ArrowLeft className="h-5 w-5" /> Back to Properties
           </Link>
         </div>
@@ -121,6 +129,9 @@ export default function PropertyDetails({ id }: { id: string }) {
     <div className="bg-gray-50 min-h-screen pb-20">
       <div className="bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+          <Link href={backHref} className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium transition-colors mb-6">
+            <ArrowLeft className="h-5 w-5" /> Back to Properties
+          </Link>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
             <div>
               <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold mb-3 uppercase tracking-wide">

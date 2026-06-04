@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
 import { Heart, Home, Car } from 'lucide-react';
 import { useFavorites } from '@/hooks/useFavorites';
@@ -21,13 +22,18 @@ interface Property {
 }
 
 export default function Properties() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const activeCategory = (searchParams.get('category') as 'Real Estate' | 'Vehicles' | 'Rentals' | 'Motorcycles') || 'Real Estate';
+  const searchTerm = searchParams.get('search') || '';
+  const filterType = searchParams.get('type') || 'All';
+  const sortBy = searchParams.get('sort') || 'newest';
+  const showFavoritesOnly = searchParams.get('fav') === '1';
+
   const [allProperties, setAllProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState<'Real Estate' | 'Vehicles' | 'Rentals' | 'Motorcycles'>('Real Estate');
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterType, setFilterType] = useState('All');
-  const [sortBy, setSortBy] = useState('newest');
-  const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const { isFavorite } = useFavorites();
 
   useEffect(() => {
@@ -45,6 +51,27 @@ export default function Properties() {
     }
     fetchProperties();
   }, []);
+
+  useEffect(() => {
+    if (!loading) {
+      const savedPos = sessionStorage.getItem('propertiesScrollPos');
+      if (savedPos) {
+        requestAnimationFrame(() => window.scrollTo(0, parseInt(savedPos, 10)));
+        sessionStorage.removeItem('propertiesScrollPos');
+      }
+    }
+  }, [loading]);
+
+  const updateParam = useCallback((key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value && value !== 'All' && value !== 'newest') {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+    const qs = params.toString();
+    router.replace(`${pathname}${qs ? '?' + qs : ''}`, { scroll: false });
+  }, [searchParams, router, pathname]);
 
   const parsePrice = (priceStr: string) => {
     const numericStr = priceStr.replace(/[^0-9]/g, '');
@@ -101,8 +128,11 @@ export default function Properties() {
   };
 
   const handleCategoryChange = (category: 'Real Estate' | 'Vehicles' | 'Rentals' | 'Motorcycles') => {
-    setActiveCategory(category);
-    setFilterType('All');
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('category', category);
+    params.delete('type');
+    const qs = params.toString();
+    router.replace(`${pathname}${qs ? '?' + qs : ''}`, { scroll: false });
   };
 
   return (
@@ -164,7 +194,7 @@ export default function Properties() {
         {/* Favorites Filter */}
         <div className="flex justify-end mb-8">
           <button
-            onClick={() => setShowFavoritesOnly(!showFavoritesOnly)}
+            onClick={() => updateParam('fav', showFavoritesOnly ? '' : '1')}
             className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all border ${
               showFavoritesOnly
                 ? 'bg-red-50 border-red-200 text-red-500 shadow-sm'

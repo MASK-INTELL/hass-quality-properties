@@ -33,10 +33,15 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const favorite = isFavorite(property.id);
 
+  const handleNavigate = () => {
+    sessionStorage.setItem('propertiesScrollPos', String(window.scrollY));
+    sessionStorage.setItem('propertiesSearchParams', window.location.search);
+  };
+
   return (
     <article className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col h-full">
       <div className="relative h-64 overflow-hidden group">
-        <Link href={`/properties/${property.id}`} className="block w-full h-full">
+        <Link href={`/properties/${property.id}`} className="block w-full h-full" onClick={handleNavigate}>
           <Image
             fill
             src={property.image_url}
@@ -126,6 +131,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           <Link
             href={`/properties/${property.id}`}
             className="p-2 rounded-full bg-gray-50 text-emerald-600 hover:bg-emerald-50 transition-colors"
+            onClick={handleNavigate}
           >
             <ArrowRight className="h-5 w-5" />
           </Link>
