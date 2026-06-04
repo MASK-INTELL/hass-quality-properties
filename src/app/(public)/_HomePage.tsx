@@ -9,6 +9,12 @@ import { useRef, useEffect, useState } from 'react';
 import PropertyCard from '@/components/PropertyCard';
 import PropertyGallery from '@/components/PropertyGallery';
 
+interface ImageMeta {
+  url: string;
+  alt: string;
+  filename: string;
+}
+
 interface Property {
   id: string;
   title: string;
@@ -22,6 +28,7 @@ interface Property {
   beds?: string;
   baths?: string;
   area?: string;
+  image_metadata?: ImageMeta[] | null;
 }
 
 export default function Home() {

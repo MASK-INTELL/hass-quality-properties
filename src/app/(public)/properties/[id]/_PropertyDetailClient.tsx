@@ -8,6 +8,12 @@ import WhatsAppIcon from '@/components/WhatsAppIcon';
 import PropertyCard from '@/components/PropertyCard';
 import { useFavorites } from '@/hooks/useFavorites';
 
+interface ImageMeta {
+  url: string;
+  alt: string;
+  filename: string;
+}
+
 interface Property {
   id: string;
   title: string;
@@ -29,6 +35,7 @@ interface Property {
   fuel_type?: string | null;
   video_url?: string | null;
   images?: string[] | null;
+  image_metadata?: ImageMeta[] | null;
 }
 
 export default function PropertyDetails({
@@ -167,7 +174,7 @@ export default function PropertyDetails({
               <Image
                 fill
                 src={images[0]}
-                alt={property.title}
+                alt={property.image_metadata?.find(m => m.url === images[0])?.alt || property.title}
                 className="object-cover transition-transform duration-500 group-hover:scale-105"
                 sizes="(max-width: 768px) 100vw, 75vw"
               />
@@ -187,7 +194,7 @@ export default function PropertyDetails({
                     <Image
                       fill
                       src={img}
-                      alt={`${property.title} - Image ${idx + 2}`}
+                      alt={property.image_metadata?.find(m => m.url === img)?.alt || `${property.title} - Image ${idx + 2}`}
                       className="object-cover transition-transform duration-500 group-hover:scale-110"
                       sizes="25vw"
                     />
@@ -233,13 +240,12 @@ export default function PropertyDetails({
           <div className="w-full h-full flex items-center justify-center p-4 md:p-12" onClick={() => setIsLightboxOpen(false)}>
             <div className="relative w-full h-full max-w-7xl max-h-full">
               <Image
-                fill
-                src={images[currentImageIndex]}
-                alt={`${property.title} - Fullscreen`}
-                className="object-contain select-none"
-                sizes="100vw"
-                onClick={(e) => e.stopPropagation()}
-              />
+                      fill
+                      src={images[currentImageIndex]}
+                      alt={property.image_metadata?.find(m => m.url === images[currentImageIndex])?.alt || `${property.title} - Fullscreen`}
+                      className="object-contain"
+                      sizes="100vw"
+                    />
             </div>
           </div>
         </div>

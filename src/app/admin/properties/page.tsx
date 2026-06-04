@@ -210,7 +210,7 @@ export default function AdminProperties() {
                       <div className="flex items-center gap-3">
                         <div className="flex-shrink-0 h-10 w-10 rounded-lg overflow-hidden bg-gray-100">
                           {property.imageUrl ? (
-                            <Image className="h-10 w-10 object-cover" src={property.imageUrl} alt="" width={40} height={40} />
+                            <Image className="h-10 w-10 object-cover" src={property.imageUrl} alt={property.title} width={40} height={40} />
                           ) : (
                             <div className="h-full w-full flex items-center justify-center">
                               <Building2 className="h-4 w-4 text-gray-400" />

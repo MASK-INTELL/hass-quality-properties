@@ -14,7 +14,10 @@ interface PropertyFormData {
   type: string;
   status: string;
   imageUrl: string;
+  imageAlt: string;
+  imageFilename: string;
   additionalImages: string[];
+  additionalAlts: string[];
   videoUrl: string;
   beds: string;
   baths: string;
@@ -54,6 +57,9 @@ export default function EditProperty() {
         if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
         if (data) {
+          const meta = data.image_metadata || [];
+          const mainMeta = meta[0] || {};
+          const addAlts = meta.slice(1).map((m: any) => m.alt || '');
           setFormData({
             title: data.title || '',
             description: data.description || '',
@@ -63,7 +69,10 @@ export default function EditProperty() {
             type: data.type || 'House',
             status: data.status || 'For Sale',
             imageUrl: data.image_url || '',
+            imageAlt: mainMeta.alt || '',
+            imageFilename: mainMeta.filename || '',
             additionalImages: data.images || [],
+            additionalAlts: addAlts.length === (data.images || []).length ? addAlts : (data.images || []).map(() => ''),
             videoUrl: data.video_url || '',
             beds: data.beds?.toString() || '',
             baths: data.baths?.toString() || '',
@@ -95,17 +104,17 @@ export default function EditProperty() {
     });
   };
 
-  const uploadFile = async (file: File): Promise<string> => {
+  const uploadFile = async (file: File, filename?: string): Promise<{ url: string; key: string; filename: string }> => {
     const form = new FormData();
     form.append('file', file);
+    if (filename) form.append('filename', filename);
 
     const res = await fetch('/api/upload', { method: 'POST', body: form });
     if (!res.ok) {
       const err = await res.json();
       throw new Error(err.error || 'Upload failed');
     }
-    const data = await res.json();
-    return data.url;
+    return res.json();
   };
 
   const handleMainImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -114,8 +123,8 @@ export default function EditProperty() {
     setUploadingImage(true);
     setValidationError(null);
     try {
-      const url = await uploadFile(file);
-      set('imageUrl', url);
+      const data = await uploadFile(file, formData?.imageFilename || undefined);
+      set('imageUrl', data.url);
     } catch (err: any) {
       setValidationError(err.message);
     } finally {
@@ -131,11 +140,14 @@ export default function EditProperty() {
     setValidationError(null);
     try {
       const urls: string[] = [];
+      const alts: string[] = [];
       for (const file of Array.from(files)) {
-        const url = await uploadFile(file);
-        urls.push(url);
+        const data = await uploadFile(file);
+        urls.push(data.url);
+        alts.push('');
       }
       set('additionalImages', [...(formData?.additionalImages || []), ...urls]);
+      set('additionalAlts', [...(formData?.additionalAlts || []), ...alts]);
     } catch (err: any) {
       setValidationError(err.message);
     } finally {
@@ -146,6 +158,14 @@ export default function EditProperty() {
   const removeAdditionalImage = (index: number) => {
     if (!formData) return;
     set('additionalImages', formData.additionalImages.filter((_, i) => i !== index));
+    set('additionalAlts', formData.additionalAlts.filter((_, i) => i !== index));
+  };
+
+  const setAdditionalAlt = (index: number, alt: string) => {
+    if (!formData) return;
+    const alts = [...formData.additionalAlts];
+    alts[index] = alt;
+    set('additionalAlts', alts);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -159,6 +179,14 @@ export default function EditProperty() {
     setLoading(true);
 
     try {
+      const imageMetadata: { url: string; alt: string; filename: string }[] = [];
+      if (formData.imageUrl) {
+        imageMetadata.push({ url: formData.imageUrl, alt: formData.imageAlt, filename: formData.imageFilename });
+      }
+      formData.additionalImages.forEach((url, i) => {
+        imageMetadata.push({ url, alt: formData.additionalAlts[i] || '', filename: '' });
+      });
+
       const res = await fetch(`/api/admin/properties/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
@@ -172,6 +200,7 @@ export default function EditProperty() {
           status: formData.status,
           image_url: formData.imageUrl,
           images: formData.additionalImages.length > 0 ? formData.additionalImages : null,
+          image_metadata: imageMetadata,
           video_url: formData.videoUrl || null,
           beds: formData.beds ? parseInt(formData.beds) : null,
           baths: formData.baths ? parseInt(formData.baths) : null,
@@ -360,9 +389,31 @@ export default function EditProperty() {
                   </button>
                 )}
               </div>
+              <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Custom filename (optional)</label>
+                  <input
+                    type="text"
+                    value={formData.imageFilename}
+                    onChange={e => set('imageFilename', e.target.value)}
+                    placeholder="e.g. 4-bedroom-villa-front-view"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-500 mb-1">Alt text (for SEO)</label>
+                  <input
+                    type="text"
+                    value={formData.imageAlt}
+                    onChange={e => set('imageAlt', e.target.value)}
+                    placeholder="e.g. Front view of the 4 bedroom villa"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                  />
+                </div>
+              </div>
               {formData.imageUrl && (
                 <div className="mt-3 rounded-xl overflow-hidden border border-gray-200 h-48 relative">
-                  <Image fill src={formData.imageUrl} alt="Preview" className="object-cover" sizes="600px" />
+                  <Image fill src={formData.imageUrl} alt={formData.imageAlt || 'Preview'} className="object-cover" sizes="600px" />
                 </div>
               )}
             </div>
@@ -383,17 +434,26 @@ export default function EditProperty() {
                 </label>
               </div>
               {formData.additionalImages.length > 0 && (
-                <div className="mt-3 grid grid-cols-4 gap-3">
+                <div className="mt-3 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
                   {formData.additionalImages.map((url, idx) => (
-                    <div key={idx} className="relative group rounded-lg overflow-hidden border border-gray-200 h-24">
-                      <Image fill src={url} alt="" className="object-cover" sizes="150px" />
-                      <button
-                        type="button"
-                        onClick={() => removeAdditionalImage(idx)}
-                        className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </button>
+                    <div key={idx} className="space-y-2">
+                      <div className="relative group rounded-lg overflow-hidden border border-gray-200 h-24">
+                        <Image fill src={url} alt={formData.additionalAlts[idx] || ''} className="object-cover" sizes="150px" />
+                        <button
+                          type="button"
+                          onClick={() => removeAdditionalImage(idx)}
+                          className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <Trash2 className="h-3 w-3" />
+                        </button>
+                      </div>
+                      <input
+                        type="text"
+                        value={formData.additionalAlts[idx] || ''}
+                        onChange={e => setAdditionalAlt(idx, e.target.value)}
+                        placeholder="Alt text (SEO)"
+                        className="w-full px-2 py-1.5 border border-gray-200 rounded text-xs focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                      />
                     </div>
                   ))}
                 </div>

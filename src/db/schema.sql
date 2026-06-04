@@ -142,6 +142,8 @@ INSERT INTO stats (label, value, sort_order, source)
 SELECT 'Client Testimonials', '0', 5, 'auto_testimonials'
 WHERE NOT EXISTS (SELECT 1 FROM stats WHERE label = 'Client Testimonials');
 
+ALTER TABLE properties ADD COLUMN IF NOT EXISTS image_metadata JSONB NOT NULL DEFAULT '[]';
+
 -- === Indexes ===
 
 CREATE INDEX IF NOT EXISTS idx_properties_category     ON properties(category);

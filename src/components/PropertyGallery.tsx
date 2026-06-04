@@ -5,12 +5,19 @@ import Image from 'next/image';
 import { Maximize, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 
+interface ImageMeta {
+  url: string;
+  alt: string;
+  filename: string;
+}
+
 interface Property {
   id: string;
   title: string;
   price: string;
   status: string;
   image_url: string;
+  image_metadata?: ImageMeta[] | null;
 }
 
 export default function PropertyGallery() {
@@ -80,7 +87,7 @@ export default function PropertyGallery() {
             <Image
               fill
               src={currentItem.image_url}
-              alt={currentItem.title}
+              alt={currentItem.image_metadata?.find(m => m.url === currentItem.image_url)?.alt || currentItem.title}
               className="object-cover"
               sizes="100vw"
             />
@@ -175,7 +182,7 @@ export default function PropertyGallery() {
               <Image
                 fill
                 src={currentItem.image_url}
-                alt={`${currentItem.title} - Fullscreen`}
+                alt={currentItem.image_metadata?.find(m => m.url === currentItem.image_url)?.alt || `${currentItem.title} - Fullscreen`}
                 className="object-contain select-none"
                 sizes="100vw"
                 onClick={(e) => e.stopPropagation()}

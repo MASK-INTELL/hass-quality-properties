@@ -1,4 +1,5 @@
 import sql from '@/lib/db';
+import type { ImageMetadata } from '@/lib/image-metadata';
 
 export interface Property {
   id: string;
@@ -14,6 +15,7 @@ export interface Property {
   baths: number | null;
   area: string | null;
   images: string[] | null;
+  image_metadata: ImageMetadata[] | null;
   make: string | null;
   model: string | null;
   year: number | null;
@@ -87,15 +89,16 @@ export async function getPropertiesPaginated(
 }
 
 export async function createProperty(data: Partial<Property>): Promise<Property> {
+  const imageMetadata = data.image_metadata ? JSON.stringify(data.image_metadata) : null;
   const [property] = await sql`
     INSERT INTO properties (
       title, description, price, location, category, type, status,
-      image_url, images, video_url, beds, baths, area,
+      image_url, images, image_metadata, video_url, beds, baths, area,
       make, model, year, mileage, transmission, fuel_type
     ) VALUES (
       ${data.title}, ${data.description}, ${data.price}, ${data.location},
       ${data.category}, ${data.type}, ${data.status},
-      ${data.image_url}, ${data.images || null}, ${data.video_url || null},
+      ${data.image_url}, ${data.images || null}, ${imageMetadata}, ${data.video_url || null},
       ${data.beds || null}, ${data.baths || null}, ${data.area || null},
       ${data.make || null}, ${data.model || null}, ${data.year || null},
       ${data.mileage || null}, ${data.transmission || null}, ${data.fuel_type || null}
@@ -105,6 +108,7 @@ export async function createProperty(data: Partial<Property>): Promise<Property>
 }
 
 export async function updateProperty(id: string, data: Partial<Property>): Promise<Property | null> {
+  const imageMetadata = data.image_metadata !== undefined ? JSON.stringify(data.image_metadata) : null;
   const [property] = await sql`
     UPDATE properties SET
       title = COALESCE(${data.title}, title),
@@ -116,6 +120,7 @@ export async function updateProperty(id: string, data: Partial<Property>): Promi
       status = COALESCE(${data.status}, status),
       image_url = COALESCE(${data.image_url}, image_url),
       images = COALESCE(${data.images || null}, images),
+      image_metadata = COALESCE(${imageMetadata}::jsonb, image_metadata),
       video_url = COALESCE(${data.video_url || null}, video_url),
       beds = COALESCE(${data.beds || null}, beds),
       baths = COALESCE(${data.baths || null}, baths),

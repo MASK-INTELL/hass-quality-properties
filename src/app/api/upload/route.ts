@@ -3,6 +3,17 @@ import { auth } from '@clerk/nextjs/server';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { r2Client, R2_CONFIG } from '@/lib/r2';
 
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    || 'untitled';
+}
+
 export async function POST(request: NextRequest) {
   const { userId } = await auth();
   if (!userId) {
@@ -25,9 +36,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
     }
 
-    const ext = file.name.split('.').pop();
-    const timestamp = Date.now();
-    const fileKey = `properties/${userId}/${timestamp}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+    const ext = file.name.split('.').pop() || 'bin';
+    const customName = (formData.get('filename') as string)?.trim();
+    const baseName = customName ? slugify(customName) : slugify(file.name.replace(/\.[^.]+$/, ''));
+    const suffix = Math.random().toString(36).slice(2, 6);
+    const fileKey = `properties/${userId}/${baseName}-${suffix}.${ext}`;
 
     const buffer = Buffer.from(await file.arrayBuffer());
 
@@ -42,7 +55,7 @@ export async function POST(request: NextRequest) {
       ? `${R2_CONFIG.publicUrl}/${fileKey}`
       : `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_CONFIG.bucketName}/${fileKey}`;
 
-    return NextResponse.json({ url: publicUrl, key: fileKey });
+    return NextResponse.json({ url: publicUrl, key: fileKey, filename: baseName });
   } catch (error) {
     console.error('Upload error:', error);
     return NextResponse.json({ error: 'Upload failed' }, { status: 500 });

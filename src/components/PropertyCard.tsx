@@ -5,6 +5,12 @@ import { MapPin, Bed, Bath, Maximize, ArrowRight, Heart, Video, Gauge, Calendar,
 import Link from 'next/link';
 import { useFavorites } from '@/hooks/useFavorites';
 
+interface ImageMeta {
+  url: string;
+  alt: string;
+  filename: string;
+}
+
 interface Property {
   id: string;
   title: string;
@@ -23,6 +29,7 @@ interface Property {
   mileage?: string | null;
   transmission?: string | null;
   video_url?: string | null;
+  image_metadata?: ImageMeta[] | null;
 }
 
 interface PropertyCardProps {
@@ -45,7 +52,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           <Image
             fill
             src={property.image_url}
-            alt={property.title}
+            alt={property.image_metadata?.find(m => m.url === property.image_url)?.alt || property.title}
             className="object-cover transform group-hover:scale-105 transition-transform duration-500"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />

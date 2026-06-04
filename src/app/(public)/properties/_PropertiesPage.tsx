@@ -6,6 +6,12 @@ import PropertyCard from '@/components/PropertyCard';
 import { Heart, Home, Car } from 'lucide-react';
 import { useFavorites } from '@/hooks/useFavorites';
 
+interface ImageMeta {
+  url: string;
+  alt: string;
+  filename: string;
+}
+
 interface Property {
   id: string;
   title: string;
@@ -19,6 +25,7 @@ interface Property {
   beds?: string;
   baths?: string;
   area?: string;
+  image_metadata?: ImageMeta[] | null;
 }
 
 export default function Properties() {

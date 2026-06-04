@@ -151,7 +151,7 @@ export default function AdminDashboard() {
               <div key={property.id} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition-colors">
                 <div className="flex-shrink-0 h-12 w-12 rounded-lg overflow-hidden bg-gray-100">
                   {property.image_url ? (
-                    <Image src={property.image_url} alt="" width={48} height={48} className="h-full w-full object-cover" />
+                    <Image src={property.image_url} alt={property.title} width={48} height={48} className="h-full w-full object-cover" />
                   ) : (
                     <div className="h-full w-full flex items-center justify-center">
                       <Building2 className="h-5 w-5 text-gray-400" />
