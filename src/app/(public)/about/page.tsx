@@ -40,7 +40,7 @@ export default async function About() {
           <ArrowLeft className="h-5 w-5" /> Back
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
+        <div className="mb-20 max-w-3xl">
           <div>
             <h2 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h2>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
@@ -49,16 +49,6 @@ export default async function About() {
             <p className="text-gray-600 text-lg leading-relaxed">
               With years of experience in the local market, our team understands the unique landscape of Fort Portal and the surrounding regions. Whether you are looking for a residential home, commercial land, or an agricultural investment, we have the expertise to guide you every step of the way.
             </p>
-          </div>
-          <div className="relative">
-            <div className="absolute inset-0 bg-emerald-600 rounded-2xl transform rotate-3 opacity-10"></div>
-            <Image
-              src="https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="Office Meeting"
-              width={800}
-              height={530}
-              className="relative rounded-2xl shadow-xl w-full object-cover"
-            />
           </div>
         </div>
 
