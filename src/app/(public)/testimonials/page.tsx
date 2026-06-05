@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Star } from 'lucide-react';
 import sql from '@/lib/db';
 import TestimonialForm from './_TestimonialForm';
@@ -71,9 +72,10 @@ export default async function Testimonials() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {testimonials.map((testimonial) => (
-            <article
+            <Link
               key={testimonial.id}
-              className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative mt-6 group"
+              href={`/testimonials/${testimonial.id}`}
+              className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative mt-6 group block"
             >
               <div className="absolute -top-6 left-8">
                 <Image
@@ -90,14 +92,14 @@ export default async function Testimonials() {
                     <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
                   ))}
                 </div>
-                <p className="text-gray-600 italic mb-6 leading-relaxed">&quot;{testimonial.quote}&quot;</p>
+                <p className="text-gray-600 italic mb-6 leading-relaxed line-clamp-4">&quot;{testimonial.quote}&quot;</p>
                 <div>
                   <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
                   <p className="text-emerald-600 text-sm font-medium">{testimonial.role}</p>
                 </div>
                 <ShareButtons quote={testimonial.quote} name={testimonial.name} role={testimonial.role} id={testimonial.id} />
               </div>
-            </article>
+            </Link>
           ))}
         </div>
       </div>
