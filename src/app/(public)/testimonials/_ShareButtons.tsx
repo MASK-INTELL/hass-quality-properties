@@ -56,7 +56,8 @@ export default function ShareButtons({ quote, name, role, id }: ShareButtonsProp
     },
   ];
 
-  const handleCopyLink = async () => {
+  const handleCopyLink = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     try {
       await navigator.clipboard.writeText(pageUrl);
       setCopied(true);
@@ -76,6 +77,7 @@ export default function ShareButtons({ quote, name, role, id }: ShareButtonsProp
           target="_blank"
           rel="noopener noreferrer"
           title={link.label}
+          onClick={(e) => e.stopPropagation()}
           className={`p-1.5 text-gray-400 ${link.color} transition-colors rounded hover:bg-gray-100`}
         >
           {link.icon}
