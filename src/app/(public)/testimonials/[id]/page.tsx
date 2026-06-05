@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Star, ArrowLeft } from 'lucide-react';
+import { JsonLd } from '@/components/JsonLd';
 import sql from '@/lib/db';
 import { getTestimonialById } from '@/lib/repositories/testimonials';
 import ShareButtons from '../_ShareButtons';
@@ -58,27 +59,22 @@ export default async function TestimonialDetail({ params }: { params: Promise<{ 
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            '@context': 'https://schema.org',
-            '@type': 'Review',
-            author: { '@type': 'Person', name: testimonial.name },
-            itemReviewed: {
-              '@type': 'Organization',
-              name: 'Hass Quality Properties',
-              image: '/logo.png',
-            },
-            reviewRating: {
-              '@type': 'Rating',
-              ratingValue: testimonial.rating,
-              bestRating: 5,
-            },
-            reviewBody: testimonial.quote,
-          }),
-        }}
-      />
+      <JsonLd data={{
+        '@context': 'https://schema.org',
+        '@type': 'Review',
+        author: { '@type': 'Person', name: testimonial.name },
+        itemReviewed: {
+          '@type': 'Organization',
+          name: 'Hass Quality Properties',
+          image: '/logo.png',
+        },
+        reviewRating: {
+          '@type': 'Rating',
+          ratingValue: testimonial.rating,
+          bestRating: 5,
+        },
+        reviewBody: testimonial.quote,
+      }} />
       <div className="bg-gray-50 min-h-screen pb-20">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
           <Link href="/testimonials" className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium transition-colors mb-8">

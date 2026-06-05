@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { fileTypeFromBuffer } from 'file-type';
 import { requireAdmin } from '@/lib/require-admin';
 import { r2Client, R2_CONFIG } from '@/lib/r2';
 
@@ -14,6 +15,19 @@ function slugify(text: string): string {
     .replace(/^-|-$/g, '')
     || 'untitled';
 }
+
+// Map allowed MIME types to accepted types for file-type detection
+const ACCEPTED_TYPES = new Set([
+  'image/jpeg',
+  'image/png',
+  'image/gif',
+  'image/webp',
+  'image/svg+xml',
+  'video/mp4',
+  'video/webm',
+  'video/ogg',
+  'application/pdf',
+]);
 
 export async function POST(request: NextRequest) {
   const unauthorized = await requireAdmin();
@@ -33,23 +47,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'File too large (max 50MB)' }, { status: 400 });
     }
 
+    // Quick preliminary filter (client-supplied MIME is untrusted)
     if (!R2_CONFIG.allowedMimeTypes.includes(file.type)) {
       return NextResponse.json({ error: 'Invalid file type' }, { status: 400 });
     }
 
-    const ext = file.name.split('.').pop() || 'bin';
+    const buffer = Buffer.from(await file.arrayBuffer());
+
+    // Magic byte detection — authoritative check
+    const detected = await fileTypeFromBuffer(buffer);
+    if (!detected || !ACCEPTED_TYPES.has(detected.mime)) {
+      return NextResponse.json({ error: 'File content does not match an accepted type' }, { status: 400 });
+    }
+
+    const ext = detected.ext;
     const customName = (formData.get('filename') as string)?.trim();
     const baseName = customName ? slugify(customName) : slugify(file.name.replace(/\.[^.]+$/, ''));
     const suffix = Math.random().toString(36).slice(2, 6);
     const fileKey = `properties/${userId}/${baseName}-${suffix}.${ext}`;
 
-    const buffer = Buffer.from(await file.arrayBuffer());
-
     await r2Client.send(new PutObjectCommand({
       Bucket: R2_CONFIG.bucketName,
       Key: fileKey,
       Body: buffer,
-      ContentType: file.type,
+      ContentType: detected.mime,
     }));
 
     const publicUrl = R2_CONFIG.publicUrl

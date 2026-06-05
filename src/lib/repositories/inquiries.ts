@@ -18,14 +18,14 @@ export async function getAllInquiries(): Promise<Inquiry[]> {
 
 export async function createInquiry(data: {
   name: string;
-  email: string;
+  email?: string;
   phone?: string;
   message: string;
   property_title?: string;
 }): Promise<Inquiry> {
   const [inquiry] = await sql`
     INSERT INTO inquiries (name, email, phone, message, property_title)
-    VALUES (${data.name}, ${data.email}, ${data.phone || null}, ${data.message}, ${data.property_title || null})
+    VALUES (${data.name}, ${data.email || ''}, ${data.phone || null}, ${data.message}, ${data.property_title || null})
     RETURNING *
   `;
   return inquiry as unknown as Inquiry;

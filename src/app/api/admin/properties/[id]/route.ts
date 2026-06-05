@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 import { requireAdmin } from '@/lib/require-admin';
+import { validateCsrf } from '@/lib/csrf';
 import { getPropertyById, updateProperty, deleteProperty } from '@/lib/repositories/properties';
+import { propertySchema } from '@/lib/validation';
 
 export async function GET(
   _request: NextRequest,
@@ -25,10 +28,14 @@ export async function PUT(
   const unauthorized = await requireAdmin();
   if (unauthorized) return unauthorized;
 
+  const csrfError = validateCsrf(request);
+  if (csrfError) return csrfError;
+
   try {
     const { id } = await params;
     const body = await request.json();
-    const property = await updateProperty(id, body);
+    const parsed = propertySchema.parse(body);
+    const property = await updateProperty(id, parsed);
     if (!property) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
@@ -39,6 +46,9 @@ export async function PUT(
     revalidatePath('/about');
     return NextResponse.json(property);
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: 'Validation failed', details: error.issues }, { status: 400 });
+    }
     console.error('Error updating property:', error);
     return NextResponse.json({ error: 'Failed to update property' }, { status: 500 });
   }

@@ -1,4 +1,4 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
+import { clerkMiddleware, createRouteMatcher, clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
 
 const isPublicRoute = createRouteMatcher([
@@ -16,8 +16,66 @@ const isPublicRoute = createRouteMatcher([
 const isAdminRoute = createRouteMatcher(['/admin(.*)']);
 const isAdminApiRoute = createRouteMatcher(['/api/admin(.*)']);
 
+const adminEmails = (process.env.ADMIN_EMAILS || '')
+  .split(',')
+  .map(s => s.trim().toLowerCase())
+  .filter(Boolean);
+
+function generateNonce(): string {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+  const array = new Uint8Array(32);
+  crypto.getRandomValues(array);
+  for (let i = 0; i < 32; i++) {
+    result += chars[array[i] % chars.length];
+  }
+  return result;
+}
+
+async function isAdminUser(userId: string): Promise<boolean> {
+  if (adminEmails.length === 0) return true;
+  try {
+    const client = await clerkClient();
+    const user = await client.users.getUser(userId);
+    const email = user.emailAddresses?.[0]?.emailAddress?.toLowerCase();
+    return !!email && adminEmails.includes(email);
+  } catch {
+    return false;
+  }
+}
+
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
+  const nonce = generateNonce();
+
+  const requestHeaders = new Headers(req.headers);
+  requestHeaders.set('x-csp-nonce', nonce);
+
+  // Build CSP
+  const cspDirectives = [
+    `default-src 'self'`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    `style-src 'self' 'unsafe-inline'`,
+    `img-src 'self' data: blob: https://*.r2.dev https://images.unsplash.com`,
+    `font-src 'self' data:`,
+    `object-src 'none'`,
+    `base-uri 'self'`,
+    `frame-ancestors 'none'`,
+    `manifest-src 'self'`,
+  ];
+  const csp = cspDirectives.join('; ');
+
+  const response = NextResponse.next({
+    request: { headers: requestHeaders },
+  });
+
+  response.headers.set('Content-Security-Policy', csp);
+  response.headers.set('x-csp-nonce', nonce);
+  response.headers.set('X-Content-Type-Options', 'nosniff');
+  response.headers.set('X-Frame-Options', 'DENY');
+  response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
+  response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
   // Redirect authenticated users away from login page
   if (userId && req.nextUrl.pathname === '/admin/login') {
@@ -29,12 +87,18 @@ export default clerkMiddleware(async (auth, req) => {
     if (!userId) {
       return NextResponse.redirect(new URL('/admin/login', req.url));
     }
+    if (adminEmails.length > 0 && !(await isAdminUser(userId))) {
+      return NextResponse.redirect(new URL('/admin/login', req.url));
+    }
   }
 
-  // Protect admin API routes — return 401
+  // Protect admin API routes — return 401/403
   if (isAdminApiRoute(req)) {
     if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+    if (adminEmails.length > 0 && !(await isAdminUser(userId))) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
   }
 
@@ -42,6 +106,8 @@ export default clerkMiddleware(async (auth, req) => {
   if (!isPublicRoute(req) && !userId) {
     return NextResponse.redirect(new URL('/admin/login', req.url));
   }
+
+  return response;
 });
 
 export const config = {

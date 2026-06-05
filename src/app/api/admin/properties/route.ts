@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
+import { z } from 'zod';
 import { requireAdmin } from '@/lib/require-admin';
+import { validateCsrf } from '@/lib/csrf';
 import { getPropertiesPaginated, createProperty } from '@/lib/repositories/properties';
+import { propertySchema } from '@/lib/validation';
 
 export async function GET(request: NextRequest) {
   const unauthorized = await requireAdmin();
@@ -27,15 +30,22 @@ export async function POST(request: NextRequest) {
   const unauthorized = await requireAdmin();
   if (unauthorized) return unauthorized;
 
+  const csrfError = validateCsrf(request);
+  if (csrfError) return csrfError;
+
   try {
     const body = await request.json();
-    const property = await createProperty(body);
+    const parsed = propertySchema.parse(body);
+    const property = await createProperty(parsed);
     revalidatePath('/api/properties');
     revalidatePath('/api/properties/featured');
     revalidatePath('/api/properties/gallery');
     revalidatePath('/about');
     return NextResponse.json(property, { status: 201 });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: 'Validation failed', details: error.issues }, { status: 400 });
+    }
     console.error('Error creating property:', error);
     return NextResponse.json({ error: 'Failed to create property' }, { status: 500 });
   }

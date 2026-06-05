@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPropertyById, getSimilarProperties } from '@/lib/repositories/properties';
+import { JsonLd } from '@/components/JsonLd';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PropertyDetailClient from './_PropertyDetailClient';
 
@@ -89,10 +90,7 @@ export default async function PropertyPage({ params }: Props) {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
       <Breadcrumbs
         items={[
           { label: 'Home', href: '/' },
