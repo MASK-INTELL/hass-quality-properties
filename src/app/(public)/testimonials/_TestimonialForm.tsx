@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Star, Loader2, CheckCircle2 } from 'lucide-react';
 
 export default function TestimonialForm() {
+  const [showForm, setShowForm] = useState(false);
   const [name, setName] = useState('');
   const [role, setRole] = useState('');
   const [rating, setRating] = useState(5);
@@ -39,6 +40,23 @@ export default function TestimonialForm() {
 
   const inputClass = "w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all text-sm";
 
+  if (!showForm) {
+    return (
+      <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 md:p-12 text-center">
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">Share Your Experience</h2>
+        <p className="text-gray-500 mb-6 max-w-xl mx-auto">
+          Have you worked with us? Let others know how we helped you find your perfect property.
+        </p>
+        <button
+          onClick={() => setShowForm(true)}
+          className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-full font-bold hover:bg-emerald-700 transition-colors shadow-sm"
+        >
+          Write a Testimonial
+        </button>
+      </div>
+    );
+  }
+
   if (submitted) {
     return (
       <div className="bg-emerald-50 border border-emerald-100 rounded-2xl p-8 md:p-12 text-center">
@@ -50,7 +68,7 @@ export default function TestimonialForm() {
           Your testimonial has been submitted for review and will appear once approved.
         </p>
         <button
-          onClick={() => setSubmitted(false)}
+          onClick={() => { setSubmitted(false); setShowForm(true); }}
           className="mt-6 text-emerald-600 font-semibold hover:text-emerald-800 underline text-sm"
         >
           Submit another
