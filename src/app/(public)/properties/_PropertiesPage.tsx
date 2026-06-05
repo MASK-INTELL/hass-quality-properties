@@ -59,16 +59,6 @@ export default function Properties() {
     fetchProperties();
   }, []);
 
-  useEffect(() => {
-    if (!loading) {
-      const savedPos = sessionStorage.getItem('propertiesScrollPos');
-      if (savedPos) {
-        requestAnimationFrame(() => window.scrollTo(0, parseInt(savedPos, 10)));
-        sessionStorage.removeItem('propertiesScrollPos');
-      }
-    }
-  }, [loading]);
-
   const updateParam = useCallback((key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
     if (value && value !== 'All' && value !== 'newest') {

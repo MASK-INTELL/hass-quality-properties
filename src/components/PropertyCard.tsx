@@ -41,7 +41,6 @@ export default function PropertyCard({ property }: PropertyCardProps) {
   const favorite = isFavorite(property.id);
 
   const handleNavigate = () => {
-    sessionStorage.setItem('propertiesScrollPos', String(window.scrollY));
     sessionStorage.setItem('propertiesSearchParams', window.location.search);
   };
 
