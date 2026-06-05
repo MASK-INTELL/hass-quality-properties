@@ -8,11 +8,14 @@ interface ShareButtonsProps {
   quote: string;
   name: string;
   role: string;
+  id?: string;
 }
 
-export default function ShareButtons({ quote, name, role }: ShareButtonsProps) {
+export default function ShareButtons({ quote, name, role, id }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
-  const pageUrl = typeof window !== 'undefined' ? `${window.location.origin}/testimonials` : '';
+  const pageUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}/testimonials${id ? `/${id}` : ''}`
+    : '';
   const text = encodeURIComponent(`"${quote}" — ${name}, ${role}`);
   const url = encodeURIComponent(pageUrl);
 

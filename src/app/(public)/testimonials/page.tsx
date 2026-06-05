@@ -95,7 +95,7 @@ export default async function Testimonials() {
                   <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
                   <p className="text-emerald-600 text-sm font-medium">{testimonial.role}</p>
                 </div>
-                <ShareButtons quote={testimonial.quote} name={testimonial.name} role={testimonial.role} />
+                <ShareButtons quote={testimonial.quote} name={testimonial.name} role={testimonial.role} id={testimonial.id} />
               </div>
             </article>
           ))}
