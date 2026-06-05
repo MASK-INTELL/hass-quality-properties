@@ -61,12 +61,12 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="h-5 w-5 text-emerald-500 flex-shrink-0" />
-                <span className="text-gray-400 text-sm">+256 771 863542</span>
+                <span className="text-gray-400 text-sm">+256 791 715573</span>
               </li>
               <li className="flex items-center gap-3">
                 <WhatsAppIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
-                <a href="https://wa.me/256771863542" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-sm">
-                  +256 771 863542
+                <a href="https://wa.me/256791715573" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-white transition-colors text-sm">
+                  +256 791 715573
                 </a>
               </li>
             </ul>

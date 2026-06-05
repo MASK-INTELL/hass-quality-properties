@@ -333,13 +333,13 @@ export default function PropertyDetails({
 
               <div className="space-y-3">
                 <a
-                  href="tel:+256771863542"
+                  href="tel:+256791715573"
                   className="flex items-center justify-center gap-3 w-full py-3 bg-gray-50 text-gray-700 rounded-lg font-semibold hover:bg-gray-100 transition-colors border border-gray-200"
                 >
                   <Phone className="h-5 w-5" /> Call Agent
                 </a>
                 <a
-                  href="https://wa.me/256771863542"
+                  href="https://wa.me/256791715573"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 w-full py-3 bg-green-50 text-green-700 rounded-lg font-semibold hover:bg-green-100 transition-colors border border-green-200"

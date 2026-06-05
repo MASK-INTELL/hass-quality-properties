@@ -22,7 +22,7 @@ const localBusinessJsonLd = {
   name: 'Hass Quality Properties',
   image: 'https://hass-quality-properties.vercel.app/logo.png',
   url: 'https://hass-quality-properties.vercel.app',
-  telephone: '+256771863542',
+  telephone: '+256791715573',
   email: 'hassqualityproperties@gmail.com',
   address: {
     '@type': 'PostalAddress',
