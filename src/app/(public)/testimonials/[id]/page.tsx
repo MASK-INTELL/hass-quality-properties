@@ -107,7 +107,7 @@ export default async function TestimonialDetail({ params }: { params: Promise<{ 
             <blockquote className="text-gray-600 text-lg leading-relaxed italic mb-8">
               &ldquo;{testimonial.quote}&rdquo;
             </blockquote>
-            <ShareButtons quote={testimonial.quote} name={testimonial.name} role={testimonial.role} id={testimonial.id} />
+             <ShareButtons quote={testimonial.quote} name={testimonial.name} role={testimonial.role} id={testimonial.id} showCopy />
           </article>
 
           {more.length > 0 && (

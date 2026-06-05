@@ -9,9 +9,10 @@ interface ShareButtonsProps {
   name: string;
   role: string;
   id?: string;
+  showCopy?: boolean;
 }
 
-export default function ShareButtons({ quote, name, role, id }: ShareButtonsProps) {
+export default function ShareButtons({ quote, name, role, id, showCopy = false }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
   const pageUrl = typeof window !== 'undefined'
     ? `${window.location.origin}/testimonials${id ? `/${id}` : ''}`
@@ -84,13 +85,15 @@ export default function ShareButtons({ quote, name, role, id }: ShareButtonsProp
           {link.icon}
         </a>
       ))}
-      <button
-        onClick={handleCopyLink}
-        title="Copy link"
-        className={`p-1.5 text-gray-400 transition-colors rounded hover:bg-gray-100 ${copied ? 'text-emerald-600' : 'hover:text-gray-600'}`}
-      >
-        {copied ? <Check className="h-4 w-4" /> : <LinkIcon className="h-4 w-4" />}
-      </button>
+      {showCopy && (
+        <button
+          onClick={handleCopyLink}
+          title="Copy link"
+          className={`p-1.5 text-gray-400 transition-colors rounded hover:bg-gray-100 ${copied ? 'text-emerald-600' : 'hover:text-gray-600'}`}
+        >
+          {copied ? <Check className="h-4 w-4" /> : <LinkIcon className="h-4 w-4" />}
+        </button>
+      )}
     </div>
   );
 }
