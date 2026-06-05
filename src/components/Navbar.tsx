@@ -12,7 +12,18 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [visible, setVisible] = useState(true);
   const lastScrollY = useRef(0);
+  const navRef = useRef<HTMLElement>(null);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -39,7 +50,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className={`bg-white shadow-md sticky top-0 z-50 transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
+    <nav ref={navRef} className={`bg-white shadow-md sticky top-0 z-50 transition-transform duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex items-center">
