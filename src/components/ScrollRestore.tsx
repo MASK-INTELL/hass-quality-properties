@@ -8,11 +8,29 @@ export default function ScrollRestore() {
   const isPopState = useRef(false);
 
   useEffect(() => {
-    const handlePopState = () => {
-      isPopState.current = true;
+    const onPopState = () => { isPopState.current = true; };
+    window.addEventListener('popstate', onPopState);
+    return () => window.removeEventListener('popstate', onPopState);
+  }, []);
+
+  useEffect(() => {
+    const origPushState = history.pushState.bind(history);
+    const origReplaceState = history.replaceState.bind(history);
+
+    const save = () => {
+      sessionStorage.setItem('scrollRestore', JSON.stringify({
+        path: window.location.pathname,
+        y: window.scrollY,
+      }));
     };
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+
+    history.pushState = (...args) => { save(); return origPushState(...args); };
+    history.replaceState = (...args) => { save(); return origReplaceState(...args); };
+
+    return () => {
+      history.pushState = origPushState;
+      history.replaceState = origReplaceState;
+    };
   }, []);
 
   useEffect(() => {
@@ -32,24 +50,6 @@ export default function ScrollRestore() {
       isPopState.current = false;
     }
   }, [pathname]);
-
-  useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      const link = (e.target as HTMLElement).closest('a');
-      if (!link) return;
-      if (!link.href || !link.href.startsWith(window.location.origin)) return;
-      if (link.getAttribute('href') === '#') return;
-      if (link.target === '_blank') return;
-
-      sessionStorage.setItem('scrollRestore', JSON.stringify({
-        path: window.location.pathname,
-        y: window.scrollY,
-      }));
-    };
-
-    document.addEventListener('click', handleClick);
-    return () => document.removeEventListener('click', handleClick);
-  }, []);
 
   return null;
 }
