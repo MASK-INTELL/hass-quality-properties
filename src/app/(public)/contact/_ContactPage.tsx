@@ -179,9 +179,9 @@ export default function Contact() {
                       />
                     </div>
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email Address *</label>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
                       <input
-                        type="email" id="email" name="email" required
+                        type="email" id="email" name="email"
                         value={formData.email} onChange={handleChange}
                         className={inputClass} placeholder="john@example.com"
                       />
@@ -190,10 +190,10 @@ export default function Contact() {
 
                   <div>
                     <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1.5">
-                      Phone / WhatsApp <span className="text-gray-400 font-normal">(optional)</span>
+                      Phone / WhatsApp *
                     </label>
                     <input
-                      type="tel" id="phone" name="phone"
+                      type="tel" id="phone" name="phone" required
                       value={formData.phone} onChange={handleChange}
                       className={inputClass} placeholder="+256 700 000 000"
                     />
