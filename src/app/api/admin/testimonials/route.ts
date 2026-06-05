@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
+import { requireAdmin } from '@/lib/require-admin';
 import sql from '@/lib/db';
 import { Testimonial, getPendingTestimonials, createTestimonial } from '@/lib/repositories/testimonials';
 
 export async function GET(request: NextRequest) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
+
   const { searchParams } = new URL(request.url);
   const filter = searchParams.get('filter');
   const testimonials = filter === 'pending'
@@ -13,6 +17,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
+
   try {
     const body = await request.json();
     const testimonial = await createTestimonial({ ...body, approved: true });

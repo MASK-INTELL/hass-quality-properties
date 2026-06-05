@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { requireAdmin } from '@/lib/require-admin';
 import { r2Client, R2_CONFIG } from '@/lib/r2';
 
 function slugify(text: string): string {
@@ -15,10 +16,10 @@ function slugify(text: string): string {
 }
 
 export async function POST(request: NextRequest) {
+  const unauthorized = await requireAdmin();
+  if (unauthorized) return unauthorized;
+
   const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
 
   try {
     const formData = await request.formData();
