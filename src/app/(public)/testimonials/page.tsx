@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Star } from 'lucide-react';
 import sql from '@/lib/db';
 import TestimonialForm from './_TestimonialForm';
+import ShareButtons from './_ShareButtons';
 
 interface Testimonial {
   id: string;
@@ -72,7 +73,7 @@ export default async function Testimonials() {
           {testimonials.map((testimonial) => (
             <article
               key={testimonial.id}
-              className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative mt-6"
+              className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow relative mt-6 group"
             >
               <div className="absolute -top-6 left-8">
                 <Image
@@ -94,6 +95,7 @@ export default async function Testimonials() {
                   <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
                   <p className="text-emerald-600 text-sm font-medium">{testimonial.role}</p>
                 </div>
+                <ShareButtons quote={testimonial.quote} name={testimonial.name} role={testimonial.role} />
               </div>
             </article>
           ))}
