@@ -30,7 +30,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Testimonials() {
-  const testimonials = await sql`SELECT * FROM testimonials ORDER BY created_at DESC` as unknown as Testimonial[];
+  const testimonials = await sql`SELECT * FROM testimonials WHERE approved = true ORDER BY created_at DESC` as unknown as Testimonial[];
   return (
     <>
       <script

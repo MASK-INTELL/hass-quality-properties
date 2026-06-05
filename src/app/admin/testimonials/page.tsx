@@ -164,9 +164,22 @@ export default function AdminTestimonialsPage() {
             {pendingCount > 0 ? `${pendingCount} pending approval` : 'All testimonials approved'}
           </p>
         </div>
-        <button onClick={() => setModalTestimonial(null)} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium shadow-sm">
-          <Plus className="h-5 w-5" /> Add Testimonial
-        </button>
+        <div className="flex items-center gap-3">
+          {pendingCount > 0 && (
+            <button
+              onClick={async () => {
+                await fetch('/api/admin/testimonials/approve-all', { method: 'POST' });
+                await fetchTestimonials();
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 bg-emerald-100 text-emerald-700 rounded-lg hover:bg-emerald-200 transition-colors font-medium text-sm"
+            >
+              <CheckCircle2 className="h-4 w-4" /> Approve All ({pendingCount})
+            </button>
+          )}
+          <button onClick={() => setModalTestimonial(null)} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium shadow-sm">
+            <Plus className="h-5 w-5" /> Add Testimonial
+          </button>
+        </div>
       </div>
 
       {/* Tabs */}

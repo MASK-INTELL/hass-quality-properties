@@ -80,3 +80,7 @@ export async function getPendingTestimonialsCount(): Promise<number> {
   const { count } = row as unknown as { count: number };
   return count;
 }
+
+export async function approveAllPendingTestimonials(): Promise<void> {
+  await sql`UPDATE testimonials SET approved = true, updated_at = NOW() WHERE approved = false`;
+}
