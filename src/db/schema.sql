@@ -84,6 +84,7 @@ CREATE TABLE IF NOT EXISTS testimonials (
   role       TEXT NOT NULL,
   quote      TEXT NOT NULL,
   rating     INT NOT NULL DEFAULT 5 CHECK (rating >= 1 AND rating <= 5),
+  approved   BOOLEAN NOT NULL DEFAULT FALSE,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
@@ -165,6 +166,8 @@ CREATE INDEX IF NOT EXISTS idx_properties_cat_stat     ON properties(category, s
 CREATE INDEX IF NOT EXISTS idx_properties_featured     ON properties(featured);
 CREATE INDEX IF NOT EXISTS idx_inquiries_read          ON inquiries(read);
 CREATE INDEX IF NOT EXISTS idx_inquiries_created_at    ON inquiries(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_testimonials_approved    ON testimonials(approved);
+CREATE INDEX IF NOT EXISTS idx_testimonials_created_at  ON testimonials(created_at DESC);
 
 -- === Seed Data: 9 sample properties ===
 

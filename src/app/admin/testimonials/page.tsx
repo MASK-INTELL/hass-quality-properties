@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Plus, Edit3, Trash2, MessageCircle, X, Star } from 'lucide-react';
+import { Plus, Edit3, Trash2, MessageCircle, X, Star, CheckCircle2 } from 'lucide-react';
 
 interface Testimonial {
   id: string;
@@ -9,6 +9,7 @@ interface Testimonial {
   role: string;
   quote: string;
   rating: number;
+  approved: boolean;
 }
 
 interface TestimonialModalProps {
@@ -76,6 +77,7 @@ function TestimonialModal({ testimonial, onSave, onClose }: TestimonialModalProp
 export default function AdminTestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<'all' | 'pending' | 'approved'>('all');
   const [modalTestimonial, setModalTestimonial] = useState<Testimonial | null | undefined>(undefined);
   const [deleteTarget, setDeleteTarget] = useState<Testimonial | null>(null);
 
@@ -95,6 +97,14 @@ export default function AdminTestimonialsPage() {
   useEffect(() => {
     fetchTestimonials();
   }, []);
+
+  const filtered = testimonials.filter(t => {
+    if (tab === 'pending') return !t.approved;
+    if (tab === 'approved') return t.approved;
+    return true;
+  });
+
+  const pendingCount = testimonials.filter(t => !t.approved).length;
 
   const handleSave = async (data: { name: string; role: string; quote: string; rating: number }) => {
     if (modalTestimonial) {
@@ -119,6 +129,17 @@ export default function AdminTestimonialsPage() {
     setModalTestimonial(undefined);
   };
 
+  const handleApprove = async (id: string) => {
+    const res = await fetch(`/api/admin/testimonials/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ approved: true }),
+    });
+    if (res.ok) {
+      await fetchTestimonials();
+    }
+  };
+
   const handleDelete = async () => {
     if (!deleteTarget) return;
     const res = await fetch(`/api/admin/testimonials/${deleteTarget.id}`, { method: 'DELETE' });
@@ -128,36 +149,68 @@ export default function AdminTestimonialsPage() {
     setDeleteTarget(null);
   };
 
+  const tabs = [
+    { key: 'all', label: 'All', count: testimonials.length },
+    { key: 'pending', label: 'Pending', count: pendingCount },
+    { key: 'approved', label: 'Approved', count: testimonials.length - pendingCount },
+  ] as const;
+
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Testimonials</h1>
-          <p className="text-gray-500 mt-1">Manage client testimonials ({testimonials.length} total)</p>
+          <p className="text-gray-500 mt-1">
+            {pendingCount > 0 ? `${pendingCount} pending approval` : 'All testimonials approved'}
+          </p>
         </div>
         <button onClick={() => setModalTestimonial(null)} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium shadow-sm">
           <Plus className="h-5 w-5" /> Add Testimonial
         </button>
       </div>
 
+      {/* Tabs */}
+      <div className="flex gap-1 mb-6 bg-gray-100 p-1 rounded-lg w-fit">
+        {tabs.map((t) => (
+          <button
+            key={t.key}
+            onClick={() => setTab(t.key)}
+            className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              tab === t.key
+                ? 'bg-white text-gray-900 shadow-sm'
+                : 'text-gray-500 hover:text-gray-700'
+            }`}
+          >
+            {t.label} ({t.count})
+          </button>
+        ))}
+      </div>
+
       <div className="bg-white rounded-xl shadow-sm border border-gray-100">
         {loading ? (
           <div className="p-8 text-center text-gray-400">Loading...</div>
-        ) : testimonials.length === 0 ? (
+        ) : filtered.length === 0 ? (
           <div className="p-12 text-center">
             <MessageCircle className="h-12 w-12 text-gray-300 mx-auto mb-4" />
-            <p className="text-gray-500 font-medium">No testimonials yet</p>
-            <p className="text-gray-400 text-sm mt-1">Click &quot;Add Testimonial&quot; to create your first one.</p>
+            <p className="text-gray-500 font-medium">
+              {tab === 'pending' ? 'No pending testimonials' : tab === 'approved' ? 'No approved testimonials' : 'No testimonials yet'}
+            </p>
+            <p className="text-gray-400 text-sm mt-1">
+              {tab === 'pending' ? 'All testimonials have been reviewed.' : 'Click "Add Testimonial" to create your first one.'}
+            </p>
           </div>
         ) : (
           <div className="divide-y divide-gray-100">
-            {testimonials.map((t) => (
+            {filtered.map((t) => (
               <div key={t.id} className="flex items-start justify-between px-6 py-4 hover:bg-gray-50 transition-colors gap-4">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 mb-1">
                     <p className="text-sm font-semibold text-gray-900">{t.name}</p>
                     <span className="text-xs text-gray-400">|</span>
                     <p className="text-xs text-emerald-600 font-medium">{t.role}</p>
+                    {!t.approved && (
+                      <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">Pending</span>
+                    )}
                   </div>
                   <div className="flex gap-0.5 mb-1">
                     {[...Array(t.rating)].map((_, i) => (
@@ -167,6 +220,11 @@ export default function AdminTestimonialsPage() {
                   <p className="text-sm text-gray-500 line-clamp-2">&quot;{t.quote}&quot;</p>
                 </div>
                 <div className="flex items-center gap-2 flex-shrink-0">
+                  {!t.approved && (
+                    <button onClick={() => handleApprove(t.id)} className="p-2 text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Approve">
+                      <CheckCircle2 className="h-4 w-4" />
+                    </button>
+                  )}
                   <button onClick={() => setModalTestimonial(t)} className="p-2 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Edit">
                     <Edit3 className="h-4 w-4" />
                   </button>

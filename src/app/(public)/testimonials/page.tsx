@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
-import { Star, Mail } from 'lucide-react';
-import WhatsAppIcon from '@/components/WhatsAppIcon';
+import { Star } from 'lucide-react';
 import sql from '@/lib/db';
+import TestimonialForm from './_TestimonialForm';
 
 interface Testimonial {
   id: string;
@@ -61,30 +61,9 @@ export default async function Testimonials() {
         </div>
       </div>
 
-      {/* Share Your Story CTA */}
+      {/* Share Your Experience Form */}
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-        <div className="bg-white rounded-2xl shadow-sm border border-emerald-100 p-8 text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Have you worked with us?</h2>
-          <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-            We value your feedback! Share your experience with Hass Quality Properties and let others know how we helped you find your perfect property or vehicle.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <a
-              href="https://wa.me/256791715573?text=Hello!%20I%20would%20like%20to%20share%20my%20testimonial%20about%20my%20experience%20with%20Hass%20Quality%20Properties."
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-green-500 text-white rounded-full font-bold hover:bg-green-600 transition-colors shadow-sm"
-            >
-              <WhatsAppIcon className="h-5 w-5" /> Send via WhatsApp
-            </a>
-            <a
-              href="mailto:hassqualityproperties@gmail.com?subject=My%20Testimonial&body=Hello%20Hass%20Quality%20Properties%20team,%0A%0AHere%20is%20my%20testimonial:%0A%0A[Write your testimony here]%0A%0A[Your Name]%0A[Your Role/Property Type]"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-full font-bold hover:bg-emerald-700 transition-colors shadow-sm"
-            >
-              <Mail className="h-5 w-5" /> Send via Email
-            </a>
-          </div>
-        </div>
+        <TestimonialForm />
       </div>
 
       {/* Testimonials Grid */}
