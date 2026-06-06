@@ -80,7 +80,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
           <span>{property.type}</span>
         </div>
 
-        <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-1">{property.title}</h3>
+        <h3 className="text-xl font-bold text-gray-900 mb-2 line-clamp-3" title={property.title}>{property.title}</h3>
 
         <div className="flex items-center gap-1 text-gray-500 text-sm mb-4">
           <MapPin className="h-4 w-4" />
