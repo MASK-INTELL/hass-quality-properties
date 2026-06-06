@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
 import { Heart, Home, Car } from 'lucide-react';
@@ -22,13 +22,13 @@ interface Property {
   type: string;
   status: string;
   image_url: string;
-  beds?: string;
-  baths?: string;
-  area?: string;
+  beds?: number | null;
+  baths?: number | null;
+  area?: string | null;
   image_metadata?: ImageMeta[] | null;
 }
 
-export default function Properties() {
+export default function Properties({ initialProperties }: { initialProperties: Property[] }) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -39,25 +39,8 @@ export default function Properties() {
   const sortBy = searchParams.get('sort') || 'newest';
   const showFavoritesOnly = searchParams.get('fav') === '1';
 
-  const [allProperties, setAllProperties] = useState<Property[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [allProperties] = useState<Property[]>(initialProperties);
   const { isFavorite } = useFavorites();
-
-  useEffect(() => {
-    async function fetchProperties() {
-      try {
-        const res = await fetch('/api/properties');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-        setAllProperties(data);
-      } catch (error) {
-        console.error('Error fetching properties:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchProperties();
-  }, []);
 
   const updateParam = useCallback((key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
