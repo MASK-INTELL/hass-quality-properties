@@ -7,7 +7,7 @@ import WelcomeOnboarding from './WelcomeOnboarding';
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const hideFooter = pathname === '/properties' || pathname === '/contact';
+  const hideFooter = pathname === '/contact' || pathname.startsWith('/properties');
 
   return (
     <>
