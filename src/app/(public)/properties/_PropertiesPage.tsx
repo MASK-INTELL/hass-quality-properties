@@ -149,7 +149,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
               className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all border bg-white border-gray-200 text-gray-600 hover:bg-red-50 hover:text-red-500 hover:border-red-200 shrink-0"
             >
               <Heart className="h-5 w-5" />
-              <span className="hidden sm:inline">My Favorites</span>
+              <span>My Favorites</span>
             </Link>
           </div>
 
