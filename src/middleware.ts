@@ -51,7 +51,7 @@ export default clerkMiddleware(async (auth, req) => {
     `frame-src 'self' https://vercel.live https://*.clerk.accounts.dev https://*.clerk.com https://*.r2.dev`,
     `media-src 'self' https://*.r2.dev`,
     `frame-ancestors 'none'`,
-    `connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com wss://*.clerk.com`,
+    `connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com wss://*.clerk.com https://*.r2.cloudflarestorage.com`,
     `manifest-src 'self'`,
     `worker-src 'self' blob:`,
   ].join('; '));
