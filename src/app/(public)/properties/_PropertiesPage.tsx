@@ -33,7 +33,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
   const router = useRouter();
   const pathname = usePathname();
 
-  const activeCategory = (searchParams.get('category') as 'Real Estate' | 'Vehicles' | 'Rentals' | 'Motorcycles') || 'Real Estate';
+  const activeCategory = (searchParams.get('category') as string) || 'All';
   const searchTerm = searchParams.get('search') || '';
   const filterType = searchParams.get('type') || 'All';
   const sortBy = searchParams.get('sort') || 'newest';
@@ -60,7 +60,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
 
   const filteredAndSortedProperties = useMemo(() => {
     let result = allProperties.filter(property => {
-      let matchesCategory = false;
+      let matchesCategory = true;
 
       if (activeCategory === 'Real Estate') {
         matchesCategory = property.category === 'Real Estate' && property.status === 'For Sale';
@@ -107,7 +107,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
     }
   };
 
-  const handleCategoryChange = (category: 'Real Estate' | 'Vehicles' | 'Rentals' | 'Motorcycles') => {
+  const handleCategoryChange = (category: string) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set('category', category);
     params.delete('type');
@@ -126,8 +126,34 @@ export default function Properties({ initialProperties }: { initialProperties: P
         </div>
 
         {/* Category Tabs */}
-        <div className="flex justify-center mb-8">
+        {/* Mobile: select dropdown */}
+        <div className="md:hidden mb-8">
+          <select
+            value={activeCategory}
+            onChange={(e) => handleCategoryChange(e.target.value)}
+            className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-sm text-sm font-semibold"
+          >
+            <option value="All">All Listings</option>
+            <option value="Real Estate">Real Estate</option>
+            <option value="Rentals">Rentals</option>
+            <option value="Vehicles">Vehicles</option>
+            <option value="Motorcycles">Motorcycles</option>
+          </select>
+        </div>
+
+        {/* Desktop: category tabs — hidden on mobile */}
+        <div className="hidden md:flex justify-center mb-8">
           <div className="inline-flex bg-white rounded-xl shadow-sm p-1 border border-gray-100 overflow-x-auto max-w-full no-scrollbar">
+            <button
+              onClick={() => handleCategoryChange('All')}
+              className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
+                activeCategory === 'All'
+                  ? 'bg-emerald-600 text-white shadow-md'
+                  : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
+              }`}
+            >
+              All Listings
+            </button>
             <button
               onClick={() => handleCategoryChange('Real Estate')}
               className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
