@@ -29,7 +29,7 @@ export interface Property {
 }
 
 export async function getAllProperties(): Promise<Property[]> {
-  const rows = await sql`SELECT * FROM properties ORDER BY created_at DESC`;
+  const rows = await sql`SELECT * FROM properties ORDER BY CASE WHEN status = 'Sold' THEN 1 ELSE 0 END, created_at DESC`;
   return rows as unknown as Property[];
 }
 
@@ -74,7 +74,7 @@ export async function getPropertiesPaginated(
     status?: string;
   }
 ): Promise<{ data: Property[]; total: number }> {
-  const rows = await sql`SELECT * FROM properties ORDER BY created_at DESC`;
+  const rows = await sql`SELECT * FROM properties ORDER BY CASE WHEN status = 'Sold' THEN 1 ELSE 0 END, created_at DESC`;
   const all = rows as unknown as Property[];
   let filtered = all;
 
@@ -160,7 +160,7 @@ export async function getPropertiesGallery(limit = 10): Promise<Pick<Property, '
   const rows = await sql`
     SELECT id, title, price, status, image_url 
     FROM properties 
-    ORDER BY created_at DESC LIMIT ${limit}
+    ORDER BY CASE WHEN status = 'Sold' THEN 1 ELSE 0 END, created_at DESC LIMIT ${limit}
   `;
   return rows as unknown as Pick<Property, 'id' | 'title' | 'price' | 'status' | 'image_url'>[];
 }
