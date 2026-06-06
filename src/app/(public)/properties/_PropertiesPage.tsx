@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
-import { Heart, Home, Car, Bike, Building2, MapPin, ArrowRight } from 'lucide-react';
+import { Heart, Home, Car, Bike, Building2, MapPin, ArrowRight, Search, X } from 'lucide-react';
 import Link from 'next/link';
 
 interface ImageMeta {
@@ -41,11 +41,12 @@ const CATEGORIES = [
 export default function Properties({ initialProperties }: { initialProperties: Property[] }) {
   const searchParams = useSearchParams();
   const initialRender = useRef(true);
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const [activeCategory, setActiveCategory] = useState(
     (searchParams.get('category') as string) || 'All'
   );
-  const searchTerm = searchParams.get('search') || '';
+  const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
   const filterType = searchParams.get('type') || 'All';
   const sortBy = searchParams.get('sort') || 'newest';
   const [allProperties] = useState<Property[]>(initialProperties);
@@ -64,6 +65,19 @@ export default function Properties({ initialProperties }: { initialProperties: P
     window.history.replaceState(null, '', newUrl);
   }, [activeCategory]);
 
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      const params = new URLSearchParams(window.location.search);
+      if (searchInput) params.set('search', searchInput);
+      else params.delete('search');
+      const qs = params.toString();
+      const newUrl = `${window.location.pathname}${qs ? '?' + qs : ''}`;
+      window.history.replaceState(null, '', newUrl);
+    }, 400);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [searchInput]);
+
   const parsePrice = (priceStr: string) => {
     const numericStr = priceStr.replace(/[^0-9]/g, '');
     return parseInt(numericStr, 10) || 0;
@@ -81,8 +95,11 @@ export default function Properties({ initialProperties }: { initialProperties: P
         matchesCategory = property.category === activeCategory;
       }
 
-      const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            property.location.toLowerCase().includes(searchTerm.toLowerCase());
+      const query = searchInput.toLowerCase();
+      const matchesSearch = !query ||
+        property.title.toLowerCase().includes(query) ||
+        property.location.toLowerCase().includes(query) ||
+        property.description.toLowerCase().includes(query);
       const matchesType = filterType === 'All' || property.type === filterType;
 
       return matchesCategory && matchesSearch && matchesType;
@@ -98,27 +115,43 @@ export default function Properties({ initialProperties }: { initialProperties: P
     });
 
     return result;
-  }, [allProperties, activeCategory, searchTerm, filterType, sortBy]);
+  }, [allProperties, activeCategory, searchInput, filterType, sortBy]);
 
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="sr-only">Browse Properties</h1>
 
-        {/* My Favorites Link */}
-        <div className="flex justify-end mb-4">
+        {/* Search + My Favorites */}
+        <div className="flex flex-col sm:flex-row gap-3 mb-6">
+          <div className="relative flex-1">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search by title, location, or description..."
+              className="w-full pl-12 pr-12 py-3 rounded-xl border border-gray-200 bg-white shadow-sm text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+            />
+            {searchInput && (
+              <button
+                onClick={() => setSearchInput('')}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            )}
+          </div>
           <Link
             href="/favorites"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all border bg-white border-gray-200 text-gray-600 hover:bg-red-50 hover:text-red-500 hover:border-red-200"
+            className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-semibold transition-all border bg-white border-gray-200 text-gray-600 hover:bg-red-50 hover:text-red-500 hover:border-red-200 shrink-0"
           >
             <Heart className="h-5 w-5" />
-            My Favorites
-            <ArrowRight className="h-4 w-4" />
+            <span className="hidden sm:inline">My Favorites</span>
           </Link>
         </div>
 
         {/* Category Tabs */}
-        {/* Mobile: select dropdown */}
         <div className="md:hidden mb-8">
           <select
             value={activeCategory}
@@ -131,7 +164,6 @@ export default function Properties({ initialProperties }: { initialProperties: P
           </select>
         </div>
 
-        {/* Desktop: category tabs — hidden on mobile */}
         <div className="hidden md:flex justify-center mb-10">
           <div className="inline-flex bg-white rounded-xl shadow-sm p-1 border border-gray-100 overflow-x-auto max-w-full no-scrollbar">
             {CATEGORIES.map(c => {
