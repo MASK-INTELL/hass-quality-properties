@@ -54,6 +54,7 @@ export default function AdminMediaPage() {
   const [deleteTarget, setDeleteTarget] = useState<MediaFile | null>(null);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
+  const [previewFile, setPreviewFile] = useState<MediaFile | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -90,6 +91,13 @@ export default function AdminMediaPage() {
   }, [debouncedSearch]);
 
   useEffect(() => { fetchFiles(); }, [fetchFiles]);
+
+  useEffect(() => {
+    if (!previewFile) return;
+    const handler = (e: KeyboardEvent) => { if (e.key === 'Escape') setPreviewFile(null); };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [previewFile]);
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -236,7 +244,10 @@ export default function AdminMediaPage() {
                 const Icon = getFileIcon(file.type);
                 return (
                   <div key={file.key} className="group relative bg-gray-50 rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-                    <div className="aspect-square relative bg-gray-100">
+                    <div
+                      onClick={() => setPreviewFile(file)}
+                      className={`relative bg-gray-100 cursor-pointer ${isImage(file.type) ? 'aspect-square' : 'aspect-video'}`}
+                    >
                       {isImage(file.type) ? (
                         <Image
                           fill
@@ -245,6 +256,22 @@ export default function AdminMediaPage() {
                           className="object-cover"
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
                         />
+                      ) : file.type.startsWith('video/') ? (
+                        <div className="w-full h-full flex items-center justify-center bg-gray-900">
+                          <div className="relative w-full h-full">
+                            <video
+                              src={file.url}
+                              className="w-full h-full object-cover"
+                              muted
+                              preload="metadata"
+                            />
+                            <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                              <div className="w-14 h-14 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
+                                <Film className="h-6 w-6 text-gray-900 ml-0.5" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       ) : (
                         <div className="w-full h-full flex items-center justify-center">
                           {Icon ? <Icon className="h-10 w-10 text-gray-400" /> : <FileText className="h-10 w-10 text-gray-400" />}
@@ -252,14 +279,14 @@ export default function AdminMediaPage() {
                       )}
                       <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                         <button
-                          onClick={() => handleCopy(file.key)}
+                          onClick={e => { e.stopPropagation(); handleCopy(file.key); }}
                           className="p-2 bg-white/90 rounded-lg hover:bg-white transition-colors"
                           title="Copy URL"
                         >
                           {copiedKey === file.key ? <Check className="h-4 w-4 text-emerald-600" /> : <Copy className="h-4 w-4 text-gray-700" />}
                         </button>
                         <button
-                          onClick={() => setDeleteTarget(file)}
+                          onClick={e => { e.stopPropagation(); setDeleteTarget(file); }}
                           className="p-2 bg-white/90 rounded-lg hover:bg-white transition-colors"
                           title="Delete"
                         >
@@ -327,6 +354,41 @@ export default function AdminMediaPage() {
                 Delete
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {previewFile && (
+        <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center" onClick={() => setPreviewFile(null)}>
+          <button
+            onClick={() => setPreviewFile(null)}
+            className="absolute top-4 right-4 text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors z-10"
+          >
+            <X className="h-8 w-8" />
+          </button>
+          <div className="w-full h-full flex items-center justify-center p-4 md:p-12" onClick={e => e.stopPropagation()}>
+            {previewFile.type.startsWith('image/') ? (
+              <div className="relative w-full h-full max-w-5xl max-h-full">
+                <Image
+                  fill
+                  src={previewFile.url}
+                  alt={getFilename(previewFile.key)}
+                  className="object-contain select-none"
+                  sizes="100vw"
+                  priority
+                />
+              </div>
+            ) : (
+              <div className="w-full max-w-4xl">
+                <video
+                  controls
+                  autoPlay
+                  className="w-full rounded-lg shadow-2xl"
+                  src={previewFile.url}
+                />
+                <p className="text-white/60 text-sm text-center mt-4 truncate">{getFilename(previewFile.key)}</p>
+              </div>
+            )}
           </div>
         </div>
       )}
