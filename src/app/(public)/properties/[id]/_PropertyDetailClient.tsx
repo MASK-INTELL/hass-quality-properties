@@ -88,20 +88,48 @@ export default function PropertyDetails({
   };
 
   const handleShare = async () => {
-    const shareData = {
-      title: property?.title,
-      text: `Check out this property: ${property?.title} for ${property?.price}`,
-      url: window.location.href,
+    const shareUrl = window.location.href;
+    const shareTitle = property?.title || '';
+    const shareText = [
+      `🏠 ${property?.title} — ${property?.price}`,
+      `📍 ${property?.location}`,
+      `Type: ${property?.type} · ${property?.category}`,
+      property?.status ? `Status: ${property?.status}` : '',
+    ].filter(Boolean).join('\n');
+
+    const shareData: Record<string, any> = {
+      title: shareTitle,
+      text: shareText,
+      url: shareUrl,
     };
 
-    if (navigator.share && navigator.canShare(shareData)) {
+    // Try to attach the first property image for native share
+    try {
+      if (images.length > 0) {
+        const res = await fetch(images[0]);
+        const blob = await res.blob();
+        const file = new File([blob], `${property?.title || 'property'}.jpg`, { type: blob.type });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          shareData.files = [file];
+        }
+      }
+    } catch { /* proceed without image */ }
+
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
       try {
         await navigator.share(shareData);
       } catch (err) {
-        console.error('Error sharing:', err);
+        if ((err as DOMException)?.name !== 'AbortError') {
+          console.error('Error sharing:', err);
+        }
       }
     } else {
-      navigator.clipboard.writeText(window.location.href);
+      const clipboardText = `${shareText}\n\n🔗 ${shareUrl}`;
+      try {
+        await navigator.clipboard.writeText(clipboardText);
+      } catch {
+        console.error('Clipboard write failed');
+      }
       setShowShareToast(true);
       setTimeout(() => setShowShareToast(false), 3000);
     }
@@ -165,7 +193,7 @@ export default function PropertyDetails({
                     <Share2 className="h-5 w-5" /> Share
                     {showShareToast && (
                       <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-3 rounded shadow-lg whitespace-nowrap">
-                        Link copied!
+                        Property info copied!
                       </span>
                     )}
                   </button>
@@ -331,7 +359,7 @@ export default function PropertyDetails({
                     <Share2 className="h-5 w-5" /> Share
                     {showShareToast && (
                       <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-3 rounded shadow-lg whitespace-nowrap">
-                        Link copied!
+                        Property info copied!
                       </span>
                     )}
                   </button>
