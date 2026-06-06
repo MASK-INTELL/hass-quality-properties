@@ -1,4 +1,5 @@
-import { S3Client, ListObjectsV2Command, DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, ListObjectsV2Command, DeleteObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 
 function getR2Endpoint() {
   const accountId = process.env.R2_ACCOUNT_ID;
@@ -28,6 +29,26 @@ export const R2_CONFIG = {
     'video/webm',
   ],
 };
+
+export async function getPresignedUploadUrl(key: string, contentType: string, expiresIn = 30) {
+  return getSignedUrl(r2Client, new PutObjectCommand({
+    Bucket: R2_CONFIG.bucketName,
+    Key: key,
+    ContentType: contentType,
+  }), { expiresIn });
+}
+
+export function generateFileKey(userId: string, fileName: string, ext: string): string {
+  const slugify = (text: string) => text
+    .toLowerCase().trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '') || 'untitled';
+  const baseName = slugify(fileName.replace(/\.[^.]+$/, ''));
+  const suffix = Math.random().toString(36).slice(2, 6);
+  return `properties/${userId}/${baseName}-${suffix}.${ext}`;
+}
 
 function getBaseUrl() {
   return R2_CONFIG.publicUrl || `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${R2_CONFIG.bucketName}`;
