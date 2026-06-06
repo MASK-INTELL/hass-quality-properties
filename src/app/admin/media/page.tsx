@@ -53,6 +53,7 @@ export default function AdminMediaPage() {
   const [loadingMore, setLoadingMore] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<MediaFile | null>(null);
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -98,12 +99,17 @@ export default function AdminMediaPage() {
       const form = new FormData();
       form.append('file', file);
       const res = await fetch('/api/upload', { method: 'POST', body: form });
-      if (!res.ok) throw new Error('Upload failed');
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Upload failed (${res.status})`);
+      }
       setFiles([]);
       setNextCursor(null);
       fetchFiles();
     } catch (err) {
       console.error(err);
+      setUploadError(err instanceof Error ? err.message : 'Upload failed');
+      setTimeout(() => setUploadError(null), 5000);
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -146,18 +152,23 @@ export default function AdminMediaPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <label className={`flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium shadow-sm cursor-pointer ${uploading ? 'opacity-75 pointer-events-none' : ''}`}>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*,video/mp4,video/webm"
-              onChange={handleUpload}
-              disabled={uploading}
-              className="hidden"
-            />
-            {uploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Upload className="h-5 w-5" />}
-            {uploading ? 'Uploading...' : 'Upload'}
-          </label>
+          <div className="flex items-center gap-3">
+            <label className={`flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium shadow-sm cursor-pointer ${uploading ? 'opacity-75 pointer-events-none' : ''}`}>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*,video/mp4,video/webm"
+                onChange={handleUpload}
+                disabled={uploading}
+                className="hidden"
+              />
+              {uploading ? <Loader2 className="h-5 w-5 animate-spin" /> : <Upload className="h-5 w-5" />}
+              {uploading ? 'Uploading...' : 'Upload'}
+            </label>
+            {uploadError && (
+              <p className="text-sm text-red-600">{uploadError}</p>
+            )}
+          </div>
         </div>
       </div>
 

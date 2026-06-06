@@ -31,8 +31,9 @@ export const propertySchema = z.object({
   images: z.array(z.string()).optional().nullable(),
   image_metadata: z.any().optional().nullable(),
   video_url: z.string().url().optional().nullable().or(z.literal('')).refine(
-    val => !val || /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\//.test(val),
-    { message: 'Video URL must be from YouTube, YouTube Shorts, or Vimeo' }
+    val => !val || /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\//.test(val)
+      || /\.(mp4|webm|ogg|mov)$/i.test(val),
+    { message: 'Video URL must be from YouTube, Vimeo, or a direct video file URL' }
   ),
   featured: z.boolean().optional().nullable(),
   make: z.string().max(100).optional().nullable(),

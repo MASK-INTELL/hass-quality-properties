@@ -56,6 +56,7 @@ export default function MediaPicker({
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -117,15 +118,21 @@ export default function MediaPicker({
     const file = e.target.files?.[0];
     if (!file) return;
     setUploading(true);
+    setUploadError(null);
     try {
       const form = new FormData();
       form.append('file', file);
-      await fetch('/api/upload', { method: 'POST', body: form });
+      const res = await fetch('/api/upload', { method: 'POST', body: form });
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `Upload failed (${res.status})`);
+      }
       setFiles([]);
       setNextCursor(null);
       await fetchFiles();
-    } catch {
-      // ignore
+    } catch (err) {
+      setUploadError(err instanceof Error ? err.message : 'Upload failed');
+      setTimeout(() => setUploadError(null), 5000);
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -191,6 +198,9 @@ export default function MediaPicker({
                 <><Upload className="h-4 w-4" /> Upload</>
               )}
             </label>
+            {uploadError && (
+              <p className="text-xs text-red-600 max-w-40 truncate" title={uploadError}>{uploadError}</p>
+            )}
             <button
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors text-gray-500"
