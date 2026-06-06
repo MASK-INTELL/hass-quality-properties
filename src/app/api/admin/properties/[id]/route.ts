@@ -39,9 +39,7 @@ export async function PUT(
     if (!property) {
       return NextResponse.json({ error: 'Not found' }, { status: 404 });
     }
-    revalidatePath('/api/properties');
-    revalidatePath('/api/properties/featured');
-    revalidatePath('/api/properties/gallery');
+    revalidatePath('/properties');
     revalidatePath(`/properties/${id}`);
     revalidatePath('/about');
     return NextResponse.json(property);
@@ -64,9 +62,7 @@ export async function DELETE(
   try {
     const { id } = await params;
     await deleteProperty(id);
-    revalidatePath('/api/properties');
-    revalidatePath('/api/properties/featured');
-    revalidatePath('/api/properties/gallery');
+    revalidatePath('/properties');
     revalidatePath(`/properties/${id}`);
     revalidatePath('/about');
     return NextResponse.json({ success: true });

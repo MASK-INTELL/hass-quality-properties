@@ -37,9 +37,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const parsed = propertySchema.parse(body);
     const property = await createProperty(parsed);
-    revalidatePath('/api/properties');
-    revalidatePath('/api/properties/featured');
-    revalidatePath('/api/properties/gallery');
+    revalidatePath('/properties');
     revalidatePath('/about');
     return NextResponse.json(property, { status: 201 });
   } catch (error) {
