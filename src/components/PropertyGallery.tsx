@@ -20,53 +20,34 @@ interface Property {
   image_metadata?: ImageMeta[] | null;
 }
 
-export default function PropertyGallery() {
-  const [galleryItems, setGalleryItems] = useState<Property[]>([]);
+interface Props {
+  items: Property[];
+}
+
+export default function PropertyGallery({ items }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+
+  if (items.length === 0) return null;
+
+  const currentItem = items[currentIndex];
 
   useEffect(() => {
-    async function fetchGallery() {
-      try {
-        const res = await fetch('/api/properties/gallery');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-
-        if (data) {
-          setGalleryItems(data);
-        }
-      } catch (error) {
-        console.error('Error fetching gallery:', error);
-      } finally {
-        setLoading(false);
-      }
-    }
-    fetchGallery();
-  }, []);
-
-  useEffect(() => {
-    if (isLightboxOpen || galleryItems.length === 0) return;
-
+    if (isLightboxOpen || items.length === 0) return;
     const timer = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % galleryItems.length);
+      setCurrentIndex((prev) => (prev + 1) % items.length);
     }, 5000);
-
     return () => clearInterval(timer);
-  }, [isLightboxOpen, galleryItems.length]);
-
-  if (loading || galleryItems.length === 0) return null;
-
-  const currentItem = galleryItems[currentIndex];
+  }, [isLightboxOpen, items.length]);
 
   const handleNext = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setCurrentIndex((prev) => (prev + 1) % galleryItems.length);
+    setCurrentIndex((prev) => (prev + 1) % items.length);
   };
 
   const handlePrev = (e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
-    setCurrentIndex((prev) => (prev - 1 + galleryItems.length) % galleryItems.length);
+    setCurrentIndex((prev) => (prev - 1 + items.length) % items.length);
   };
 
   return (
@@ -134,7 +115,7 @@ export default function PropertyGallery() {
           </button>
 
           <div className="absolute bottom-8 right-8 flex gap-2">
-            {galleryItems.map((_, idx) => (
+            {items.map((_, idx) => (
               <button
                 key={idx}
                 onClick={(e) => {
@@ -160,7 +141,7 @@ export default function PropertyGallery() {
           </button>
 
           <div className="absolute top-6 left-6 text-white/70 font-medium z-50">
-            {currentIndex + 1} / {galleryItems.length}
+            {currentIndex + 1} / {items.length}
           </div>
 
           <button

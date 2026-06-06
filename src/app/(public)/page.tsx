@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import HomePage from './_HomePage';
+import { getFeaturedProperties, getPropertiesGallery } from '@/lib/repositories/properties';
 
 export const metadata: Metadata = {
   title: 'Hass Quality Properties - Homes, Lands, Plots, Cars & Rentals in Fort Portal',
@@ -15,6 +16,8 @@ export const metadata: Metadata = {
   },
   alternates: { canonical: '/' },
 };
+
+export const revalidate = 3600;
 
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
@@ -36,14 +39,19 @@ const localBusinessJsonLd = {
   description: 'Premier property company in Fort Portal Tourism City, Uganda specializing in homes, lands, plots, cars, and motorcycles.',
 };
 
-export default function Page() {
+export default async function Page() {
+  const [featured, gallery] = await Promise.all([
+    getFeaturedProperties(),
+    getPropertiesGallery(),
+  ]);
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
       />
-      <HomePage />
+      <HomePage featuredProperties={featured} galleryProperties={gallery} />
     </>
   );
 }

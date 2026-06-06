@@ -31,23 +31,16 @@ interface Property {
   image_metadata?: ImageMeta[] | null;
 }
 
-export default function Home() {
-  const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
+interface HomePageProps {
+  featuredProperties: Property[];
+  galleryProperties: { id: string; title: string; price: string; status: string; image_url: string }[];
+}
+
+export default function Home({ featuredProperties, galleryProperties }: HomePageProps) {
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    async function fetchFeatured() {
-      try {
-        const res = await fetch('/api/properties/featured');
-        if (!res.ok) throw new Error('Failed to fetch');
-        const data = await res.json();
-        setFeaturedProperties(data);
-      } catch (error) {
-        console.error('Error fetching featured properties:', error);
-      }
-    }
-    fetchFeatured();
     fetchTestimonials();
   }, []);
 
@@ -155,7 +148,7 @@ export default function Home() {
       </section>
 
       {/* Property Gallery */}
-      <PropertyGallery />
+      <PropertyGallery items={galleryProperties} />
 
 
 
