@@ -52,7 +52,7 @@ export async function getSimilarProperties(
   const rows = await sql`
     SELECT *
     FROM properties
-    WHERE id != ${excludeId}
+    WHERE id != ${excludeId} AND status != 'Sold'
     ORDER BY
       CASE
         WHEN category = ${category} AND location ILIKE '%' || COALESCE(${location}, '') || '%' THEN 0
