@@ -1,9 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import sql from '@/lib/db';
 import { createTestimonial } from '@/lib/repositories/testimonials';
 import { validateCsrf } from '@/lib/csrf';
 import { rateLimit } from '@/lib/rate-limit';
 import { testimonialSchema } from '@/lib/validation';
+
+export async function GET() {
+  const testimonials = await sql`
+    SELECT id, name, role, quote, rating FROM testimonials WHERE approved = true ORDER BY created_at DESC
+  `;
+  return NextResponse.json(testimonials);
+}
 
 export async function POST(request: NextRequest) {
   const csrfError = validateCsrf(request);
