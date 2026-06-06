@@ -2,7 +2,6 @@ import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Star } from 'lucide-react';
-import { JsonLd } from '@/components/JsonLd';
 import sql from '@/lib/db';
 import TestimonialForm from './_TestimonialForm';
 import ShareButtons from './_ShareButtons';
@@ -36,17 +35,22 @@ export default async function Testimonials() {
   const testimonials = await sql`SELECT * FROM testimonials WHERE approved = true ORDER BY created_at DESC` as unknown as Testimonial[];
   return (
     <>
-      <JsonLd data={{
-        '@context': 'https://schema.org',
-        '@type': 'Organization',
-        name: 'Hass Quality Properties',
-        review: testimonials.slice(0, 10).map((t) => ({
-          '@type': 'Review',
-          author: { '@type': 'Person', name: t.name },
-          reviewRating: { '@type': 'Rating', ratingValue: t.rating, bestRating: 5 },
-          reviewBody: t.quote,
-        })),
-      }} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Hass Quality Properties',
+            review: testimonials.slice(0, 10).map((t) => ({
+              '@type': 'Review',
+              author: { '@type': 'Person', name: t.name },
+              reviewRating: { '@type': 'Rating', ratingValue: t.rating, bestRating: 5 },
+              reviewBody: t.quote,
+            })),
+          }),
+        }}
+      />
       <div className="bg-gray-50 min-h-screen pb-20">
       {/* Header */}
       <div className="bg-emerald-900 text-white py-20">

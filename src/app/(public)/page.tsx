@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import { JsonLd } from '@/components/JsonLd';
 import HomePage from './_HomePage';
 
 export const metadata: Metadata = {
@@ -40,7 +39,10 @@ const localBusinessJsonLd = {
 export default function Page() {
   return (
     <>
-      <JsonLd data={localBusinessJsonLd} />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(localBusinessJsonLd) }}
+      />
       <HomePage />
     </>
   );

@@ -22,17 +22,6 @@ const adminEmails = (process.env.ADMIN_EMAILS || '')
   .map(s => s.trim().toLowerCase())
   .filter(Boolean);
 
-function generateNonce(): string {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-  const array = new Uint8Array(32);
-  crypto.getRandomValues(array);
-  for (let i = 0; i < 32; i++) {
-    result += chars[array[i] % chars.length];
-  }
-  return result;
-}
-
 async function isAdminUser(userId: string): Promise<boolean> {
   if (adminEmails.length === 0) return true;
   try {
@@ -48,15 +37,12 @@ async function isAdminUser(userId: string): Promise<boolean> {
 
 export default clerkMiddleware(async (auth, req) => {
   const { userId } = await auth();
-  const nonce = generateNonce();
 
-  const requestHeaders = new Headers(req.headers);
-  requestHeaders.set('x-csp-nonce', nonce);
+  const response = NextResponse.next();
 
-  // Build CSP
-  const cspDirectives = [
+  response.headers.set('Content-Security-Policy', [
     `default-src 'self'`,
-    `script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com`,
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com`,
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data: blob: https://*.r2.dev https://images.unsplash.com https://img.clerk.com https://*.clerk.accounts.dev`,
     `font-src 'self' data:`,
@@ -67,15 +53,7 @@ export default clerkMiddleware(async (auth, req) => {
     `connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com wss://*.clerk.com`,
     `manifest-src 'self'`,
     `worker-src 'self' blob:`,
-  ];
-  const csp = cspDirectives.join('; ');
-
-  const response = NextResponse.next({
-    request: { headers: requestHeaders },
-  });
-
-  response.headers.set('Content-Security-Policy', csp);
-  response.headers.set('x-csp-nonce', nonce);
+  ].join('; '));
   response.headers.set('X-Content-Type-Options', 'nosniff');
   response.headers.set('X-Frame-Options', 'DENY');
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');

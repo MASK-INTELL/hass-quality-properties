@@ -1,8 +1,6 @@
 import type { Metadata } from 'next';
-import { headers } from 'next/headers';
 import './globals.css';
 import { ToastProvider } from '@/components/Toast';
-import { CspProvider } from '@/components/CspProvider';
 import PWARegister from '@/components/PWARegister';
 
 const siteName = 'Hass Quality Properties';
@@ -41,10 +39,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const headersList = await headers();
-  const nonce = headersList.get('x-csp-nonce') || '';
-
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
@@ -55,11 +50,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
       <body className="antialiased">
-        <CspProvider nonce={nonce}>
-          <ToastProvider>
-            {children}
-          </ToastProvider>
-        </CspProvider>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
         <PWARegister />
       </body>
     </html>
