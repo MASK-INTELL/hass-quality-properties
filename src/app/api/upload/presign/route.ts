@@ -3,14 +3,13 @@ import { requireAdmin } from '@/lib/require-admin';
 import { rateLimit } from '@/lib/rate-limit';
 import { getPresignedUploadUrl, generateFileKey, getPublicUrl, R2_CONFIG } from '@/lib/r2';
 
-const limiter = rateLimit('presign', 10, 60000);
-
 export async function POST(request: NextRequest) {
   const unauthorized = await requireAdmin();
   if (unauthorized) return unauthorized;
 
   const ip = request.headers.get('x-forwarded-for') || 'unknown';
-  if (!limiter(ip).allowed) {
+  const { allowed } = rateLimit(`presign:${ip}`, 10, 60000);
+  if (!allowed) {
     return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
   }
 
