@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, useMemo, useCallback } from 'react';
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
+import { useState, useMemo, useEffect, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
 import { Heart, Home, Car, Bike, Building2, MapPin, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -38,36 +38,31 @@ const CATEGORIES = [
   { id: 'Motorcycles', label: 'Motorcycles', icon: Bike },
 ];
 
-const CATEGORY_TYPES: Record<string, string[]> = {
-  Homes: ['All', 'House', 'Apartment', 'Commercial'],
-  Lands: ['All', 'Land'],
-  Plots: ['All', 'Plot'],
-  Rentals: ['All', 'House', 'Apartment', 'Land', 'Commercial', 'Plot'],
-  Cars: ['All', 'Car', 'Truck', 'Bus', 'Van', 'Mini-bus', 'Pickup', 'Lorry'],
-  Motorcycles: ['All', 'Motorcycle'],
-};
-
 export default function Properties({ initialProperties }: { initialProperties: Property[] }) {
   const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
+  const initialRender = useRef(true);
 
-  const activeCategory = (searchParams.get('category') as string) || 'All';
+  const [activeCategory, setActiveCategory] = useState(
+    (searchParams.get('category') as string) || 'All'
+  );
   const searchTerm = searchParams.get('search') || '';
   const filterType = searchParams.get('type') || 'All';
   const sortBy = searchParams.get('sort') || 'newest';
   const [allProperties] = useState<Property[]>(initialProperties);
 
-  const updateParam = useCallback((key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (value && value !== 'All' && value !== 'newest') {
-      params.set(key, value);
-    } else {
-      params.delete(key);
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+      return;
     }
+    const params = new URLSearchParams(window.location.search);
+    params.set('category', activeCategory);
+    params.delete('type');
+    params.delete('search');
     const qs = params.toString();
-    router.replace(`${pathname}${qs ? '?' + qs : ''}`, { scroll: false });
-  }, [searchParams, router, pathname]);
+    const newUrl = `${window.location.pathname}${qs ? '?' + qs : ''}`;
+    window.history.replaceState(null, '', newUrl);
+  }, [activeCategory]);
 
   const parsePrice = (priceStr: string) => {
     const numericStr = priceStr.replace(/[^0-9]/g, '');
@@ -105,19 +100,6 @@ export default function Properties({ initialProperties }: { initialProperties: P
     return result;
   }, [allProperties, activeCategory, searchTerm, filterType, sortBy]);
 
-  const getPropertyTypes = () => {
-    if (activeCategory === 'All') return ['All'];
-    return CATEGORY_TYPES[activeCategory] || ['All'];
-  };
-
-  const handleCategoryChange = (category: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('category', category);
-    params.delete('type');
-    const qs = params.toString();
-    router.replace(`${pathname}${qs ? '?' + qs : ''}`, { scroll: false });
-  };
-
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -140,7 +122,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
         <div className="md:hidden mb-8">
           <select
             value={activeCategory}
-            onChange={(e) => handleCategoryChange(e.target.value)}
+            onChange={(e) => setActiveCategory(e.target.value)}
             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-sm text-sm font-semibold"
           >
             {CATEGORIES.map(c => (
@@ -159,7 +141,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
               return (
                 <button
                   key={c.id}
-                  onClick={() => handleCategoryChange(c.id)}
+                  onClick={() => setActiveCategory(c.id)}
                   className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
                     isActive
                       ? 'bg-emerald-600 text-white shadow-md'
