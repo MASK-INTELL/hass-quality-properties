@@ -3,33 +3,11 @@
 import Image from 'next/image';
 import { ArrowRight, Search, Star } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
-
 import Link from 'next/link';
 import { useRef, useEffect, useState } from 'react';
 import PropertyCard from '@/components/PropertyCard';
 import PropertyGallery from '@/components/PropertyGallery';
-
-interface ImageMeta {
-  url: string;
-  alt: string;
-  filename: string;
-}
-
-interface Property {
-  id: string;
-  title: string;
-  description: string;
-  price: string;
-  location: string;
-  category: string;
-  type: string;
-  status: string;
-  image_url: string;
-  beds?: string;
-  baths?: string;
-  area?: string;
-  image_metadata?: ImageMeta[] | null;
-}
+import type { Property } from '@/lib/repositories/properties';
 
 interface HomePageProps {
   featuredProperties: Property[];
