@@ -37,15 +37,16 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
       e.preventDefault();
       e.stopPropagation();
     }
-    setFavorites(prev => {
-      if (prev.includes(id)) {
-        toast('error', 'Removed from favorites');
-        return prev.filter(fId => fId !== id);
-      }
+
+    if (favorites.includes(id)) {
+      if (!window.confirm('Remove this property from favorites?')) return;
+      setFavorites(prev => prev.filter(fId => fId !== id));
+      toast('error', 'Removed from favorites');
+    } else {
+      setFavorites(prev => [...prev, id]);
       toast('success', 'Added to favorites');
-      return [...prev, id];
-    });
-  }, [toast]);
+    }
+  }, [toast, favorites]);
 
   const isFavorite = useCallback((id: string) => favorites.includes(id), [favorites]);
 
