@@ -34,11 +34,25 @@ export default function InquiryCard({ property, defaultExpanded = false }: Inqui
   const [expanded, setExpanded] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+
+  function handlePhoneChange(val: string) {
+    setPhone(val);
+    setPhoneError(validatePhone(val));
+  }
   const [message, setMessage] = useState(() => buildInspectionMessage(property));
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const formRef = useRef<HTMLDivElement>(null);
+
+  function validatePhone(val: string): string | null {
+    if (!val.trim()) return 'Phone is required';
+    if (!/^(\+256|0)\d{9}$/.test(val.replace(/[\s\-\(\)]/g, ''))) {
+      return 'Enter a valid phone number (e.g., +256 791 715 573)';
+    }
+    return null;
+  }
 
   useEffect(() => {
     if (defaultExpanded && window.innerWidth >= 1024) {
@@ -120,11 +134,14 @@ export default function InquiryCard({ property, defaultExpanded = false }: Inqui
                 <input
                   type="tel"
                   value={phone}
-                  onChange={e => setPhone(e.target.value)}
+                  onChange={e => handlePhoneChange(e.target.value)}
                   placeholder="Phone Number"
                   required
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                  className={`w-full px-4 py-2.5 border rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors ${phoneError ? 'border-red-400' : 'border-gray-300'}`}
                 />
+                {phoneError && (
+                  <p className="text-xs text-red-600 mt-1">{phoneError}</p>
+                )}
               </div>
               <div>
                 <textarea
@@ -139,7 +156,7 @@ export default function InquiryCard({ property, defaultExpanded = false }: Inqui
               )}
               <button
                 type="submit"
-                disabled={submitting || !name.trim() || !phone.trim()}
+                disabled={submitting || !name.trim() || !phone.trim() || !!phoneError}
                 className="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <MessageSquare className="h-4 w-4" />}

@@ -3,7 +3,13 @@ import { z } from 'zod';
 export const inquirySchema = z.object({
   name: z.string().min(1, 'Name is required').max(200),
   email: z.string().email().optional().or(z.literal('')),
-  phone: z.string().min(1, 'Phone is required').max(50),
+  phone: z.string()
+    .min(1, 'Phone is required')
+    .max(20)
+    .refine(
+      val => /^(\+256|0)\d{9}$/.test(val.replace(/[\s\-\(\)]/g, '')),
+      { message: 'Enter a valid phone number (e.g., +256 791 715 573)' }
+    ),
   message: z.string().min(1, 'Message is required').max(5000),
   property_title: z.string().optional(),
 });

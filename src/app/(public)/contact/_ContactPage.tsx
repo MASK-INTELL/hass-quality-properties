@@ -12,17 +12,30 @@ export default function Contact() {
     subject: '',
     message: '',
   });
+  const [phoneError, setPhoneError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  function validatePhone(val: string): string | null {
+    if (!val.trim()) return 'Phone is required';
+    if (!/^(\+256|0)\d{9}$/.test(val.replace(/[\s\-\(\)]/g, ''))) {
+      return 'Enter a valid phone number (e.g., +256 791 715 573)';
+    }
+    return null;
+  }
+
   const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    if (name === 'phone') setPhoneError(validatePhone(value));
   };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    const phoneVal = formData.phone.replace(/[\s\-\(\)]/g, '');
+    const phoneErr = validatePhone(phoneVal);
+    if (phoneErr) { setPhoneError(phoneErr); return; }
     setIsSubmitting(true);
     setError(null);
 
@@ -195,8 +208,11 @@ export default function Contact() {
                     <input
                       type="tel" id="phone" name="phone" required
                       value={formData.phone} onChange={handleChange}
-                      className={inputClass} placeholder="+256 700 000 000"
+                      className={`${inputClass} ${phoneError ? 'border-red-400' : ''}`} placeholder="+256 700 000 000"
                     />
+                    {phoneError && (
+                      <p className="text-xs text-red-600 mt-1">{phoneError}</p>
+                    )}
                   </div>
 
                   <div>
@@ -226,7 +242,7 @@ export default function Contact() {
 
                   <button
                     type="submit"
-                    disabled={isSubmitting}
+                    disabled={isSubmitting || !!phoneError}
                     className="w-full py-3.5 px-6 rounded-lg text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
                   >
                     {isSubmitting
