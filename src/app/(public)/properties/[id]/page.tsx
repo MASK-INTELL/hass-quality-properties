@@ -1,10 +1,19 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import sql from '@/lib/db';
 import { getPropertyById, getSimilarProperties } from '@/lib/repositories/properties';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PropertyDetailClient from './_PropertyDetailClient';
 
+export const revalidate = 3600;
+
 const BASE_URL = 'https://hass-quality-properties.vercel.app';
+
+export async function generateStaticParams() {
+  const rows = await sql`SELECT id FROM properties ORDER BY created_at DESC LIMIT 500`;
+  const properties = rows as unknown as { id: string }[];
+  return properties.map(p => ({ id: p.id }));
+}
 
 interface Props {
   params: Promise<{ id: string }>;
