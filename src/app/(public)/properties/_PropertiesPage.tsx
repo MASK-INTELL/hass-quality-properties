@@ -121,11 +121,18 @@ export default function Properties({ initialProperties }: { initialProperties: P
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Listings</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Explore our diverse portfolio of homes, lands, plots, and vehicles in Fort Portal and beyond.
-          </p>
+        <h1 className="sr-only">Browse Properties</h1>
+
+        {/* My Favorites Link */}
+        <div className="flex justify-end mb-4">
+          <Link
+            href="/favorites"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all border bg-white border-gray-200 text-gray-600 hover:bg-red-50 hover:text-red-500 hover:border-red-200"
+          >
+            <Heart className="h-5 w-5" />
+            My Favorites
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
 
         {/* Category Tabs */}
@@ -143,7 +150,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
         </div>
 
         {/* Desktop: category tabs — hidden on mobile */}
-        <div className="hidden md:flex justify-center mb-8">
+        <div className="hidden md:flex justify-center mb-10">
           <div className="inline-flex bg-white rounded-xl shadow-sm p-1 border border-gray-100 overflow-x-auto max-w-full no-scrollbar">
             {CATEGORIES.map(c => {
               const Icon = c.icon;
