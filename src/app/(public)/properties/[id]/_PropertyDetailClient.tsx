@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { MapPin, Bed, Bath, Maximize, ArrowLeft, Phone, Building2, ChevronLeft, ChevronRight, X, Share2, Heart, Video } from 'lucide-react';
@@ -57,6 +57,21 @@ export default function PropertyDetails({
       setBackHref(`/properties${saved}`);
     }
   }, []);
+
+  const whatsappUrl = useMemo(() => {
+    const msg = [
+      'I would like to request an inspection for this property:',
+      '',
+      `Title: ${property?.title || ''}`,
+      `Location: ${property?.location || ''}`,
+      `Price: ${property?.price || ''}`,
+      `Type: ${property?.type || ''}`,
+      `Category: ${property?.category || ''}`,
+      '',
+      'Please contact me to schedule. Thank you.',
+    ].join('\n');
+    return `https://wa.me/256791715573?text=${encodeURIComponent(msg)}`;
+  }, [property]);
 
   const { isFavorite, toggleFavorite } = useFavorites();
 
@@ -484,7 +499,7 @@ export default function PropertyDetails({
                   <Phone className="h-5 w-5" /> Call Agent
                 </a>
                 <a
-                  href="https://wa.me/256791715573"
+                  href={whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-center gap-3 w-full py-3 bg-green-50 text-green-700 rounded-lg font-semibold hover:bg-green-100 transition-colors border border-green-200"
