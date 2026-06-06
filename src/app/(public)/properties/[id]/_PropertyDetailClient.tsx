@@ -124,84 +124,215 @@ export default function PropertyDetails({
           <Link href={backHref} className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium transition-colors mb-6">
             <ArrowLeft className="h-5 w-5" /> Back to Properties
           </Link>
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
-            <div>
-              <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold mb-3 uppercase tracking-wide">
-                {property.status}
-              </span>
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{property.title}</h1>
-              <div className="flex items-center gap-2 text-gray-600 text-lg">
-                <MapPin className="h-5 w-5" />
-                {property.location}
+          {/* Mobile layout (< lg) — unchanged */}
+          <div className="lg:hidden">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
+              <div>
+                <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold mb-3 uppercase tracking-wide">
+                  {property.status}
+                </span>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{property.title}</h1>
+                <div className="flex items-center gap-2 text-gray-600 text-lg">
+                  <MapPin className="h-5 w-5" />
+                  {property.location}
+                </div>
+              </div>
+              <div className="flex flex-col items-end gap-4">
+                <div className="text-emerald-600">
+                  <p className="text-3xl font-bold">{property.price}</p>
+                </div>
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={handleShare}
+                    className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors relative"
+                  >
+                    <Share2 className="h-5 w-5" /> Share
+                    {showShareToast && (
+                      <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-3 rounded shadow-lg whitespace-nowrap">
+                        Link copied!
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    onClick={(e) => toggleFavorite(property.id, e)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors border ${
+                      isFavorite(property.id)
+                        ? 'bg-red-50 border-red-200 text-red-500 hover:bg-red-100'
+                        : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <Heart className={`h-5 w-5 ${isFavorite(property.id) ? 'fill-red-500' : ''}`} />
+                    {isFavorite(property.id) ? 'Saved' : 'Save'}
+                  </button>
+                </div>
               </div>
             </div>
-            <div className="flex flex-col items-end gap-4">
-              <div className="text-emerald-600">
-                <p className="text-3xl font-bold">{property.price}</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-[60vh]">
+              <div
+                className={`relative rounded-xl overflow-hidden cursor-pointer group ${images.length > 1 ? 'md:col-span-3' : 'md:col-span-4'}`}
+                onClick={() => setIsLightboxOpen(true)}
+              >
+                <Image
+                  fill
+                  src={images[0]}
+                  alt={property.image_metadata?.find(m => m.url === images[0])?.alt || property.title}
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  sizes="(max-width: 768px) 100vw, 75vw"
+                />
               </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={handleShare}
-                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors relative"
-                >
-                  <Share2 className="h-5 w-5" /> Share
-                  {showShareToast && (
-                    <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-3 rounded shadow-lg whitespace-nowrap">
-                      Link copied!
-                    </span>
-                  )}
-                </button>
-                <button
-                  onClick={(e) => toggleFavorite(property.id, e)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-colors border ${
-                    isFavorite(property.id)
-                      ? 'bg-red-50 border-red-200 text-red-500 hover:bg-red-100'
-                      : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-                  }`}
-                >
-                  <Heart className={`h-5 w-5 ${isFavorite(property.id) ? 'fill-red-500' : ''}`} />
-                  {isFavorite(property.id) ? 'Saved' : 'Save'}
-                </button>
-              </div>
+
+              {images.length > 1 && (
+                <div className="hidden md:grid grid-rows-3 gap-4 h-full">
+                  {images.slice(1, 4).map((img, idx) => (
+                    <div
+                      key={idx}
+                      className="relative rounded-xl overflow-hidden cursor-pointer group"
+                      onClick={() => {
+                        setCurrentImageIndex(idx + 1);
+                        setIsLightboxOpen(true);
+                      }}
+                    >
+                      <Image
+                        fill
+                        src={img}
+                        alt={property.image_metadata?.find(m => m.url === img)?.alt || `${property.title} - Image ${idx + 2}`}
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        sizes="25vw"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 h-[60vh]">
-            <div
-              className={`relative rounded-xl overflow-hidden cursor-pointer group ${images.length > 1 ? 'md:col-span-3' : 'md:col-span-4'}`}
-              onClick={() => setIsLightboxOpen(true)}
-            >
-              <Image
-                fill
-                src={images[0]}
-                alt={property.image_metadata?.find(m => m.url === images[0])?.alt || property.title}
-                className="object-cover transition-transform duration-500 group-hover:scale-105"
-                sizes="(max-width: 768px) 100vw, 75vw"
-              />
-            </div>
+          {/* Desktop layout (lg+) — image left, details right */}
+          <div className="hidden lg:block">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+              <div>
+                <div
+                  className="relative aspect-[4/3] rounded-2xl overflow-hidden cursor-pointer group"
+                  onClick={() => setIsLightboxOpen(true)}
+                >
+                  <Image
+                    fill
+                    src={images[0]}
+                    alt={property.image_metadata?.find(m => m.url === images[0])?.alt || property.title}
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+                </div>
 
-            {images.length > 1 && (
-              <div className="hidden md:grid grid-rows-3 gap-4 h-full">
-                {images.slice(1, 4).map((img, idx) => (
-                  <div
-                    key={idx}
-                    className="relative rounded-xl overflow-hidden cursor-pointer group"
-                    onClick={() => {
-                      setCurrentImageIndex(idx + 1);
-                      setIsLightboxOpen(true);
-                    }}
-                  >
-                    <Image
-                      fill
-                      src={img}
-                      alt={property.image_metadata?.find(m => m.url === img)?.alt || `${property.title} - Image ${idx + 2}`}
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
-                      sizes="25vw"
-                    />
+                {images.length > 1 && (
+                  <div className="grid grid-cols-3 gap-3 mt-3">
+                    {images.slice(1, 4).map((img, idx) => (
+                      <div
+                        key={idx}
+                        className="relative aspect-[4/3] rounded-xl overflow-hidden cursor-pointer group"
+                        onClick={() => {
+                          setCurrentImageIndex(idx + 1);
+                          setIsLightboxOpen(true);
+                        }}
+                      >
+                        <Image
+                          fill
+                          src={img}
+                          alt={property.image_metadata?.find(m => m.url === img)?.alt || `${property.title} - Image ${idx + 2}`}
+                          className="object-cover transition-transform duration-500 group-hover:scale-110"
+                          sizes="25vw"
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
+                )}
               </div>
-            )}
+
+              <div className="space-y-6">
+                <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold uppercase tracking-wide">
+                  {property.status}
+                </span>
+                <h1 className="text-3xl font-bold text-gray-900">{property.title}</h1>
+                <p className="text-gray-600 leading-relaxed text-base">
+                  {property.description}
+                </p>
+                <p className="text-3xl font-bold text-emerald-600">{property.price}</p>
+                <div className="flex items-center gap-2 text-gray-600">
+                  <MapPin className="h-5 w-5" />
+                  {property.location}
+                </div>
+
+                <div className="flex flex-wrap gap-6 pt-2">
+                  {property.area && (
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 bg-emerald-50 rounded-full text-emerald-600">
+                        <Maximize className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Area</p>
+                        <p className="font-bold text-gray-900 text-sm">{property.area}</p>
+                      </div>
+                    </div>
+                  )}
+                  {property.beds && (
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 bg-emerald-50 rounded-full text-emerald-600">
+                        <Bed className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Bedrooms</p>
+                        <p className="font-bold text-gray-900 text-sm">{property.beds}</p>
+                      </div>
+                    </div>
+                  )}
+                  {property.baths && (
+                    <div className="flex items-center gap-2">
+                      <div className="p-2 bg-emerald-50 rounded-full text-emerald-600">
+                        <Bath className="h-5 w-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs text-gray-500">Bathrooms</p>
+                        <p className="font-bold text-gray-900 text-sm">{property.baths}</p>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-2">
+                    <div className="p-2 bg-emerald-50 rounded-full text-emerald-600">
+                      <Building2 className="h-5 w-5" />
+                    </div>
+                    <div>
+                      <p className="text-xs text-gray-500">Type</p>
+                      <p className="font-bold text-gray-900 text-sm">{property.type}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3 pt-4">
+                  <button
+                    onClick={handleShare}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-medium transition-colors relative"
+                  >
+                    <Share2 className="h-5 w-5" /> Share
+                    {showShareToast && (
+                      <span className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-xs py-1 px-3 rounded shadow-lg whitespace-nowrap">
+                        Link copied!
+                      </span>
+                    )}
+                  </button>
+                  <button
+                    onClick={(e) => toggleFavorite(property.id, e)}
+                    className={`flex items-center gap-2 px-5 py-2.5 rounded-lg font-medium transition-colors border ${
+                      isFavorite(property.id)
+                        ? 'bg-red-50 border-red-200 text-red-500 hover:bg-red-100'
+                        : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <Heart className={`h-5 w-5 ${isFavorite(property.id) ? 'fill-red-500' : ''}`} />
+                    {isFavorite(property.id) ? 'Saved' : 'Save'}
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -254,7 +385,7 @@ export default function PropertyDetails({
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2 space-y-8">
-            <div className="bg-white rounded-xl shadow-sm p-8 flex flex-wrap gap-8 justify-between border border-gray-100">
+            <div className="lg:hidden bg-white rounded-xl shadow-sm p-8 flex flex-wrap gap-8 justify-between border border-gray-100">
               {property.area && (
                 <div className="flex items-center gap-3">
                   <div className="p-3 bg-emerald-50 rounded-full text-emerald-600">
@@ -302,7 +433,7 @@ export default function PropertyDetails({
               </div>
             </div>
 
-            <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
+            <div className="lg:hidden bg-white rounded-xl shadow-sm p-8 border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
               <p className="text-gray-600 leading-relaxed text-lg">
                 {property.description}
