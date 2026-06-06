@@ -175,18 +175,6 @@ export default function Properties({ initialProperties }: { initialProperties: P
           </div>
         </div>
 
-        {/* My Favorites Link */}
-        <div className="flex justify-end mb-8">
-          <Link
-            href="/favorites"
-            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all border bg-white border-gray-200 text-gray-600 hover:bg-red-50 hover:text-red-500 hover:border-red-200"
-          >
-            <Heart className="h-5 w-5" />
-            My Favorites
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-
         {/* Results */}
         {filteredAndSortedProperties.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
