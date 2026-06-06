@@ -22,6 +22,7 @@ export const propertySchema = z.object({
   price: z.string().min(1, 'Price is required').max(100),
   location: z.string().min(1, 'Location is required').max(200),
   category: z.string().min(1, 'Category is required').max(100),
+  type: z.string().min(1, 'Type is required').max(100),
   status: z.enum(['For Sale', 'For Rent', 'Sold', 'Rented']).optional().default('For Sale'),
   beds: z.number().int().optional().nullable(),
   baths: z.number().int().optional().nullable(),
