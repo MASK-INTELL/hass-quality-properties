@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { MapPin, Bed, Bath, Maximize, ArrowLeft, Phone, Building2, ChevronLeft, ChevronRight, X, Share2, Heart, Video } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import PropertyCard from '@/components/PropertyCard';
+import InquiryCard from '@/components/InquiryCard';
 import { useFavorites } from '@/hooks/useFavorites';
 
 interface ImageMeta {
@@ -440,7 +441,7 @@ export default function PropertyDetails({
               </p>
             </div>
 
-            {property.video_url && (
+            {property.video_url ? (
               <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
                 <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
                   <Video className="h-6 w-6 text-emerald-600" /> Video Tour
@@ -463,6 +464,10 @@ export default function PropertyDetails({
                     </video>
                   )}
                 </div>
+              </div>
+            ) : (
+              <div className="hidden lg:block">
+                <InquiryCard propertyTitle={property.title} defaultExpanded />
               </div>
             )}
           </div>
@@ -487,6 +492,10 @@ export default function PropertyDetails({
                   <WhatsAppIcon className="h-5 w-5" /> WhatsApp
                 </a>
               </div>
+            </div>
+
+            <div className={property.video_url ? '' : 'lg:hidden'}>
+              <InquiryCard propertyTitle={property.title} />
             </div>
           </div>
         </div>
