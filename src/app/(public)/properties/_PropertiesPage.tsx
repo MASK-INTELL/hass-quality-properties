@@ -3,8 +3,8 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
-import { Heart, Home, Car, Bike, Building2, MapPin } from 'lucide-react';
-import { useFavorites } from '@/hooks/useFavorites';
+import { Heart, Home, Car, Bike, Building2, MapPin, ArrowRight } from 'lucide-react';
+import Link from 'next/link';
 
 interface ImageMeta {
   url: string;
@@ -56,10 +56,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
   const searchTerm = searchParams.get('search') || '';
   const filterType = searchParams.get('type') || 'All';
   const sortBy = searchParams.get('sort') || 'newest';
-  const showFavoritesOnly = searchParams.get('fav') === '1';
-
   const [allProperties] = useState<Property[]>(initialProperties);
-  const { isFavorite } = useFavorites();
 
   const updateParam = useCallback((key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -92,9 +89,8 @@ export default function Properties({ initialProperties }: { initialProperties: P
       const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
                             property.location.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesType = filterType === 'All' || property.type === filterType;
-      const matchesFavorites = !showFavoritesOnly || isFavorite(property.id);
 
-      return matchesCategory && matchesSearch && matchesType && matchesFavorites;
+      return matchesCategory && matchesSearch && matchesType;
     });
 
     result.sort((a, b) => {
@@ -107,7 +103,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
     });
 
     return result;
-  }, [allProperties, activeCategory, searchTerm, filterType, sortBy, showFavoritesOnly, isFavorite]);
+  }, [allProperties, activeCategory, searchTerm, filterType, sortBy]);
 
   const getPropertyTypes = () => {
     if (activeCategory === 'All') return ['All'];
@@ -172,19 +168,16 @@ export default function Properties({ initialProperties }: { initialProperties: P
           </div>
         </div>
 
-        {/* Favorites Filter */}
+        {/* My Favorites Link */}
         <div className="flex justify-end mb-8">
-          <button
-            onClick={() => updateParam('fav', showFavoritesOnly ? '' : '1')}
-            className={`flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all border ${
-              showFavoritesOnly
-                ? 'bg-red-50 border-red-200 text-red-500 shadow-sm'
-                : 'bg-white border-gray-200 text-gray-600 hover:bg-gray-50'
-            }`}
+          <Link
+            href="/favorites"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-semibold transition-all border bg-white border-gray-200 text-gray-600 hover:bg-red-50 hover:text-red-500 hover:border-red-200"
           >
-            <Heart className={`h-5 w-5 ${showFavoritesOnly ? 'fill-red-500' : ''}`} />
-            {showFavoritesOnly ? 'Showing Favorites' : 'Show Favorites Only'}
-          </button>
+            <Heart className="h-5 w-5" />
+            My Favorites
+            <ArrowRight className="h-4 w-4" />
+          </Link>
         </div>
 
         {/* Results */}
