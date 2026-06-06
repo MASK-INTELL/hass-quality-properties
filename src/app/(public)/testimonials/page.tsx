@@ -53,14 +53,8 @@ export default async function Testimonials() {
       />
       <div className="bg-gray-50 min-h-screen pb-20">
       {/* Header */}
-      <div className="bg-emerald-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Client Success Stories</h1>
-          <p className="text-xl text-emerald-100 max-w-3xl mx-auto">
-            Read what our clients have to say about their experience working with Hass Quality Properties.
-            With over 11 years of experience, we&apos;ve built a legacy of trust.
-          </p>
-        </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-6">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Client Success Stories</h1>
       </div>
 
       {/* Share Your Experience Form */}

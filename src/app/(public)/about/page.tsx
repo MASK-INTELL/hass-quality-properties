@@ -26,14 +26,9 @@ export default async function About() {
 
   return (
     <div className="bg-white min-h-screen">
-      {/* Hero Header */}
-      <div className="bg-emerald-900 text-white py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">About Us</h1>
-          <p className="text-xl text-emerald-100 max-w-3xl mx-auto">
-            Your trusted real estate partner in Fort Portal Tourism City, committed to quality, integrity, and excellence.
-          </p>
-        </div>
+      {/* Header */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-6">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">About Us</h1>
       </div>
 
       {/* Main Content */}
