@@ -1,10 +1,14 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import Navbar from './Navbar';
 import Footer from './Footer';
 import WelcomeOnboarding from './WelcomeOnboarding';
 
 export default function PublicLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const hideFooter = pathname === '/properties' || pathname === '/contact';
+
   return (
     <>
       <WelcomeOnboarding />
@@ -13,7 +17,7 @@ export default function PublicLayout({ children }: { children: React.ReactNode }
         <main className="flex-grow">
           {children}
         </main>
-        <Footer />
+        {!hideFooter && <Footer />}
       </div>
     </>
   );
