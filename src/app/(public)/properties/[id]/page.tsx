@@ -57,7 +57,7 @@ export default async function PropertyPage({ params }: Props) {
     notFound();
   }
 
-  const similarProperties = await getSimilarProperties(property.category, id, 3);
+  const similarProperties = await getSimilarProperties(property.category, property.location, id);
 
   const images = property.images?.length ? property.images : (property.image_url ? [property.image_url] : []);
   const mainImage = images[0] || '/logo.png';

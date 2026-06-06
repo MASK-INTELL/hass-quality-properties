@@ -45,13 +45,22 @@ export async function getPropertyById(id: string): Promise<Property | null> {
 
 export async function getSimilarProperties(
   category: string,
+  location: string,
   excludeId: string,
-  limit = 3
+  limit = 12
 ): Promise<Property[]> {
   const rows = await sql`
-    SELECT * FROM properties 
-    WHERE category = ${category} AND id != ${excludeId} 
-    ORDER BY created_at DESC LIMIT ${limit}
+    SELECT *
+    FROM properties
+    WHERE id != ${excludeId}
+    ORDER BY
+      CASE
+        WHEN category = ${category} AND location ILIKE '%' || COALESCE(${location}, '') || '%' THEN 0
+        WHEN category = ${category} THEN 1
+        ELSE 2
+      END,
+      created_at DESC
+    LIMIT ${limit}
   `;
   return rows as unknown as Property[];
 }

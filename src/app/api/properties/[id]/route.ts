@@ -12,7 +12,7 @@ export async function GET(
     return NextResponse.json({ error: 'Not found' }, { status: 404 });
   }
 
-  const similar = await getSimilarProperties(property.category, id, 3);
+  const similar = await getSimilarProperties(property.category, property.location, id);
 
   return NextResponse.json({ property, similar }, {
     headers: { 'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120' },
