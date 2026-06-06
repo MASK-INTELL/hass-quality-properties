@@ -32,10 +32,12 @@ interface PropertyFormData {
 }
 
 const CATEGORY_TYPES: Record<string, string[]> = {
-  'Real Estate': ['House', 'Apartment', 'Land', 'Commercial'],
-  'Rentals': ['House', 'Apartment', 'Land', 'Commercial'],
-  'Vehicles': ['Car', 'Truck', 'Van'],
-  'Motorcycles': ['Motorcycle', 'Scooter', 'Dirt Bike'],
+  'Homes': ['House', 'Apartment', 'Commercial'],
+  'Lands': ['Land'],
+  'Plots': ['Plot'],
+  'Rentals': ['House', 'Apartment', 'Land', 'Commercial', 'Plot'],
+  'Cars': ['Car', 'Truck', 'Bus', 'Van', 'Mini-bus', 'Pickup', 'Lorry'],
+  'Motorcycles': ['Motorcycle'],
 };
 
 export default function EditProperty() {
@@ -66,7 +68,7 @@ export default function EditProperty() {
             description: data.description || '',
             price: data.price || '',
             location: data.location || '',
-            category: data.category || 'Real Estate',
+            category: data.category || 'Homes',
             type: data.type || 'House',
             status: data.status || 'For Sale',
             imageUrl: data.image_url || '',
@@ -215,9 +217,9 @@ export default function EditProperty() {
     );
   }
 
-  const isVehicle = formData.category === 'Vehicles' || formData.category === 'Motorcycles';
-  const isRealEstate = formData.category === 'Real Estate' || formData.category === 'Rentals';
-  const showRoomDetails = isRealEstate && formData.type !== 'Land' && formData.type !== 'Commercial';
+  const isVehicle = formData.category === 'Cars' || formData.category === 'Motorcycles';
+  const isRealEstate = ['Homes', 'Lands', 'Plots', 'Rentals'].includes(formData.category);
+  const showRoomDetails = isRealEstate && !['Land', 'Commercial', 'Plot'].includes(formData.type);
 
   const inputClass = "w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-sm";
   const labelClass = "block text-sm font-medium text-gray-700 mb-1.5";

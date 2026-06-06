@@ -17,7 +17,7 @@ CREATE TABLE IF NOT EXISTS properties (
   description   TEXT NOT NULL,
   price         TEXT NOT NULL,
   location      TEXT NOT NULL,
-  category      TEXT NOT NULL CHECK (category IN ('Real Estate', 'Rentals', 'Vehicles', 'Motorcycles')),
+  category      TEXT NOT NULL CHECK (category IN ('Homes', 'Lands', 'Plots', 'Rentals', 'Cars', 'Motorcycles')),
   type          TEXT NOT NULL,
   status        TEXT NOT NULL CHECK (status IN ('For Sale', 'For Rent', 'Sold')),
   image_url     TEXT NOT NULL,
@@ -177,7 +177,7 @@ SELECT * FROM (VALUES
     'Modern Family Home in Booma',
     'A beautiful modern family home located in the upscale Booma residential area. Features spacious living areas, a modern kitchen, and a well-maintained garden.',
     'UGX 450,000,000', 'Booma, Fort Portal',
-    'Real Estate', 'House', 'For Sale', TRUE,
+    'Homes', 'House', 'For Sale', TRUE,
     'https://images.unsplash.com/photo-1600596542815-2250657d2fc5?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     ARRAY['https://images.unsplash.com/photo-1600596542815-2250657d2fc5?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80','https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80','https://images.unsplash.com/photo-1600607687931-cebf0746e50e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80','https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'],
     4, 3, '25 Decimals', 'https://www.youtube.com/embed/tgbNymZ7vqY',
@@ -187,7 +187,7 @@ SELECT * FROM (VALUES
     'Prime Commercial Plot',
     'Strategic commercial plot located near the city center. Ideal for a shopping mall, office complex, or hotel. Titled land with easy access to main roads.',
     'UGX 150,000,000', 'Fort Portal City Center',
-    'Real Estate', 'Land', 'For Sale', FALSE,
+    'Plots', 'Plot', 'For Sale', FALSE,
     'https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     '{}', NULL, NULL, '50x100 ft', NULL,
     NULL, NULL, NULL, NULL, NULL, NULL
@@ -205,7 +205,7 @@ SELECT * FROM (VALUES
     'Farm Land in Kyenjojo',
     'Fertile farm land suitable for tea, coffee, or cattle farming. Located 15km from Fort Portal city with good access roads.',
     'UGX 25,000,000 per Acre', 'Kyenjojo District',
-    'Real Estate', 'Land', 'For Sale', FALSE,
+    'Lands', 'Land', 'For Sale', FALSE,
     'https://images.unsplash.com/photo-1500076656116-558758c991c1?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     '{}', NULL, NULL, '10 Acres', NULL,
     NULL, NULL, NULL, NULL, NULL, NULL
@@ -214,7 +214,7 @@ SELECT * FROM (VALUES
     'Colonial Style Bungalow',
     'Charming colonial-style bungalow with renovated interiors. Large compound with mature trees and a separate servant quarter.',
     'UGX 380,000,000', 'Kabarole Hill',
-    'Real Estate', 'House', 'For Sale', TRUE,
+    'Homes', 'House', 'For Sale', TRUE,
     'https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     '{}', 3, 2, '30 Decimals', NULL,
     NULL, NULL, NULL, NULL, NULL, NULL
@@ -223,7 +223,7 @@ SELECT * FROM (VALUES
     'Lake View Resort Land',
     'Exclusive land overlooking one of the crater lakes. Perfect for an eco-lodge or luxury resort development.',
     'UGX 800,000,000', 'Crater Lakes Region',
-    'Real Estate', 'Land', 'For Sale', FALSE,
+    'Lands', 'Land', 'For Sale', FALSE,
     'https://images.unsplash.com/photo-1449156493391-d2cfa28e468b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     '{}', NULL, NULL, '5 Acres', NULL,
     NULL, NULL, NULL, NULL, NULL, NULL
@@ -232,7 +232,7 @@ SELECT * FROM (VALUES
     'Toyota Land Cruiser Prado TX',
     'Excellent condition Toyota Land Cruiser Prado TX. Perfect for both city driving and upcountry terrain. Fully serviced with new tires.',
     'UGX 120,000,000', 'Fort Portal City Center',
-    'Vehicles', 'Car', 'For Sale', FALSE,
+    'Cars', 'Car', 'For Sale', FALSE,
     'https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     '{}', NULL, NULL, NULL, NULL,
     NULL, NULL, 2015, '85,000 km', 'Automatic', 'Diesel'
@@ -241,7 +241,7 @@ SELECT * FROM (VALUES
     'Subaru Forester XT',
     'Well-maintained Subaru Forester XT. Great family car with AWD capability. Clean interior and exterior.',
     'UGX 45,000,000', 'Booma, Fort Portal',
-    'Vehicles', 'Car', 'For Sale', FALSE,
+    'Cars', 'Car', 'For Sale', FALSE,
     'https://images.unsplash.com/photo-1580273916550-e323be2ae537?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     '{}', NULL, NULL, NULL, NULL,
     NULL, NULL, 2012, '110,000 km', 'Automatic', 'Petrol'

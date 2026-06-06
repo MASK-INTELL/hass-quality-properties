@@ -167,7 +167,7 @@ export async function getDashboardStats(): Promise<{
       COUNT(*)::int AS "totalProperties",
       COUNT(*) FILTER (WHERE status = 'For Sale')::int AS "forSale",
       COUNT(*) FILTER (WHERE status = 'For Rent')::int AS "forRent",
-      COUNT(*) FILTER (WHERE category IN ('Vehicles', 'Motorcycles'))::int AS "vehicles"
+      COUNT(*) FILTER (WHERE category IN ('Cars', 'Motorcycles'))::int AS "vehicles"
     FROM properties
   `;
   return result as unknown as {

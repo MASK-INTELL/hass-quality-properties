@@ -9,7 +9,7 @@ const siteDescription = 'Find your perfect property, rental, or vehicle in Fort 
 export const metadata: Metadata = {
   metadataBase: new URL('https://hass-quality-properties.vercel.app'),
   title: {
-    default: `${siteName} - Real Estate, Rentals & Vehicles`,
+    default: `${siteName} - Homes, Lands, Plots, Cars & Rentals`,
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
@@ -17,14 +17,14 @@ export const metadata: Metadata = {
     type: 'website',
     locale: 'en_US',
     siteName,
-    title: `${siteName} - Real Estate, Rentals & Vehicles`,
+    title: `${siteName} - Homes, Lands, Plots, Cars & Rentals`,
     description: siteDescription,
     url: '/',
     images: [{ url: '/logo.png', width: 512, height: 512, alt: siteName }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: `${siteName} - Real Estate, Rentals & Vehicles`,
+    title: `${siteName} - Homes, Lands, Plots, Cars & Rentals`,
     description: siteDescription,
     images: ['/logo.png'],
   },

@@ -53,7 +53,7 @@ export default async function PropertyPage({ params }: Props) {
   const images = property.images?.length ? property.images : (property.image_url ? [property.image_url] : []);
   const mainImage = images[0] || '/logo.png';
 
-  const jsonLd = property.category === 'Real Estate' || property.category === 'Rentals'
+  const jsonLd = ['Homes', 'Lands', 'Plots', 'Rentals'].includes(property.category)
     ? {
         '@context': 'https://schema.org',
         '@type': 'RealEstateListing',

@@ -8,12 +8,12 @@ export const metadata: Metadata = {
   description: 'Explore our portfolio of houses, apartments, land, commercial properties, vehicles and motorcycles for sale or rent in Fort Portal, Uganda.',
   openGraph: {
     title: 'Properties for Sale & Rent | Hass Quality Properties',
-    description: 'Browse our complete listings of real estate and vehicles in Fort Portal.',
+    description: 'Browse our complete listings of homes, lands, plots, cars and motorcycles in Fort Portal.',
     url: '/properties',
   },
   twitter: {
     title: 'Properties for Sale & Rent | Hass Quality Properties',
-    description: 'Browse our complete listings of real estate and vehicles in Fort Portal.',
+    description: 'Browse our complete listings of homes, lands, plots, cars and motorcycles in Fort Portal.',
   },
   alternates: { canonical: '/properties' },
 };

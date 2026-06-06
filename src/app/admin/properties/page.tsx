@@ -7,7 +7,7 @@ import { Plus, Search, Filter, Edit, Trash2, Building2, ChevronLeft, ChevronRigh
 
 const PAGE_SIZE = 10;
 
-const CATEGORIES = ['All', 'Real Estate', 'Rentals', 'Vehicles', 'Motorcycles'];
+const CATEGORIES = ['All', 'Homes', 'Lands', 'Plots', 'Rentals', 'Cars', 'Motorcycles'];
 const STATUSES = ['All', 'For Sale', 'For Rent', 'Sold'];
 
 export default function AdminProperties() {
@@ -96,7 +96,7 @@ export default function AdminProperties() {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Properties</h1>
-          <p className="text-gray-500 mt-1 text-sm">Manage your real estate and vehicle listings</p>
+          <p className="text-gray-500 mt-1 text-sm">Manage your homes, lands, plots, cars and motorcycle listings</p>
         </div>
         <button
           onClick={() => router.push('/admin/properties/add')}

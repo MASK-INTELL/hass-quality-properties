@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
-import { Heart, Home, Car } from 'lucide-react';
+import { Heart, Home, Car, Bike, Building2, MapPin } from 'lucide-react';
 import { useFavorites } from '@/hooks/useFavorites';
 
 interface ImageMeta {
@@ -27,6 +27,25 @@ interface Property {
   area?: string | null;
   image_metadata?: ImageMeta[] | null;
 }
+
+const CATEGORIES = [
+  { id: 'All', label: 'All Listings', icon: null },
+  { id: 'Homes', label: 'Homes', icon: Home },
+  { id: 'Lands', label: 'Lands', icon: MapPin },
+  { id: 'Plots', label: 'Plots', icon: Building2 },
+  { id: 'Rentals', label: 'Rentals', icon: Home },
+  { id: 'Cars', label: 'Cars', icon: Car },
+  { id: 'Motorcycles', label: 'Motorcycles', icon: Bike },
+];
+
+const CATEGORY_TYPES: Record<string, string[]> = {
+  Homes: ['All', 'House', 'Apartment', 'Commercial'],
+  Lands: ['All', 'Land'],
+  Plots: ['All', 'Plot'],
+  Rentals: ['All', 'House', 'Apartment', 'Land', 'Commercial', 'Plot'],
+  Cars: ['All', 'Car', 'Truck', 'Bus', 'Van', 'Mini-bus', 'Pickup', 'Lorry'],
+  Motorcycles: ['All', 'Motorcycle'],
+};
 
 export default function Properties({ initialProperties }: { initialProperties: Property[] }) {
   const searchParams = useSearchParams();
@@ -62,14 +81,12 @@ export default function Properties({ initialProperties }: { initialProperties: P
     let result = allProperties.filter(property => {
       let matchesCategory = true;
 
-      if (activeCategory === 'Real Estate') {
-        matchesCategory = property.category === 'Real Estate' && property.status === 'For Sale';
+      if (activeCategory === 'All') {
+        matchesCategory = true;
       } else if (activeCategory === 'Rentals') {
         matchesCategory = property.status === 'For Rent';
-      } else if (activeCategory === 'Vehicles') {
-        matchesCategory = property.category === 'Vehicles' && property.type !== 'Motorcycle';
-      } else if (activeCategory === 'Motorcycles') {
-        matchesCategory = property.type === 'Motorcycle';
+      } else {
+        matchesCategory = property.category === activeCategory;
       }
 
       const matchesSearch = property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -93,18 +110,8 @@ export default function Properties({ initialProperties }: { initialProperties: P
   }, [allProperties, activeCategory, searchTerm, filterType, sortBy, showFavoritesOnly, isFavorite]);
 
   const getPropertyTypes = () => {
-    switch (activeCategory) {
-      case 'Real Estate':
-        return ['All', 'House', 'Land', 'Apartment', 'Commercial'];
-      case 'Rentals':
-        return ['All', 'House', 'Apartment', 'Commercial'];
-      case 'Vehicles':
-        return ['All', 'Car', 'Truck'];
-      case 'Motorcycles':
-        return ['All', 'Motorcycle'];
-      default:
-        return ['All'];
-    }
+    if (activeCategory === 'All') return ['All'];
+    return CATEGORY_TYPES[activeCategory] || ['All'];
   };
 
   const handleCategoryChange = (category: string) => {
@@ -121,7 +128,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
         <div className="text-center mb-12">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">Our Listings</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Explore our diverse portfolio of real estate and vehicles in Fort Portal and beyond.
+            Explore our diverse portfolio of homes, lands, plots, and vehicles in Fort Portal and beyond.
           </p>
         </div>
 
@@ -133,67 +140,35 @@ export default function Properties({ initialProperties }: { initialProperties: P
             onChange={(e) => handleCategoryChange(e.target.value)}
             className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-sm text-sm font-semibold"
           >
-            <option value="All">All Listings</option>
-            <option value="Real Estate">Real Estate</option>
-            <option value="Rentals">Rentals</option>
-            <option value="Vehicles">Vehicles</option>
-            <option value="Motorcycles">Motorcycles</option>
+            {CATEGORIES.map(c => (
+              <option key={c.id} value={c.id}>{c.label}</option>
+            ))}
           </select>
         </div>
 
         {/* Desktop: category tabs — hidden on mobile */}
         <div className="hidden md:flex justify-center mb-8">
           <div className="inline-flex bg-white rounded-xl shadow-sm p-1 border border-gray-100 overflow-x-auto max-w-full no-scrollbar">
-            <button
-              onClick={() => handleCategoryChange('All')}
-              className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
-                activeCategory === 'All'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
-              }`}
-            >
-              All Listings
-            </button>
-            <button
-              onClick={() => handleCategoryChange('Real Estate')}
-              className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
-                activeCategory === 'Real Estate'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
-              }`}
-            >
-              <Home className="h-5 w-5" /> Real Estate
-            </button>
-            <button
-              onClick={() => handleCategoryChange('Rentals')}
-              className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
-                activeCategory === 'Rentals'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
-              }`}
-            >
-              <Home className="h-5 w-5" /> Rentals
-            </button>
-            <button
-              onClick={() => handleCategoryChange('Vehicles')}
-              className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
-                activeCategory === 'Vehicles'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
-              }`}
-            >
-              <Car className="h-5 w-5" /> Vehicles
-            </button>
-            <button
-              onClick={() => handleCategoryChange('Motorcycles')}
-              className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
-                activeCategory === 'Motorcycles'
-                  ? 'bg-emerald-600 text-white shadow-md'
-                  : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
-              }`}
-            >
-              <Car className="h-5 w-5" /> Motorcycles
-            </button>
+            {CATEGORIES.map(c => {
+              const Icon = c.icon;
+              const isActive = activeCategory === c.id;
+              const isAll = c.id === 'All';
+              return (
+                <button
+                  key={c.id}
+                  onClick={() => handleCategoryChange(c.id)}
+                  className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
+                    isActive
+                      ? 'bg-emerald-600 text-white shadow-md'
+                      : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
+                  } ${isAll ? 'hidden lg:flex' : ''}`}
+                >
+                  {Icon && <Icon className="h-5 w-5" />}
+                  {isAll ? '' : c.label}
+                  {isAll && 'All Listings'}
+                </button>
+              );
+            })}
           </div>
         </div>
 

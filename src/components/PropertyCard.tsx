@@ -89,7 +89,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
 
         <div className="flex items-center justify-between border-t border-gray-100 pt-4 mt-auto">
           <div className="flex gap-4">
-            {property.category === 'Real Estate' ? (
+            {['Homes', 'Lands', 'Plots', 'Rentals'].includes(property.category) ? (
               <>
                 {property.beds && (
                   <div className="flex items-center gap-1 text-gray-600 text-sm" title="Bedrooms">
