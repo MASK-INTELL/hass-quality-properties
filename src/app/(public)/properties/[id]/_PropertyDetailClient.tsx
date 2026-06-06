@@ -472,8 +472,8 @@ export default function PropertyDetails({
             )}
           </div>
 
-          <div className="space-y-8">
-            <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100 sticky top-24">
+          <div className="space-y-8 lg:sticky lg:top-24">
+            <div className="bg-white rounded-xl shadow-sm p-8 border border-gray-100">
               <h3 className="text-xl font-bold text-gray-900 mb-6">Interested in this property?</h3>
 
               <div className="space-y-3">
