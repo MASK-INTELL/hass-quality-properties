@@ -467,8 +467,8 @@ export default function PropertyDetails({
               </div>
             ) : (
               <div className="hidden lg:block">
-                <InquiryCard propertyTitle={property.title} defaultExpanded />
-              </div>
+<InquiryCard property={property} defaultExpanded />
+            </div>
             )}
           </div>
 
@@ -495,7 +495,7 @@ export default function PropertyDetails({
             </div>
 
             <div className={property.video_url ? '' : 'lg:hidden'}>
-              <InquiryCard propertyTitle={property.title} />
+              <InquiryCard property={property} />
             </div>
           </div>
         </div>

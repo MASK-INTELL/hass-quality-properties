@@ -1,18 +1,40 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { MessageSquare, Send, Loader2, CheckCircle, ChevronDown, ChevronUp, Phone } from 'lucide-react';
+import { MessageSquare, Loader2, CheckCircle, ChevronDown, ChevronUp, Phone } from 'lucide-react';
+
+interface PropertyInfo {
+  title: string;
+  location: string;
+  price: string;
+  type: string;
+  category: string;
+}
 
 interface InquiryCardProps {
-  propertyTitle: string;
+  property: PropertyInfo;
   defaultExpanded?: boolean;
 }
 
-export default function InquiryCard({ propertyTitle, defaultExpanded = false }: InquiryCardProps) {
+function buildInspectionMessage(p: PropertyInfo): string {
+  return [
+    'I would like to request an inspection for this property:',
+    '',
+    `Title: ${p.title}`,
+    `Location: ${p.location}`,
+    `Price: ${p.price}`,
+    `Type: ${p.type}`,
+    `Category: ${p.category}`,
+    '',
+    'Please contact me to schedule. Thank you.',
+  ].join('\n');
+}
+
+export default function InquiryCard({ property, defaultExpanded = false }: InquiryCardProps) {
   const [expanded, setExpanded] = useState(false);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(() => buildInspectionMessage(property));
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -33,16 +55,16 @@ export default function InquiryCard({ propertyTitle, defaultExpanded = false }: 
       const res = await fetch('/api/inquiries', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: name.trim(), phone: phone.trim(), message: message.trim() || `Interested in: ${propertyTitle}`, property_title: propertyTitle }),
+        body: JSON.stringify({ name: name.trim(), phone: phone.trim(), message: message.trim(), property_title: property.title }),
       });
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
-        throw new Error(body.error || 'Failed to send inquiry');
+        throw new Error(body.error || 'Failed to send request');
       }
       setSubmitted(true);
       setName('');
       setPhone('');
-      setMessage('');
+      setMessage(buildInspectionMessage(property));
       setTimeout(() => setSubmitted(false), 4000);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
@@ -67,7 +89,7 @@ export default function InquiryCard({ propertyTitle, defaultExpanded = false }: 
           <div className="p-2.5 bg-emerald-50 rounded-full text-emerald-600">
             <MessageSquare className="h-5 w-5" />
           </div>
-          <span className="font-semibold text-gray-900 text-left">Ask a Question</span>
+          <span className="font-semibold text-gray-900 text-left">Request Inspection</span>
         </div>
         {expanded ? <ChevronUp className="h-5 w-5 text-gray-400" /> : <ChevronDown className="h-5 w-5 text-gray-400" />}
       </button>
@@ -79,7 +101,7 @@ export default function InquiryCard({ propertyTitle, defaultExpanded = false }: 
               <div className="w-12 h-12 rounded-full bg-emerald-100 flex items-center justify-center mb-3">
                 <CheckCircle className="h-6 w-6 text-emerald-600" />
               </div>
-              <p className="font-semibold text-gray-900">Inquiry Sent!</p>
+              <p className="font-semibold text-gray-900">Inspection Request Sent!</p>
               <p className="text-sm text-gray-500 mt-1">We&apos;ll get back to you soon.</p>
             </div>
           ) : (
@@ -108,8 +130,7 @@ export default function InquiryCard({ propertyTitle, defaultExpanded = false }: 
                 <textarea
                   value={message}
                   onChange={e => setMessage(e.target.value)}
-                  placeholder={`I'm interested in: ${propertyTitle}`}
-                  rows={3}
+                  rows={6}
                   className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors resize-none"
                 />
               </div>
@@ -121,8 +142,8 @@ export default function InquiryCard({ propertyTitle, defaultExpanded = false }: 
                 disabled={submitting || !name.trim() || !phone.trim()}
                 className="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
-                {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                {submitting ? 'Sending...' : 'Send Inquiry'}
+                {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <MessageSquare className="h-4 w-4" />}
+                {submitting ? 'Sending...' : 'Request Inspection'}
               </button>
               <p className="text-xs text-gray-400 text-center">
                 Or call us directly: <a href="tel:+256791715573" className="text-emerald-600 hover:underline font-medium inline-flex items-center gap-1"><Phone className="h-3 w-3" /> +256 791 715 573</a>
