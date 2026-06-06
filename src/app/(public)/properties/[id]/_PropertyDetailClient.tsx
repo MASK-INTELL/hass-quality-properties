@@ -446,13 +446,22 @@ export default function PropertyDetails({
                   <Video className="h-6 w-6 text-emerald-600" /> Video Tour
                 </h2>
                 <div className="relative w-full overflow-hidden pt-[56.25%] rounded-lg bg-gray-100">
-                  <iframe
-                    src={property.video_url}
-                    title="Property Video Tour"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="absolute top-0 left-0 w-full h-full border-0"
-                  ></iframe>
+                  {/^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\//.test(property.video_url) ? (
+                    <iframe
+                      src={property.video_url}
+                      title="Property Video Tour"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                      className="absolute top-0 left-0 w-full h-full border-0"
+                    ></iframe>
+                  ) : (
+                    <video
+                      controls
+                      className="absolute top-0 left-0 w-full h-full border-0"
+                    >
+                      <source src={property.video_url} />
+                    </video>
+                  )}
                 </div>
               </div>
             )}
