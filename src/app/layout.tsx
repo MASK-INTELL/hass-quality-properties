@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { ToastProvider } from '@/components/Toast';
+import { FavoritesProvider } from '@/hooks/useFavorites';
 import PWARegister from '@/components/PWARegister';
 
 const siteName = 'Hass Quality Properties';
@@ -51,7 +52,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="antialiased">
         <ToastProvider>
-          {children}
+          <FavoritesProvider>
+            {children}
+          </FavoritesProvider>
         </ToastProvider>
         <PWARegister />
       </body>
