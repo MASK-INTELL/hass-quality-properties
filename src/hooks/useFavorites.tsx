@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
 import { useToast } from '@/components/Toast';
+import ConfirmDialog from '@/components/ConfirmDialog';
 
 interface FavoritesContextValue {
   favorites: string[];
@@ -14,6 +15,8 @@ const FavoritesContext = createContext<FavoritesContextValue | null>(null);
 export function FavoritesProvider({ children }: { children: ReactNode }) {
   const toast = useToast();
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [pendingRemoveId, setPendingRemoveId] = useState<string | null>(null);
+  const pendingTriggerRef = useRef<React.MouseEvent | undefined>(undefined);
   const loaded = useRef(false);
 
   useEffect(() => {
@@ -39,20 +42,39 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     }
 
     if (favorites.includes(id)) {
-      if (!window.confirm('Remove this property from favorites?')) return;
-      setFavorites(prev => prev.filter(fId => fId !== id));
-      toast('error', 'Removed from favorites');
+      pendingTriggerRef.current = e;
+      setPendingRemoveId(id);
     } else {
       setFavorites(prev => [...prev, id]);
       toast('success', 'Added to favorites');
     }
   }, [toast, favorites]);
 
+  const confirmRemove = useCallback(() => {
+    if (!pendingRemoveId) return;
+    setFavorites(prev => prev.filter(fId => fId !== pendingRemoveId));
+    toast('error', 'Removed from favorites');
+    setPendingRemoveId(null);
+  }, [pendingRemoveId, toast]);
+
+  const cancelRemove = useCallback(() => {
+    setPendingRemoveId(null);
+  }, []);
+
   const isFavorite = useCallback((id: string) => favorites.includes(id), [favorites]);
 
   return (
     <FavoritesContext.Provider value={{ favorites, toggleFavorite, isFavorite }}>
       {children}
+      <ConfirmDialog
+        open={!!pendingRemoveId}
+        title="Remove from Favorites?"
+        message="This property will be removed from your saved favorites."
+        confirmLabel="Remove"
+        cancelLabel="Keep"
+        onConfirm={confirmRemove}
+        onCancel={cancelRemove}
+      />
     </FavoritesContext.Provider>
   );
 }
