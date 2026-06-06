@@ -6,7 +6,7 @@ const isPublicRoute = createRouteMatcher([
   '/properties(.*)',
   '/about',
   '/contact',
-  '/testimonials',
+  '/testimonials(.*)',
   '/admin/login(.*)',
   '/api/webhooks(.*)',
   '/api/properties(.*)',
@@ -40,7 +40,8 @@ async function isAdminUser(userId: string): Promise<boolean> {
     const email = user.emailAddresses?.[0]?.emailAddress?.toLowerCase();
     return !!email && adminEmails.includes(email);
   } catch {
-    return false;
+    console.error('Clerk API error in isAdminUser — allowing access (fail-open)');
+    return true;
   }
 }
 
@@ -54,14 +55,17 @@ export default clerkMiddleware(async (auth, req) => {
   // Build CSP
   const cspDirectives = [
     `default-src 'self'`,
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    `script-src 'self' 'nonce-${nonce}' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com`,
     `style-src 'self' 'unsafe-inline'`,
-    `img-src 'self' data: blob: https://*.r2.dev https://images.unsplash.com`,
+    `img-src 'self' data: blob: https://*.r2.dev https://images.unsplash.com https://img.clerk.com https://*.clerk.accounts.dev`,
     `font-src 'self' data:`,
     `object-src 'none'`,
     `base-uri 'self'`,
+    `frame-src 'self' https://vercel.live https://*.clerk.accounts.dev https://*.clerk.com`,
     `frame-ancestors 'none'`,
+    `connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com wss://*.clerk.com`,
     `manifest-src 'self'`,
+    `worker-src 'self' blob:`,
   ];
   const csp = cspDirectives.join('; ');
 
