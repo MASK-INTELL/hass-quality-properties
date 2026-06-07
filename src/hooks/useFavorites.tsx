@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
 import { useToast } from '@/components/Toast';
 import ConfirmDialog from '@/components/ConfirmDialog';
+import { gtagEvent } from '@/lib/analytics';
 
 interface FavoritesContextValue {
   favorites: string[];
@@ -46,6 +47,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
       setPendingRemoveId(id);
     } else {
       setFavorites(prev => [...prev, id]);
+      gtagEvent('favorite_toggle', { action: 'add', property_id: id });
       toast('success', 'Added to favorites');
     }
   }, [toast, favorites]);
@@ -53,6 +55,7 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
   const confirmRemove = useCallback(() => {
     if (!pendingRemoveId) return;
     setFavorites(prev => prev.filter(fId => fId !== pendingRemoveId));
+    gtagEvent('favorite_toggle', { action: 'remove', property_id: pendingRemoveId });
     toast('error', 'Removed from favorites');
     setPendingRemoveId(null);
   }, [pendingRemoveId, toast]);

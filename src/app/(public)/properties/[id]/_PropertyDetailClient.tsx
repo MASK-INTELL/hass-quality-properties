@@ -8,6 +8,7 @@ import WhatsAppIcon from '@/components/WhatsAppIcon';
 import PropertyCard from '@/components/PropertyCard';
 import InquiryCard from '@/components/InquiryCard';
 import { useFavorites } from '@/hooks/useFavorites';
+import { gtagEvent } from '@/lib/analytics';
 
 interface ImageMeta {
   url: string;
@@ -57,6 +58,17 @@ export default function PropertyDetails({
       setBackHref(`/properties${saved}`);
     }
   }, []);
+
+  useEffect(() => {
+    if (property) {
+      gtagEvent('view_property', {
+        property_id: property.id,
+        property_title: property.title,
+        property_category: property.category,
+        property_price: property.price,
+      });
+    }
+  }, [property]);
 
   const whatsappUrl = useMemo(() => {
     const msg = [

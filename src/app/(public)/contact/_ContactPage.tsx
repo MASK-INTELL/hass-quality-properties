@@ -3,6 +3,7 @@
 import { Mail, MapPin, Phone, Send, ExternalLink, Loader2, CheckCircle2 } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 import { useState, ChangeEvent, FormEvent } from 'react';
+import { gtagEvent } from '@/lib/analytics';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -54,6 +55,7 @@ export default function Contact() {
       if (!res.ok) throw new Error('Failed to submit');
 
       setSubmitted(true);
+      gtagEvent('form_submit', { form_type: 'contact' });
       setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
     } catch (err: unknown) {
       setError('Sorry, something went wrong. Please try again or contact us directly via WhatsApp.');

@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
 import { Heart, Home, Car, Bike, Building2, MapPin, ArrowRight, Search, X } from 'lucide-react';
 import Link from 'next/link';
+import { gtagEvent } from '@/lib/analytics';
 
 interface ImageMeta {
   url: string;
@@ -74,6 +75,9 @@ export default function Properties({ initialProperties }: { initialProperties: P
       const qs = params.toString();
       const newUrl = `${window.location.pathname}${qs ? '?' + qs : ''}`;
       window.history.replaceState(null, '', newUrl);
+      if (searchInput.trim()) {
+        gtagEvent('search', { search_term: searchInput.trim() });
+      }
     }, 400);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [searchInput]);
@@ -158,7 +162,12 @@ export default function Properties({ initialProperties }: { initialProperties: P
           <div className="md:hidden w-full max-w-2xl">
             <select
               value={activeCategory}
-              onChange={(e) => setActiveCategory(e.target.value)}
+              onChange={(e) => {
+                setActiveCategory(e.target.value);
+                if (e.target.value !== 'All') {
+                  gtagEvent('filter_category', { category: e.target.value });
+                }
+              }}
               className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-sm text-sm font-semibold"
             >
               {CATEGORIES.map(c => (
@@ -177,7 +186,12 @@ export default function Properties({ initialProperties }: { initialProperties: P
                 return (
                   <button
                     key={c.id}
-                    onClick={() => setActiveCategory(c.id)}
+                    onClick={() => {
+                      setActiveCategory(c.id);
+                      if (c.id !== 'All') {
+                        gtagEvent('filter_category', { category: c.id });
+                      }
+                    }}
                     className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
                       isActive
                         ? 'bg-emerald-600 text-white shadow-md'

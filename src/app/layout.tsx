@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import './globals.css';
+import { GoogleAnalytics } from '@next/third-parties/google';
 import { ToastProvider } from '@/components/Toast';
 import { FavoritesProvider } from '@/hooks/useFavorites';
 import PWARegister from '@/components/PWARegister';
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             {children}
           </FavoritesProvider>
         </ToastProvider>
+        <GoogleAnalytics gaId="G-FGG6PH7KH6" />
         <PWARegister />
       </body>
     </html>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { MessageSquare, Loader2, CheckCircle, ChevronDown, ChevronUp, Phone } from 'lucide-react';
+import { gtagEvent } from '@/lib/analytics';
 
 interface PropertyInfo {
   title: string;
@@ -76,6 +77,7 @@ export default function InquiryCard({ property, defaultExpanded = false }: Inqui
         throw new Error(body.error || 'Failed to send request');
       }
       setSubmitted(true);
+      gtagEvent('request_inspection', { property_title: property.title });
       setName('');
       setPhone('');
       setMessage(buildInspectionMessage(property));
