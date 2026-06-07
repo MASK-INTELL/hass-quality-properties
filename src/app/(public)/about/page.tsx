@@ -61,7 +61,7 @@ export default async function About() {
       <div className="bg-white min-h-screen">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-4 flex justify-center">
-        <CompanyLogo className="h-32 w-auto object-contain cursor-pointer" />
+        <CompanyLogo className="h-52 w-auto object-contain cursor-pointer" />
       </div>
 
       {/* Main Content */}
