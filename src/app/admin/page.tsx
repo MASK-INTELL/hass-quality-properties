@@ -32,7 +32,7 @@ export default function AdminDashboard() {
     async function fetchData() {
       try {
         const [statsRes, propsRes] = await Promise.all([
-          fetch('/api/admin/stats'),
+          fetch('/api/admin/dashboard-stats'),
           fetch('/api/admin/properties?pageSize=5'),
         ]);
         if (!statsRes.ok || !propsRes.ok) throw new Error('Failed to fetch');
