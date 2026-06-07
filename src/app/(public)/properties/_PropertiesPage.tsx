@@ -3,7 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'next/navigation';
 import PropertyCard from '@/components/PropertyCard';
-import { Heart, Home, Car, Bike, Building2, MapPin, ArrowRight, Search, X } from 'lucide-react';
+import { Heart, Home, Car, Bike, Building2, MapPin, Search, X, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { gtagEvent } from '@/lib/analytics';
 
@@ -39,6 +39,8 @@ const CATEGORIES = [
   { id: 'Motorcycles', label: 'Motorcycles', icon: Bike },
 ];
 
+const PAGE_SIZE = 12;
+
 export default function Properties({ initialProperties }: { initialProperties: Property[] }) {
   const searchParams = useSearchParams();
   const initialRender = useRef(true);
@@ -48,19 +50,25 @@ export default function Properties({ initialProperties }: { initialProperties: P
     (searchParams.get('category') as string) || 'All'
   );
   const [searchInput, setSearchInput] = useState(searchParams.get('search') || '');
+  const [currentPage, setCurrentPage] = useState(Number(searchParams.get('page')) || 1);
   const filterType = searchParams.get('type') || 'All';
   const sortBy = searchParams.get('sort') || 'newest';
   const [allProperties] = useState<Property[]>(initialProperties);
+
+  const pageInitialRender = useRef(true);
 
   useEffect(() => {
     if (initialRender.current) {
       initialRender.current = false;
       return;
     }
+    setCurrentPage(1);
     const params = new URLSearchParams(window.location.search);
-    params.set('category', activeCategory);
+    if (activeCategory !== 'All') params.set('category', activeCategory);
+    else params.delete('category');
     params.delete('type');
     params.delete('search');
+    params.delete('page');
     const qs = params.toString();
     const newUrl = `${window.location.pathname}${qs ? '?' + qs : ''}`;
     window.history.replaceState(null, '', newUrl);
@@ -69,9 +77,11 @@ export default function Properties({ initialProperties }: { initialProperties: P
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
+      setCurrentPage(1);
       const params = new URLSearchParams(window.location.search);
       if (searchInput) params.set('search', searchInput);
       else params.delete('search');
+      params.delete('page');
       const qs = params.toString();
       const newUrl = `${window.location.pathname}${qs ? '?' + qs : ''}`;
       window.history.replaceState(null, '', newUrl);
@@ -81,6 +91,19 @@ export default function Properties({ initialProperties }: { initialProperties: P
     }, 400);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [searchInput]);
+
+  useEffect(() => {
+    if (pageInitialRender.current) {
+      pageInitialRender.current = false;
+      return;
+    }
+    const params = new URLSearchParams(window.location.search);
+    if (currentPage > 1) params.set('page', String(currentPage));
+    else params.delete('page');
+    const qs = params.toString();
+    const newUrl = `${window.location.pathname}${qs ? '?' + qs : ''}`;
+    window.history.replaceState(null, '', newUrl);
+  }, [currentPage]);
 
   const parsePrice = (priceStr: string) => {
     const numericStr = priceStr.replace(/[^0-9]/g, '');
@@ -121,12 +144,23 @@ export default function Properties({ initialProperties }: { initialProperties: P
     return result;
   }, [allProperties, activeCategory, searchInput, filterType, sortBy]);
 
+  const totalPages = Math.ceil(filteredAndSortedProperties.length / PAGE_SIZE);
+  const paginatedProperties = useMemo(() => {
+    const start = (currentPage - 1) * PAGE_SIZE;
+    return filteredAndSortedProperties.slice(start, start + PAGE_SIZE);
+  }, [filteredAndSortedProperties, currentPage]);
+
+  const goToPage = (page: number) => {
+    setCurrentPage(Math.max(1, Math.min(page, totalPages)));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h1 className="sr-only">Browse Properties</h1>
 
-        {/* Controls — centered, same width as tabs */}
+        {/* Controls */}
         <div className="flex flex-col items-center mb-10">
           {/* Search + My Favorites */}
           <div className="flex flex-col sm:flex-row gap-3 mb-6 w-full max-w-2xl">
@@ -157,8 +191,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
             </Link>
           </div>
 
-          {/* Category Tabs */}
-          {/* Mobile: select dropdown */}
+          {/* Category Tabs — Mobile */}
           <div className="md:hidden w-full max-w-2xl">
             <select
               value={activeCategory}
@@ -176,7 +209,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
             </select>
           </div>
 
-          {/* Desktop: category tabs */}
+          {/* Category Tabs — Desktop */}
           <div className="hidden md:flex justify-center">
             <div className="inline-flex bg-white rounded-xl shadow-sm p-1 border border-gray-100 overflow-x-auto max-w-full no-scrollbar">
               {CATEGORIES.map(c => {
@@ -206,12 +239,18 @@ export default function Properties({ initialProperties }: { initialProperties: P
               })}
             </div>
           </div>
+
+          {/* Results count */}
+          <p className="text-sm text-gray-500 mt-4">
+            {filteredAndSortedProperties.length} property{filteredAndSortedProperties.length !== 1 ? 'ies' : 'y'} found
+            {totalPages > 1 && ` — Page ${currentPage} of ${totalPages}`}
+          </p>
         </div>
 
         {/* Results */}
-        {filteredAndSortedProperties.length > 0 ? (
+        {paginatedProperties.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredAndSortedProperties.map((property) => (
+            {paginatedProperties.map((property) => (
               <PropertyCard key={property.id} property={property} />
             ))}
           </div>
@@ -219,6 +258,52 @@ export default function Properties({ initialProperties }: { initialProperties: P
           <div className="text-center py-20">
             <h3 className="text-xl font-semibold text-gray-900 mb-2">No properties found</h3>
             <p className="text-gray-500">Try adjusting your search or filter criteria.</p>
+          </div>
+        )}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-12">
+            <button
+              onClick={() => goToPage(currentPage - 1)}
+              disabled={currentPage <= 1}
+              className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronLeft className="h-4 w-4" /> Prev
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1)
+              .filter(p => {
+                if (totalPages <= 7) return true;
+                if (p === 1 || p === totalPages) return true;
+                if (Math.abs(p - currentPage) <= 1) return true;
+                return false;
+              })
+              .map((p, idx, arr) => (
+                <span key={p} className="flex items-center">
+                  {idx > 0 && arr[idx - 1] !== p - 1 && (
+                    <span className="px-2 text-gray-400">...</span>
+                  )}
+                  <button
+                    onClick={() => goToPage(p)}
+                    className={`min-w-[40px] h-10 rounded-lg text-sm font-semibold transition-all ${
+                      p === currentPage
+                        ? 'bg-emerald-600 text-white shadow-md'
+                        : 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    {p}
+                  </button>
+                </span>
+              ))}
+
+            <button
+              onClick={() => goToPage(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+              className="flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-semibold border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-all"
+            >
+              Next <ChevronRight className="h-4 w-4" />
+            </button>
           </div>
         )}
       </div>

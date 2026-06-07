@@ -39,7 +39,7 @@ export default async function About() {
 
         <div className="mb-20 max-w-3xl">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h2>
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
               Hass Quality Properties is a premier real estate company based in Fort Portal Tourism City, Uganda. We specialize in connecting buyers with their dream properties and helping sellers get the best value for their investments.
             </p>

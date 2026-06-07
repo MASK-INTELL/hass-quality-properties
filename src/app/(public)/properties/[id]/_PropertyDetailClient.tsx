@@ -235,6 +235,7 @@ export default function PropertyDetails({
                   alt={property.image_metadata?.find(m => m.url === images[0])?.alt || property.title}
                   className="object-cover transition-transform duration-500 group-hover:scale-105"
                   sizes="(max-width: 768px) 100vw, 75vw"
+                  priority
                 />
               </div>
 
@@ -277,6 +278,7 @@ export default function PropertyDetails({
                     alt={property.image_metadata?.find(m => m.url === images[0])?.alt || property.title}
                     className="object-cover transition-transform duration-500 group-hover:scale-105"
                     sizes="(max-width: 1024px) 100vw, 50vw"
+                    priority
                   />
                 </div>
 
