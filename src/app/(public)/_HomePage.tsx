@@ -72,7 +72,7 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
             <span className="text-emerald-400">Fort Portal Tourism City</span>
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-gray-200 max-w-3xl mx-auto font-light">
-            We help you find the perfect home, land, or commercial space in the Pearl of Africa.
+            We help you find the perfect home, land, car or commercial space in the Pearl of Africa.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
