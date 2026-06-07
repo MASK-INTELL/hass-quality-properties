@@ -24,8 +24,8 @@ export default function CompanyLogo({ className = "" }: CompanyLogoProps) {
       <Image
         src={logoUrl}
         alt="Hass Quality Properties Logo"
-        width={48}
-        height={48}
+        width={400}
+        height={400}
         className={`cursor-pointer transition-transform hover:scale-105 ${className}`}
         onClick={handleClick}
         title="Click to preview logo"
