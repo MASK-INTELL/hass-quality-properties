@@ -3,6 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/require-admin';
 import sql from '@/lib/db';
 import { Testimonial, getPendingTestimonials, createTestimonial } from '@/lib/repositories/testimonials';
+import { pingIndexNow } from '@/lib/indexnow';
 
 export async function GET(request: NextRequest) {
   const unauthorized = await requireAdmin();
@@ -26,6 +27,7 @@ export async function POST(request: NextRequest) {
     revalidatePath('/api/testimonials');
     revalidatePath('/testimonials');
     revalidatePath('/about');
+    pingIndexNow(['https://hass-quality-properties.vercel.app/testimonials']);
     return NextResponse.json(testimonial, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to create testimonial' }, { status: 500 });

@@ -56,6 +56,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="manifest" href="/manifest.webmanifest" />
       </head>
       <body className="antialiased">
+        <noscript>
+          <div style={{ padding: '20px', textAlign: 'center' }}>
+            <h1>Hass Quality Properties</h1>
+            <p>Homes, Lands, Plots, Cars & Rentals in Fort Portal, Uganda</p>
+            <nav>
+              <a href="/">Home</a> | <a href="/properties">Properties</a> | <a href="/about">About</a> | <a href="/contact">Contact</a> | <a href="/testimonials">Testimonials</a>
+            </nav>
+          </div>
+        </noscript>
         <ToastProvider>
           <FavoritesProvider>
             {children}

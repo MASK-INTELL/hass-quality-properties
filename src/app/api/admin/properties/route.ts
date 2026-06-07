@@ -5,6 +5,7 @@ import { requireAdmin } from '@/lib/require-admin';
 import { validateCsrf } from '@/lib/csrf';
 import { getPropertiesPaginated, createProperty } from '@/lib/repositories/properties';
 import { propertySchema } from '@/lib/validation';
+import { pingIndexNow } from '@/lib/indexnow';
 
 export async function GET(request: NextRequest) {
   const unauthorized = await requireAdmin();
@@ -39,6 +40,7 @@ export async function POST(request: NextRequest) {
     const property = await createProperty(parsed);
     revalidatePath('/properties');
     revalidatePath('/about');
+    pingIndexNow(['https://hass-quality-properties.vercel.app/properties']);
     return NextResponse.json(property, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {

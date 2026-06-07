@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { getAllStats } from '@/lib/repositories/stats';
 import { getAllAgents } from '@/lib/repositories/agents';
-import { ArrowLeft, Building2, Users, Target, Award, CheckCircle2, ArrowRight } from 'lucide-react';
+import { Building2, Users, Target, Award, CheckCircle2, ArrowRight } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata: Metadata = {
@@ -26,7 +26,38 @@ export default async function About() {
   const agents = await getAllAgents();
 
   return (
-    <div className="bg-white min-h-screen">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Hass Quality Properties',
+            url: 'https://hass-quality-properties.vercel.app',
+            logo: 'https://hass-quality-properties.vercel.app/logo.png',
+            description: 'Premier real estate company in Fort Portal Tourism City, Uganda specializing in homes, lands, plots, cars, and motorcycles.',
+            address: {
+              '@type': 'PostalAddress',
+              addressLocality: 'Fort Portal Tourism City',
+              addressCountry: 'UG',
+            },
+            telephone: '+256791715573',
+            email: 'hassqualityproperties@gmail.com',
+            sameAs: [
+              'https://wa.me/256791715573',
+            ],
+            knowsAbout: [
+              'Real estate in Fort Portal Uganda',
+              'Houses for sale and rent',
+              'Land and plots for sale',
+              'Cars and motorcycles for sale',
+              'Commercial properties',
+            ],
+          }),
+        }}
+      />
+      <div className="bg-white min-h-screen">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-2 flex justify-center">
         <Image src="/logo.png" alt="Hass Quality Properties" width={100} height={100} className="object-contain" />
@@ -186,5 +217,6 @@ export default async function About() {
         )}
       </div>
     </div>
+    </>
   );
 }
