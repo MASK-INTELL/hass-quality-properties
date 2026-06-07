@@ -242,7 +242,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
 
           {/* Results count */}
           <p className="text-sm text-gray-500 mt-4">
-            {filteredAndSortedProperties.length} property{filteredAndSortedProperties.length !== 1 ? 'ies' : 'y'} found
+            {filteredAndSortedProperties.length} {filteredAndSortedProperties.length === 1 ? 'property' : 'properties'} found
             {totalPages > 1 && ` — Page ${currentPage} of ${totalPages}`}
           </p>
         </div>
