@@ -37,7 +37,7 @@ export default async function About() {
             name: 'Hass Quality Properties',
             url: 'https://hass-quality-properties.vercel.app',
             logo: 'https://hass-quality-properties.vercel.app/logo.png',
-            description: 'Premier real estate company in Fort Portal Tourism City, Uganda specializing in homes, lands, plots, cars, and motorcycles.',
+            description: 'Realible Brokers in Fort Portal Tourism City, Uganda specializing in homes, lands, plots, cars, and motorcycles.',
             address: {
               '@type': 'PostalAddress',
               addressLocality: 'Fort Portal Tourism City',
@@ -72,10 +72,10 @@ export default async function About() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
-              Hass Quality Properties is a premier real estate company based in Fort Portal Tourism City, Uganda. We specialize in connecting buyers with their dream properties and helping sellers get the best value for their investments.
+              Hass Quality Properties is your reliable Real Estate partner based in Fort Portal Tourism City, Uganda. We specialize in connecting buyers with their dream properties and helping sellers get the best value for their investments.
             </p>
             <p className="text-gray-600 text-lg leading-relaxed">
-              With years of experience in the local market, our team understands the unique landscape of Fort Portal and the surrounding regions. Whether you are looking for a residential home, commercial land, or an agricultural investment, we have the expertise to guide you every step of the way.
+              With years of experience in the local market, our team Brokers understands the unique landscape of Fort Portal and the surrounding regions. Whether you are looking for a residential home, commercial land, or an agricultural investment, we have the expertise to guide you every step of the way.
             </p>
           </div>
         </div>
@@ -158,7 +158,7 @@ export default async function About() {
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
               <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-                Get to know the dedicated professionals behind Hass Quality Properties.
+                Get to know few dedicated professionals behind Hass Quality Properties.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">
