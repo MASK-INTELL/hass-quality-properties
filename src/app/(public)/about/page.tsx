@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { getAllStats } from '@/lib/repositories/stats';
 import { getAllAgents } from '@/lib/repositories/agents';
 import { ArrowLeft, Building2, Users, Target, Award, CheckCircle2, ArrowRight } from 'lucide-react';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -33,11 +34,9 @@ export default async function About() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
-        <Link href="/" className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium transition-colors mb-8">
-          <ArrowLeft className="h-5 w-5" /> Back
-        </Link>
+        <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About Us' }]} />
 
-        <div className="mb-20 max-w-3xl">
+        <div className="mb-20 max-w-3xl mt-6">
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">

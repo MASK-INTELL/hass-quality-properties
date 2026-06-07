@@ -187,7 +187,7 @@ export default function PropertyDetails({
                 <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold mb-3 uppercase tracking-wide">
                   {property.status}
                 </span>
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{property.title}</h1>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 lg:hidden">{property.title}</h1>
                 <div className="flex items-center gap-2 text-gray-600 text-lg">
                   <MapPin className="h-5 w-5" />
                   {property.location}
@@ -310,7 +310,7 @@ export default function PropertyDetails({
                 <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold uppercase tracking-wide">
                   {property.status}
                 </span>
-                <h1 className="text-3xl font-bold text-gray-900">{property.title}</h1>
+                <h1 className="text-3xl font-bold text-gray-900 hidden lg:block">{property.title}</h1>
                 <p className="text-gray-600 leading-relaxed text-base">
                   {property.description}
                 </p>

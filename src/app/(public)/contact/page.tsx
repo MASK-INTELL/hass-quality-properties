@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import ContactPage from './_ContactPage';
+import Breadcrumbs from '@/components/Breadcrumbs';
 
 export const metadata: Metadata = {
   title: 'Contact Us',
@@ -17,5 +18,10 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <ContactPage />;
+  return (
+    <>
+      <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact Us' }]} />
+      <ContactPage />
+    </>
+  );
 }

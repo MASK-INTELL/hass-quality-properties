@@ -14,6 +14,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ];
 
   let propertyPages: MetadataRoute.Sitemap = [];
+  let testimonialPages: MetadataRoute.Sitemap = [];
   try {
     const rows = await sql`SELECT id, updated_at FROM properties ORDER BY created_at DESC LIMIT 500`;
     const properties = rows as unknown as { id: string; updated_at: string }[];
@@ -23,9 +24,18 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     }));
+
+    const tRows = await sql`SELECT id, updated_at FROM testimonials WHERE approved = true ORDER BY updated_at DESC LIMIT 500`;
+    const testimonials = tRows as unknown as { id: string; updated_at: string }[];
+    testimonialPages = testimonials.map((t) => ({
+      url: `${BASE_URL}/testimonials/${t.id}`,
+      lastModified: new Date(t.updated_at),
+      changeFrequency: 'monthly' as const,
+      priority: 0.5,
+    }));
   } catch {
     // DB unavailable at build time — return only static pages
   }
 
-  return [...staticPages, ...propertyPages];
+  return [...staticPages, ...propertyPages, ...testimonialPages];
 }

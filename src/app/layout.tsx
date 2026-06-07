@@ -22,13 +22,11 @@ export const metadata: Metadata = {
     title: `${siteName} - Homes, Lands, Plots, Cars & Rentals`,
     description: siteDescription,
     url: '/',
-    images: [{ url: '/logo.png', width: 512, height: 512, alt: siteName }],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${siteName} - Homes, Lands, Plots, Cars & Rentals`,
     description: siteDescription,
-    images: ['/logo.png'],
   },
   robots: {
     index: true,

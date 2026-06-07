@@ -5,6 +5,7 @@ import { Star, ArrowLeft } from 'lucide-react';
 import sql from '@/lib/db';
 import { getTestimonialById } from '@/lib/repositories/testimonials';
 import ShareButtons from '../_ShareButtons';
+import Breadcrumbs from '@/components/Breadcrumbs';
 import { notFound } from 'next/navigation';
 
 interface Testimonial {
@@ -36,12 +37,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
       title: `${testimonial.name} — ${stars} | Hass Quality Properties`,
       description: `"${testimonial.quote}" — ${testimonial.name}, ${testimonial.role}`,
       url: `/testimonials/${id}`,
-      images: [{ url: '/logo.png', width: 512, height: 512 }],
     },
     twitter: {
       title: `${testimonial.name} — ${stars} | Hass Quality Properties`,
       description: `"${testimonial.quote}" — ${testimonial.name}, ${testimonial.role}`,
-      images: ['/logo.png'],
     },
     alternates: { canonical: `/testimonials/${id}` },
   };
@@ -80,10 +79,12 @@ export default async function TestimonialDetail({ params }: { params: Promise<{ 
         }}
       />
       <div className="bg-gray-50 min-h-screen pb-20">
-        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-12">
-          <Link href="/testimonials" className="inline-flex items-center gap-2 text-emerald-600 hover:text-emerald-700 font-medium transition-colors mb-8">
-            <ArrowLeft className="h-5 w-5" /> All Testimonials
-          </Link>
+        <Breadcrumbs items={[
+          { label: 'Home', href: '/' },
+          { label: 'Testimonials', href: '/testimonials' },
+          { label: testimonial.name },
+        ]} />
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
 
           <article className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8 md:p-12">
             <div className="flex items-center gap-4 mb-6">
