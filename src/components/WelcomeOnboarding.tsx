@@ -2,7 +2,16 @@
 
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { Home, Key, Map, Building2, Car, X, ArrowRight } from 'lucide-react';
+import { Home, Key, Map, Building2, Car, Bike, X, ArrowRight } from 'lucide-react';
+
+const goalToCategory: Record<string, string> = {
+  homes: 'Homes',
+  rentals: 'Rentals',
+  lands: 'Lands',
+  commercial: 'Homes',
+  cars: 'Cars',
+  motorcycles: 'Motorcycles',
+};
 
 export default function WelcomeOnboarding() {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +39,11 @@ export default function WelcomeOnboarding() {
 
   const handleFinish = (budget: string) => {
     handleClose();
-    router.push('/properties');
+    const category = goalToCategory[goal] || '';
+    const params = new URLSearchParams();
+    if (category) params.set('category', category);
+    const qs = params.toString();
+    router.push(qs ? `/properties?${qs}` : '/properties');
   };
 
   if (!isOpen) return null;
@@ -101,13 +114,23 @@ export default function WelcomeOnboarding() {
                   </div>
                 </button>
 
-                <button onClick={() => handleGoalSelect('vehicle')} className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-100 hover:border-emerald-500 hover:bg-emerald-50 transition-all text-left group">
+                <button onClick={() => handleGoalSelect('cars')} className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-100 hover:border-emerald-500 hover:bg-emerald-50 transition-all text-left group">
                   <div className="bg-emerald-100 p-3 rounded-lg text-emerald-600 group-hover:bg-emerald-200 transition-colors flex-shrink-0">
                     <Car className="h-6 w-6" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Buy a Vehicle</h3>
-                    <p className="text-sm text-gray-500">Cars, trucks, and motorcycles</p>
+                    <h3 className="font-bold text-gray-900">Buy a Car</h3>
+                    <p className="text-sm text-gray-500">Sedans, trucks, pickups, and vans</p>
+                  </div>
+                </button>
+
+                <button onClick={() => handleGoalSelect('motorcycles')} className="w-full flex items-center gap-4 p-4 rounded-xl border-2 border-gray-100 hover:border-emerald-500 hover:bg-emerald-50 transition-all text-left group">
+                  <div className="bg-emerald-100 p-3 rounded-lg text-emerald-600 group-hover:bg-emerald-200 transition-colors flex-shrink-0">
+                    <Bike className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">Buy a Motorcycle</h3>
+                    <p className="text-sm text-gray-500">Boda bodas, sports bikes, and scooters</p>
                   </div>
                 </button>
               </div>
