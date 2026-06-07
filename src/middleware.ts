@@ -31,8 +31,8 @@ async function isAdminUser(userId: string): Promise<boolean> {
     const email = user.emailAddresses?.[0]?.emailAddress?.toLowerCase();
     return !!email && adminEmails.includes(email);
   } catch {
-    console.error('Clerk API error in isAdminUser — allowing access (fail-open)');
-    return true;
+    console.error('Clerk API error in isAdminUser — denying access (fail-closed)');
+    return false;
   }
 }
 

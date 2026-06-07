@@ -167,68 +167,122 @@ export default function AdminAgents() {
           <p className="text-gray-400 text-sm mt-1">Add your first team member to get started.</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {agents.map((agent, idx) => (
-                <tr key={agent.id} className="hover:bg-gray-50 transition-colors">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-3">
-                      <div className="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-                        {agent.photo_url ? (
-                          <Image className="h-10 w-10 object-cover" src={agent.photo_url} alt={agent.name} width={40} height={40} />
-                        ) : (
-                          <div className="h-full w-full flex items-center justify-center">
-                            <Users className="h-4 w-4 text-gray-400" />
-                          </div>
-                        )}
-                      </div>
-                      <p className="text-sm font-medium text-gray-900">{agent.name}</p>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{agent.title}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center gap-1">
-                      <span className="text-sm text-gray-500 w-4">{agent.sort_order}</span>
-                      <button
-                        onClick={() => moveAgent(agent.id, 'up')}
-                        disabled={idx === 0}
-                        className="p-0.5 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
-                      >
-                        <ChevronUp className="h-4 w-4" />
-                      </button>
-                      <button
-                        onClick={() => moveAgent(agent.id, 'down')}
-                        disabled={idx === agents.length - 1}
-                        className="p-0.5 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
-                      >
-                        <ChevronDown className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => openEdit(agent)} className="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Edit">
-                        <Edit className="h-4 w-4" />
-                      </button>
-                      <button onClick={() => setDeleteTarget(agent)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
-                        <Trash2 className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </td>
+        <>
+          {/* Desktop table */}
+          <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Agent</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody className="divide-y divide-gray-200">
+                {agents.map((agent, idx) => (
+                  <tr key={agent.id} className="hover:bg-gray-50 transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-3">
+                        <div className="flex-shrink-0 h-10 w-10 rounded-full overflow-hidden bg-gray-100">
+                          {agent.photo_url ? (
+                            <Image className="h-10 w-10 object-cover" src={agent.photo_url} alt={agent.name} width={40} height={40} />
+                          ) : (
+                            <div className="h-full w-full flex items-center justify-center">
+                              <Users className="h-4 w-4 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
+                        <p className="text-sm font-medium text-gray-900">{agent.name}</p>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{agent.title}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center gap-1">
+                        <span className="text-sm text-gray-500 w-4">{agent.sort_order}</span>
+                        <button
+                          onClick={() => moveAgent(agent.id, 'up')}
+                          disabled={idx === 0}
+                          className="p-0.5 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <ChevronUp className="h-4 w-4" />
+                        </button>
+                        <button
+                          onClick={() => moveAgent(agent.id, 'down')}
+                          disabled={idx === agents.length - 1}
+                          className="p-0.5 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                        >
+                          <ChevronDown className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button onClick={() => openEdit(agent)} className="p-1.5 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Edit">
+                          <Edit className="h-4 w-4" />
+                        </button>
+                        <button onClick={() => setDeleteTarget(agent)} className="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {/* Mobile cards */}
+          <div className="md:hidden space-y-3">
+            {agents.map((agent, idx) => (
+              <div key={agent.id} className="bg-white rounded-xl border border-gray-200 p-4">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="flex-shrink-0 h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                    {agent.photo_url ? (
+                      <Image className="h-12 w-12 object-cover" src={agent.photo_url} alt={agent.name} width={48} height={48} />
+                    ) : (
+                      <div className="h-full w-full flex items-center justify-center">
+                        <Users className="h-5 w-5 text-gray-400" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-medium text-gray-900 truncate">{agent.name}</p>
+                    <p className="text-xs text-gray-500 truncate">{agent.title}</p>
+                  </div>
+                </div>
+                <div className="flex items-center justify-between pt-2 border-t border-gray-100">
+                  <div className="flex items-center gap-1">
+                    <span className="text-xs text-gray-400 mr-1">Order:</span>
+                    <span className="text-sm text-gray-500 w-4">{agent.sort_order}</span>
+                    <button
+                      onClick={() => moveAgent(agent.id, 'up')}
+                      disabled={idx === 0}
+                      className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                      <ChevronUp className="h-3.5 w-3.5" />
+                    </button>
+                    <button
+                      onClick={() => moveAgent(agent.id, 'down')}
+                      disabled={idx === agents.length - 1}
+                      className="p-1 text-gray-400 hover:text-gray-600 disabled:opacity-30 disabled:cursor-not-allowed"
+                    >
+                      <ChevronDown className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button onClick={() => openEdit(agent)} className="p-2 text-gray-500 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Edit">
+                      <Edit className="h-4 w-4" />
+                    </button>
+                    <button onClick={() => setDeleteTarget(agent)} className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Delete">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
       )}
 
       {showModal && (
@@ -247,7 +301,7 @@ export default function AdminAgents() {
                 <input
                   type="text" value={form.name} onChange={e => setForm(prev => ({ ...prev, name: e.target.value }))}
                   placeholder="e.g. Hassan Kintu"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg max-sm:text-base sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-gray-900"
                 />
               </div>
               <div>
@@ -255,7 +309,7 @@ export default function AdminAgents() {
                 <input
                   type="text" value={form.title} onChange={e => setForm(prev => ({ ...prev, title: e.target.value }))}
                   placeholder="e.g. Founder & CEO"
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg max-sm:text-base sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all text-gray-900"
                 />
               </div>
               <div>

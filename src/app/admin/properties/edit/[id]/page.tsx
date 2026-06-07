@@ -438,7 +438,7 @@ export default function EditProperty() {
                   <Video className="h-5 w-5 text-gray-500" />
                   Browse
                 </button>
-                {formData.videoUrl && formData.videoUrl.includes('r2.dev') && (
+                {formData.videoUrl && (
                   <button
                     type="button"
                     onClick={() => set('videoUrl', '')}

@@ -3,9 +3,12 @@ import { NextResponse } from 'next/server';
 export function validateCsrf(request: Request): NextResponse | null {
   const origin = request.headers.get('origin');
   const referer = request.headers.get('referer');
-  const appUrl = process.env.APP_URL || '';
+  const appUrl = process.env.APP_URL || process.env.NEXT_PUBLIC_APP_URL || '';
 
-  if (!appUrl) return null;
+  if (!appUrl) {
+    console.warn('CSRF validation skipped — APP_URL not configured');
+    return null;
+  }
 
   const allowed = new URL(appUrl).origin;
 

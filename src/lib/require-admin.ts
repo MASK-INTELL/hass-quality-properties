@@ -7,17 +7,22 @@ const adminEmails = (process.env.ADMIN_EMAILS || '')
   .filter(Boolean);
 
 export async function requireAdmin() {
-  const { userId } = await auth();
-  if (!userId) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  if (adminEmails.length > 0) {
-    const client = await clerkClient();
-    const user = await client.users.getUser(userId);
-    const email = user.emailAddresses?.[0]?.emailAddress?.toLowerCase();
-    if (!email || !adminEmails.includes(email)) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  try {
+    const { userId } = await auth();
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
+
+    if (adminEmails.length > 0) {
+      const client = await clerkClient();
+      const user = await client.users.getUser(userId);
+      const email = user.emailAddresses?.[0]?.emailAddress?.toLowerCase();
+      if (!email || !adminEmails.includes(email)) {
+        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+      }
+    }
+  } catch (error) {
+    console.error('require-admin error:', error);
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
 }

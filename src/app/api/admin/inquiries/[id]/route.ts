@@ -1,13 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { requireAdmin } from '@/lib/require-admin';
+import { validateCsrf } from '@/lib/csrf';
 import { markInquiryRead, deleteInquiry } from '@/lib/repositories/inquiries';
 
 export async function PUT(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const unauthorized = await requireAdmin();
   if (unauthorized) return unauthorized;
+
+  const csrfError = validateCsrf(request);
+  if (csrfError) return csrfError;
 
   try {
     const { id } = await params;
@@ -20,11 +24,14 @@ export async function PUT(
 }
 
 export async function DELETE(
-  _request: NextRequest,
+  request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const unauthorized = await requireAdmin();
   if (unauthorized) return unauthorized;
+
+  const csrfError = validateCsrf(request);
+  if (csrfError) return csrfError;
 
   try {
     const { id } = await params;

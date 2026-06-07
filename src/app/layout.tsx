@@ -4,12 +4,13 @@ import { GoogleAnalytics } from '@next/third-parties/google';
 import { ToastProvider } from '@/components/Toast';
 import { FavoritesProvider } from '@/hooks/useFavorites';
 import PWARegister from '@/components/PWARegister';
+import { getBaseUrl } from '@/lib/config';
 
 const siteName = 'Hass Quality Properties';
 const siteDescription = 'Find your perfect property, rental, or vehicle in Fort Portal, Uganda. Browse houses, apartments, land, commercial properties, cars, and motorcycles.';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://hass-quality-properties.vercel.app'),
+  metadataBase: new URL(getBaseUrl()),
   title: {
     default: `${siteName} - Homes, Lands, Plots, Cars & Rentals`,
     template: `%s | ${siteName}`,

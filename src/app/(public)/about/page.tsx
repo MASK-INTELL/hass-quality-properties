@@ -6,6 +6,7 @@ import { getAllAgents } from '@/lib/repositories/agents';
 import { Building2, Users, Target, Award, CheckCircle2, ArrowRight } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import CompanyLogo from '@/components/CompanyLogo';
+import { getBaseUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -26,6 +27,8 @@ export default async function About() {
   const stats = await getAllStats();
   const agents = await getAllAgents();
 
+  const baseUrl = getBaseUrl();
+
   return (
     <>
       <script
@@ -35,8 +38,8 @@ export default async function About() {
             '@context': 'https://schema.org',
             '@type': 'Organization',
             name: 'Hass Quality Properties',
-            url: 'https://hass-quality-properties.vercel.app',
-            logo: 'https://hass-quality-properties.vercel.app/logo.png',
+            url: baseUrl,
+            logo: `${baseUrl}/logo.png`,
             description: 'Realible Brokers in Fort Portal Tourism City, Uganda specializing in homes, lands, plots, cars, and motorcycles.',
             address: {
               '@type': 'PostalAddress',

@@ -4,10 +4,11 @@ import sql from '@/lib/db';
 import { getPropertyById, getSimilarProperties } from '@/lib/repositories/properties';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import PropertyDetailClient from './_PropertyDetailClient';
+import { getBaseUrl } from '@/lib/config';
 
 export const revalidate = 3600;
 
-const BASE_URL = 'https://hass-quality-properties.vercel.app';
+const BASE_URL = getBaseUrl();
 
 export async function generateStaticParams() {
   const rows = await sql`SELECT id FROM properties ORDER BY created_at DESC LIMIT 500`;

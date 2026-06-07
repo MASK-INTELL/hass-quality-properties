@@ -1,7 +1,8 @@
 import { MetadataRoute } from 'next';
 import sql from '@/lib/db';
+import { getBaseUrl } from '@/lib/config';
 
-const BASE_URL = 'https://hass-quality-properties.vercel.app';
+const BASE_URL = getBaseUrl();
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPages: MetadataRoute.Sitemap = [

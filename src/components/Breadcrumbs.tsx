@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
+import { getBaseUrl } from '@/lib/config';
 
 interface Crumb {
   label: string;
   href?: string;
 }
 
-const BASE_URL = 'https://hass-quality-properties.vercel.app';
+const BASE_URL = getBaseUrl();
 
 export default function Breadcrumbs({ items }: { items: Crumb[] }) {
   const jsonLd = {

@@ -4,6 +4,7 @@ import { createInquiry } from '@/lib/repositories/inquiries';
 import { validateCsrf } from '@/lib/csrf';
 import { rateLimit } from '@/lib/rate-limit';
 import { inquirySchema } from '@/lib/validation';
+import { sendInquiryNotification } from '@/lib/email';
 
 export async function POST(request: NextRequest) {
   const csrfError = validateCsrf(request);
@@ -19,6 +20,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const parsed = inquirySchema.parse(body);
     const inquiry = await createInquiry(parsed);
+    sendInquiryNotification(parsed);
     return NextResponse.json(inquiry, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {

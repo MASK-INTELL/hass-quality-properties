@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/require-admin';
+import { validateCsrf } from '@/lib/csrf';
 import { updateTestimonial, deleteTestimonial } from '@/lib/repositories/testimonials';
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const unauthorized = await requireAdmin();
   if (unauthorized) return unauthorized;
+
+  const csrfError = validateCsrf(request);
+  if (csrfError) return csrfError;
 
   try {
     const { id } = await params;

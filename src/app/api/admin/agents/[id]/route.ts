@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/require-admin';
+import { validateCsrf } from '@/lib/csrf';
 import { getAgentById, updateAgent, deleteAgent } from '@/lib/repositories/agents';
 
 export async function GET(
@@ -22,6 +23,9 @@ export async function PUT(
 ) {
   const unauthorized = await requireAdmin();
   if (unauthorized) return unauthorized;
+
+  const csrfError = validateCsrf(request);
+  if (csrfError) return csrfError;
 
   try {
     const { id } = await params;

@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import HomePage from './_HomePage';
 import { getFeaturedProperties, getPropertiesGallery } from '@/lib/repositories/properties';
+import { getBaseUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
   title: 'Hass Quality Properties - Homes, Lands, Plots, Cars & Rentals in Fort Portal',
@@ -19,12 +20,13 @@ export const metadata: Metadata = {
 
 export const revalidate = 3600;
 
+const baseUrl = getBaseUrl();
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'RealEstateAgent',
   name: 'Hass Quality Properties',
-  image: 'https://hass-quality-properties.vercel.app/logo.png',
-  url: 'https://hass-quality-properties.vercel.app',
+  image: `${baseUrl}/logo.png`,
+  url: baseUrl,
   telephone: '+256791715573',
   email: 'hassqualityproperties@gmail.com',
   address: {

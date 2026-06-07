@@ -6,6 +6,7 @@ import { validateCsrf } from '@/lib/csrf';
 import { getPropertyById, updateProperty, deleteProperty } from '@/lib/repositories/properties';
 import { propertySchema } from '@/lib/validation';
 import { pingIndexNow } from '@/lib/indexnow';
+import { getBaseUrl } from '@/lib/config';
 
 export async function GET(
   _request: NextRequest,
@@ -44,7 +45,7 @@ export async function PUT(
     revalidatePath(`/properties/${id}`);
     revalidatePath('/about');
     revalidatePath('/');
-    pingIndexNow([`${process.env.NEXT_PUBLIC_APP_URL || 'https://hass-quality-properties.vercel.app'}/properties`]);
+    pingIndexNow([`${getBaseUrl()}/properties`]);
     return NextResponse.json(property);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -69,7 +70,7 @@ export async function DELETE(
     revalidatePath(`/properties/${id}`);
     revalidatePath('/about');
     revalidatePath('/');
-    pingIndexNow(['https://hass-quality-properties.vercel.app/properties']);
+    pingIndexNow([`${getBaseUrl()}/properties`]);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting property:', error);

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { requireAdmin } from '@/lib/require-admin';
+import { validateCsrf } from '@/lib/csrf';
 import sql from '@/lib/db';
 import { Testimonial, getPendingTestimonials, createTestimonial } from '@/lib/repositories/testimonials';
 import { pingIndexNow } from '@/lib/indexnow';
@@ -21,13 +22,16 @@ export async function POST(request: NextRequest) {
   const unauthorized = await requireAdmin();
   if (unauthorized) return unauthorized;
 
+  const csrfError = validateCsrf(request);
+  if (csrfError) return csrfError;
+
   try {
     const body = await request.json();
     const testimonial = await createTestimonial({ ...body, approved: true });
     revalidatePath('/api/testimonials');
     revalidatePath('/testimonials');
     revalidatePath('/about');
-    pingIndexNow(['https://hass-quality-properties.vercel.app/testimonials']);
+    pingIndexNow([`${process.env.APP_URL || 'https://hassqualityproperties.xyz'}/testimonials`]);
     return NextResponse.json(testimonial, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to create testimonial' }, { status: 500 });
