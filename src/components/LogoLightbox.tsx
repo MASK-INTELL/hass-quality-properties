@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { X, Download, Share2 } from 'lucide-react';
 
@@ -54,7 +55,7 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
     }
   };
 
-  return (
+  return createPortal(
     <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center">
       <button 
         onClick={onClose}
@@ -97,6 +98,7 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
           />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }
