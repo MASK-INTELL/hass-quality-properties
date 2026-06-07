@@ -113,21 +113,6 @@ export default function PropertyGallery({ items }: Props) {
           >
             <ChevronRight className="h-8 w-8" />
           </button>
-
-          <div className="absolute bottom-8 right-8 flex gap-2">
-            {items.map((_, idx) => (
-              <button
-                key={idx}
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setCurrentIndex(idx);
-                }}
-                className={`w-3 h-3 rounded-full transition-all ${
-                  idx === currentIndex ? 'bg-emerald-500 scale-125' : 'bg-white/50 hover:bg-white/80'
-                }`}
-              />
-            ))}
-          </div>
         </div>
       </div>
 
