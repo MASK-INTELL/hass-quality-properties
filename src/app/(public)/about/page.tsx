@@ -5,6 +5,7 @@ import { getAllStats } from '@/lib/repositories/stats';
 import { getAllAgents } from '@/lib/repositories/agents';
 import { Building2, Users, Target, Award, CheckCircle2, ArrowRight } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
+import CompanyLogo from '@/components/CompanyLogo';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -59,8 +60,8 @@ export default async function About() {
       />
       <div className="bg-white min-h-screen">
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-2 flex justify-center">
-        <Image src="/logo.png" alt="Hass Quality Properties" width={100} height={100} className="object-contain" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-4 flex justify-center">
+        <CompanyLogo className="h-32 w-auto object-contain cursor-pointer" />
       </div>
 
       {/* Main Content */}
