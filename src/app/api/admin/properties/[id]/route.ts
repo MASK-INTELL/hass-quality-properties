@@ -43,6 +43,7 @@ export async function PUT(
     revalidatePath('/properties');
     revalidatePath(`/properties/${id}`);
     revalidatePath('/about');
+    revalidatePath('/');
     pingIndexNow([`${process.env.NEXT_PUBLIC_APP_URL || 'https://hass-quality-properties.vercel.app'}/properties`]);
     return NextResponse.json(property);
   } catch (error) {
@@ -67,6 +68,7 @@ export async function DELETE(
     revalidatePath('/properties');
     revalidatePath(`/properties/${id}`);
     revalidatePath('/about');
+    revalidatePath('/');
     pingIndexNow(['https://hass-quality-properties.vercel.app/properties']);
     return NextResponse.json({ success: true });
   } catch (error) {

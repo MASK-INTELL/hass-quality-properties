@@ -40,6 +40,7 @@ export async function POST(request: NextRequest) {
     const property = await createProperty(parsed);
     revalidatePath('/properties');
     revalidatePath('/about');
+    revalidatePath('/');
     pingIndexNow(['https://hass-quality-properties.vercel.app/properties']);
     return NextResponse.json(property, { status: 201 });
   } catch (error) {
