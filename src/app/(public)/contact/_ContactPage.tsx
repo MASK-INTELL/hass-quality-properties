@@ -65,7 +65,7 @@ export default function Contact() {
     }
   };
 
-  const inputClass = "w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all max-sm:text-base sm:text-sm";
+  const inputClass = "w-full px-4 py-3 rounded-lg border border-gray-300 text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:border-transparent outline-none transition-all max-sm:text-base sm:text-sm";
 
   return (
     <div className="bg-white min-h-screen py-12">

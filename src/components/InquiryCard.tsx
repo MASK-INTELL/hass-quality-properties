@@ -129,7 +129,7 @@ export default function InquiryCard({ property, defaultExpanded = false }: Inqui
                   onChange={e => setName(e.target.value)}
                   placeholder="Your Name"
                   required
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg max-sm:text-base sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg max-sm:text-base sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors text-gray-900"
                 />
               </div>
               <div>
@@ -139,7 +139,7 @@ export default function InquiryCard({ property, defaultExpanded = false }: Inqui
                   onChange={e => handlePhoneChange(e.target.value)}
                   placeholder="Phone Number"
                   required
-                  className={`w-full px-4 py-2.5 border rounded-lg max-sm:text-base sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors ${phoneError ? 'border-red-400' : 'border-gray-300'}`}
+                  className={`w-full px-4 py-2.5 border rounded-lg max-sm:text-base sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors text-gray-900 ${phoneError ? 'border-red-400' : 'border-gray-300'}`}
                 />
                 {phoneError && (
                   <p className="text-xs text-red-600 mt-1">{phoneError}</p>
@@ -150,7 +150,7 @@ export default function InquiryCard({ property, defaultExpanded = false }: Inqui
                   value={message}
                   onChange={e => setMessage(e.target.value)}
                   rows={6}
-                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg max-sm:text-base sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors resize-none"
+                  className="w-full px-4 py-2.5 border border-gray-300 rounded-lg max-sm:text-base sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-colors resize-none text-gray-900"
                 />
               </div>
               {error && (
