@@ -43,7 +43,7 @@ export default clerkMiddleware(async (auth, req) => {
 
   response.headers.set('Content-Security-Policy', [
     `default-src 'self'`,
-    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com`,
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com https://www.googletagmanager.com`,
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data: blob: https://*.r2.dev https://images.unsplash.com https://img.clerk.com https://*.clerk.accounts.dev`,
     `font-src 'self' data:`,
@@ -52,7 +52,7 @@ export default clerkMiddleware(async (auth, req) => {
     `frame-src 'self' https://vercel.live https://*.clerk.accounts.dev https://*.clerk.com https://*.r2.dev`,
     `media-src 'self' https://*.r2.dev`,
     `frame-ancestors 'none'`,
-    `connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com wss://*.clerk.com https://*.r2.cloudflarestorage.com`,
+    `connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com wss://*.clerk.com https://*.r2.cloudflarestorage.com https://www.google-analytics.com`,
     `manifest-src 'self'`,
     `worker-src 'self' blob:`,
   ].join('; '));
