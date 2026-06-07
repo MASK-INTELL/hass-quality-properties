@@ -2,9 +2,9 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Hass Quality Properties - Homes, Lands, Plots, Cars & Rentals',
-    short_name: 'Hass Properties',
-    description: 'Find your perfect property, rental, or vehicle in Fort Portal, Uganda.',
+    name: 'HASS - Homes, Lands, Plots, Cars & Rentals',
+    short_name: 'Hass quality Properties',
+    description: 'We specialize in connecting buyers with their dream properties and helping sellers get the best value for their investments.',
     start_url: '/',
     display: 'standalone',
     background_color: '#059669',
