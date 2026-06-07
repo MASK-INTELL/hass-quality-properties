@@ -171,7 +171,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
                 placeholder="Search by title, location, or description..."
-                className="w-full pl-12 pr-12 py-3 rounded-xl border border-gray-200 bg-white shadow-sm text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
+                className="w-full pl-12 pr-12 py-3 rounded-xl border border-gray-200 bg-white shadow-sm max-sm:text-base sm:text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all"
               />
               {searchInput && (
                 <button
@@ -201,7 +201,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
                   gtagEvent('filter_category', { category: e.target.value });
                 }
               }}
-              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-sm text-sm font-semibold"
+              className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white shadow-sm max-sm:text-base sm:text-sm font-semibold"
             >
               {CATEGORIES.map(c => (
                 <option key={c.id} value={c.id}>{c.label}</option>
