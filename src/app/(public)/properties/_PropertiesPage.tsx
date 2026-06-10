@@ -158,7 +158,10 @@ export default function Properties({ initialProperties }: { initialProperties: P
   return (
     <div className="bg-gray-50 min-h-screen py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="sr-only">Browse Properties</h1>
+        <div className="mb-8">
+          <h1 className="text-3xl md:text-4xl font-bold text-gray-900">Browse Properties</h1>
+          <p className="text-gray-500 mt-1">Explore our portfolio of homes, lands, plots, vehicles and rentals in Fort Portal, Uganda.</p>
+        </div>
 
         {/* Controls */}
         <div className="flex flex-col items-center mb-10">

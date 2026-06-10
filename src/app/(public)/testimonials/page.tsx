@@ -74,7 +74,7 @@ export default async function Testimonials() {
               <div className="absolute -top-6 left-8">
                 <Image
                   src="/logo.png"
-                  alt={testimonial.name}
+                  alt="Hass Properties"
                   width={56}
                   height={56}
                   className="rounded-full border-4 border-white shadow-md object-cover bg-gray-100"
@@ -88,7 +88,7 @@ export default async function Testimonials() {
                 </div>
                 <p className="text-gray-600 italic mb-6 leading-relaxed line-clamp-4">&quot;{testimonial.quote}&quot;</p>
                 <div>
-                  <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
+                  <h2 className="font-bold text-gray-900 text-lg">{testimonial.name}</h2>
                   <p className="text-emerald-600 text-sm font-medium">{testimonial.role}</p>
                 </div>
                 <ShareButtons quote={testimonial.quote} name={testimonial.name} role={testimonial.role} id={testimonial.id} />

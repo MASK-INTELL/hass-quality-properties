@@ -30,9 +30,10 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   if (!testimonial) return { title: 'Not Found' };
 
   const stars = '⭐'.repeat(testimonial.rating);
+  const truncate = (s: string, n: number) => s.length > n ? s.slice(0, n - 1) + '…' : s;
   return {
     title: `${testimonial.name} — ${stars} | Client Testimonial`,
-    description: `"${testimonial.quote}" — ${testimonial.name}, ${testimonial.role}. Read more client success stories at Hass Properties.`,
+    description: truncate(`"${testimonial.quote}" — ${testimonial.name}, ${testimonial.role}. Read more client success stories at Hass Properties.`, 160),
     openGraph: {
       title: `${testimonial.name} — ${stars} | Hass Properties`,
       description: `"${testimonial.quote}" — ${testimonial.name}, ${testimonial.role}`,
@@ -90,7 +91,7 @@ export default async function TestimonialDetail({ params }: { params: Promise<{ 
             <div className="flex items-center gap-4 mb-6">
               <Image
                 src="/logo.png"
-                alt={testimonial.name}
+                alt="Hass Properties"
                 width={64}
                 height={64}
                 className="rounded-full border-4 border-white shadow-md object-cover bg-gray-100"

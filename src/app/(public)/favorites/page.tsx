@@ -5,7 +5,7 @@ import FavoritesPage from './_FavoritesPage';
 
 export const metadata: Metadata = {
   title: 'My Favorites',
-  description: 'View your saved favorite properties in Fort Portal.',
+  description: 'View your saved favorite properties in Fort Portal. Browse homes, lands, plots, cars and motorcycles you have bookmarked for quick access.',
   robots: { index: false },
   alternates: { canonical: '/favorites' },
 };
