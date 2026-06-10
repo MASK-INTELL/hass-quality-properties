@@ -64,16 +64,19 @@ export default async function About() {
         }}
       />
       <div className="bg-white min-h-screen">
-      {/* Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-10 pb-4 flex justify-center">
-        <CompanyLogo className="h-52 w-auto object-contain cursor-pointer" />
-      </div>
-
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-12 pb-20">
         <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'About Us' }]} />
 
-        <div className="mb-20 max-w-3xl mt-6">
+        {/* Who We Are */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20 mt-6">
+          <div className="relative">
+            <div className="absolute -top-4 -left-4 w-24 h-24 bg-emerald-100 rounded-full -z-10" />
+            <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-emerald-50 rounded-full -z-10" />
+            <div className="rounded-2xl shadow-2xl w-full h-[500px] bg-gray-50 flex items-center justify-center overflow-hidden">
+              <CompanyLogo className="w-3/4 h-3/4 object-contain" />
+            </div>
+          </div>
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
