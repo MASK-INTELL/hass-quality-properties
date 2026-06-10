@@ -56,10 +56,10 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
   };
 
   return createPortal(
-    <div className="fixed inset-0 z-[100] bg-black/95 flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] bg-white/95 flex items-center justify-center">
       <button 
         onClick={onClose}
-        className="absolute top-6 right-6 text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors z-50"
+        className="absolute top-6 right-6 text-gray-400 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 transition-colors z-50"
       >
         <X className="h-8 w-8" />
       </button>
@@ -67,7 +67,7 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
       <div className="absolute top-6 right-20 flex gap-4 z-50">
         <button 
           onClick={handleShare}
-          className="text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors relative"
+          className="text-gray-400 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 transition-colors relative"
           title="Share Logo"
         >
           <Share2 className="h-6 w-6" />
@@ -79,7 +79,7 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
         </button>
         <button 
           onClick={handleDownload}
-          className="text-white/70 hover:text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+          className="text-gray-400 hover:text-gray-900 p-2 rounded-full hover:bg-gray-100 transition-colors"
           title="Download Logo"
         >
           <Download className="h-6 w-6" />
@@ -92,7 +92,7 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
             fill
             src={logoUrl}
             alt="Hass Properties Logo Fullscreen"
-            className="object-contain select-none bg-white/5 rounded-2xl p-8"
+            className="object-contain select-none bg-gray-50 rounded-2xl p-8"
             sizes="100vw"
             onClick={(e) => e.stopPropagation()}
           />
