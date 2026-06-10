@@ -29,7 +29,7 @@ export default function Image() {
             marginBottom: 16,
           }}
         >
-          HASS QUALITY
+          HASS
         </div>
         <div
           style={{

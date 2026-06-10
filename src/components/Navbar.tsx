@@ -56,9 +56,9 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link href="/" className="flex-shrink-0 flex items-center gap-2">
               <CompanyLogo className="h-12 w-auto object-contain" />
-              <div className="flex flex-col">
-                <span className="font-bold text-xl tracking-tight text-gray-900">HASS QUALITY</span>
-                <span className="text-xs font-semibold tracking-widest text-emerald-600">PROPERTIES</span>
+              <div className="flex flex-col items-center leading-tight">
+                <span className="font-bold text-2xl tracking-tight text-gray-900">HASS</span>
+                <span className="text-sm font-semibold tracking-widest text-emerald-600">PROPERTIES</span>
               </div>
             </Link>
           </div>

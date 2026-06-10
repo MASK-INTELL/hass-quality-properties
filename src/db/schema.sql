@@ -1,5 +1,5 @@
 -- =============================================================================
--- HASS QUALITY PROPERTIES — Database Schema for Neon (PostgreSQL)
+-- HASS PROPERTIES — Database Schema for Neon (PostgreSQL)
 -- =============================================================================
 -- Run this entire file in the Neon SQL Editor once your database is created.
 -- Everything is idempotent (IF NOT EXISTS) — safe to run multiple times.
