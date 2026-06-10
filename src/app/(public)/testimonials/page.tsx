@@ -18,7 +18,7 @@ interface Testimonial {
 
 export const metadata: Metadata = {
   title: 'Client Testimonials',
-  description: 'Read real success stories from clients who bought and sold homes, land, plots, cars and motorcycles with Hass Properties. 12+ years trusted service in Fort Portal, Uganda.',
+  description: 'Read real success stories from clients who bought and sold homes, land, plots, cars and motorcycles with Hass Properties. Over a decade of trusted service in Fort Portal, Uganda.',
   openGraph: {
     title: 'Client Success Stories | Hass Properties',
     description: 'Hear from our happy clients in Fort Portal. Genuine reviews from buyers and sellers who found their perfect property with Hass Properties.',

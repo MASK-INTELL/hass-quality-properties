@@ -6,11 +6,11 @@ import { getAllAgents } from '@/lib/repositories/agents';
 import { Building2, Users, Target, Award, CheckCircle2, ArrowRight } from 'lucide-react';
 import Breadcrumbs from '@/components/Breadcrumbs';
 import CompanyLogo from '@/components/CompanyLogo';
-import { getBaseUrl } from '@/lib/config';
+import { getBaseUrl, FOUNDING_YEAR } from '@/lib/config';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about Hass Properties — your trusted real estate partner in Fort Portal Tourism City, Uganda. 12+ years of experience connecting buyers with homes, land, plots, cars and motorcycles.',
+  description: 'Learn about Hass Properties — your trusted real estate partner in Fort Portal Tourism City, Uganda with over a decade of experience connecting buyers with homes, land, plots, cars and motorcycles.',
   openGraph: {
     title: 'About Hass Properties',
     description: 'Fort Portal\'s trusted real estate partner since 2013. Hass Properties helps you buy, sell and rent homes, land, plots, cars and motorcycles across Uganda.',
@@ -28,6 +28,8 @@ export default async function About() {
   const agents = await getAllAgents();
 
   const baseUrl = getBaseUrl();
+  const yearsExp = new Date().getFullYear() - FOUNDING_YEAR;
+  const allStats = [{ label: 'Years Experience', value: `${yearsExp}+`, id: 'years', sort_order: 0, source: '', created_at: '', updated_at: '' }, ...stats];
 
   return (
     <>
@@ -207,10 +209,10 @@ export default async function About() {
         </div>
 
         {/* Stats */}
-        {stats.length > 0 && (
+        {allStats.length > 0 && (
           <div className="bg-emerald-900 rounded-3xl p-12 text-white text-center">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-              {stats.map((stat) => (
+              {allStats.map((stat) => (
                 <div key={stat.label}>
                   <div className="text-4xl font-bold mb-2">{stat.value}</div>
                   <div className="text-emerald-200 text-sm uppercase tracking-wider">{stat.label}</div>
