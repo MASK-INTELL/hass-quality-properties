@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Hass Properties',
+    name: 'HASS',
     short_name: 'Hass Properties',
     description: 'We specialize in connecting buyers with their dream properties and helping sellers get the best value for their investments.',
     start_url: '/',

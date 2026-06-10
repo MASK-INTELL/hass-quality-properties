@@ -19,7 +19,7 @@ export default function Footer() {
             </div>
             <p className="text-gray-400 mb-6 text-sm leading-relaxed">
               Your trusted partner in finding the perfect property in Fort Portal Tourism City and across Uganda. 
-              We specialize in residential, commercial, and land sales.
+              We specialize in connecting buyers with their dream properties and helping sellers get the best value for their investments.
             </p>
           </div>
 
