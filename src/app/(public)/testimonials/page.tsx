@@ -18,15 +18,15 @@ interface Testimonial {
 
 export const metadata: Metadata = {
   title: 'Client Testimonials',
-  description: 'Read what our clients say about Hass Properties. Over 11 years of trusted real estate service in Fort Portal, Uganda.',
+  description: 'Read real success stories from clients who bought and sold homes, land, plots, cars and motorcycles with Hass Properties. 12+ years trusted service in Fort Portal, Uganda.',
   openGraph: {
     title: 'Client Success Stories | Hass Properties',
-    description: 'Read what our clients say about their experience with Hass Properties in Fort Portal, Uganda.',
+    description: 'Hear from our happy clients in Fort Portal. Genuine reviews from buyers and sellers who found their perfect property with Hass Properties.',
     url: '/testimonials',
   },
   twitter: {
     title: 'Client Success Stories | Hass Properties',
-    description: 'Read what our clients say about their experience with us.',
+    description: 'Real testimonials from Fort Portal clients. See why Hass Properties is the trusted choice for homes, land, cars and more in Uganda.',
   },
   alternates: { canonical: '/testimonials' },
 };

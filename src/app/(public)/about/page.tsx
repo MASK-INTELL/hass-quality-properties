@@ -10,15 +10,15 @@ import { getBaseUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about Hass Properties — your trusted real estate partner in Fort Portal Tourism City, Uganda with over 11 years of experience.',
+  description: 'Learn about Hass Properties — your trusted real estate partner in Fort Portal Tourism City, Uganda. 12+ years of experience connecting buyers with homes, land, plots, cars and motorcycles.',
   openGraph: {
     title: 'About Hass Properties',
-    description: 'Your trusted real estate partner in Fort Portal Tourism City, Uganda.',
+    description: 'Fort Portal\'s trusted real estate partner since 2013. Hass Properties helps you buy, sell and rent homes, land, plots, cars and motorcycles across Uganda.',
     url: '/about',
   },
   twitter: {
     title: 'About Hass Properties',
-    description: 'Your trusted real estate partner in Fort Portal Tourism City, Uganda.',
+    description: 'Fort Portal\'s trusted real estate partner since 2013. Hass Properties helps you buy, sell and rent homes, land, plots, cars and motorcycles across Uganda.',
   },
   alternates: { canonical: '/about' },
 };
