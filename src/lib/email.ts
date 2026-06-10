@@ -31,7 +31,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
 
 export function sendInquiryNotification(inquiry: {
   name: string;
-  email: string;
+  email?: string | null;
   phone?: string | null;
   message: string;
   property_title?: string | null;
@@ -43,6 +43,7 @@ export function sendInquiryNotification(inquiry: {
 
   if (adminEmails.length === 0) return;
 
+  const emailLine = inquiry.email ? `<p><strong>Email:</strong> ${inquiry.email}</p>` : '';
   const phoneLine = inquiry.phone ? `<p><strong>Phone:</strong> ${inquiry.phone}</p>` : '';
   const propertyLine = inquiry.property_title
     ? `<p><strong>Property:</strong> ${inquiry.property_title}</p>`
@@ -54,7 +55,7 @@ export function sendInquiryNotification(inquiry: {
     html: `
       <h2>New Inquiry Received</h2>
       <p><strong>Name:</strong> ${inquiry.name}</p>
-      <p><strong>Email:</strong> ${inquiry.email}</p>
+      ${emailLine}
       ${phoneLine}
       ${propertyLine}
       <p><strong>Message:</strong></p>
