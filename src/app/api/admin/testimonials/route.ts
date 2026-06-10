@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
     revalidatePath('/api/testimonials');
     revalidatePath('/testimonials');
     revalidatePath('/about');
-    pingIndexNow([`${process.env.APP_URL || 'https://hassqualityproperties.xyz'}/testimonials`]);
+    pingIndexNow([`${process.env.APP_URL || 'https://hassproperties.com'}/testimonials`]);
     return NextResponse.json(testimonial, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to create testimonial' }, { status: 500 });

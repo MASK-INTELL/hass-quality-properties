@@ -32,14 +32,14 @@ export async function generateMetadata({ params }: { params: Promise<{ id: strin
   const stars = '⭐'.repeat(testimonial.rating);
   return {
     title: `${testimonial.name} — ${stars} | Client Testimonial`,
-    description: `"${testimonial.quote}" — ${testimonial.name}, ${testimonial.role}. Read more client success stories at Hass Quality Properties.`,
+    description: `"${testimonial.quote}" — ${testimonial.name}, ${testimonial.role}. Read more client success stories at Hass Properties.`,
     openGraph: {
-      title: `${testimonial.name} — ${stars} | Hass Quality Properties`,
+      title: `${testimonial.name} — ${stars} | Hass Properties`,
       description: `"${testimonial.quote}" — ${testimonial.name}, ${testimonial.role}`,
       url: `/testimonials/${id}`,
     },
     twitter: {
-      title: `${testimonial.name} — ${stars} | Hass Quality Properties`,
+      title: `${testimonial.name} — ${stars} | Hass Properties`,
       description: `"${testimonial.quote}" — ${testimonial.name}, ${testimonial.role}`,
     },
     alternates: { canonical: `/testimonials/${id}` },
@@ -66,7 +66,7 @@ export default async function TestimonialDetail({ params }: { params: Promise<{ 
             author: { '@type': 'Person', name: testimonial.name },
             itemReviewed: {
               '@type': 'Organization',
-              name: 'Hass Quality Properties',
+              name: 'Hass Properties',
               image: '/logo.png',
             },
             reviewRating: {

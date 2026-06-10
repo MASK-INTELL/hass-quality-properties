@@ -55,8 +55,8 @@ export default function Footer() {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-emerald-500 flex-shrink-0" />
-                <a href="mailto:hassqualityproperties@gmail.com" className="text-gray-400 hover:text-white transition-colors text-sm break-all">
-                  hassqualityproperties@gmail.com
+                <a href="mailto:info@hassproperties.com" className="text-gray-400 hover:text-white transition-colors text-sm break-all">
+                  info@hassproperties.com
                 </a>
               </li>
               <li className="flex items-center gap-3">
@@ -79,7 +79,7 @@ export default function Footer() {
               Built with ⚡ by <a href="https://mask-intelligence.web.app" target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:text-emerald-400 transition-colors">Mask Intelligence</a>
             </p>
             <p className="text-gray-500 text-sm">
-              &copy; {new Date().getFullYear()} Hass Quality Properties. All rights reserved.
+              &copy; {new Date().getFullYear()} Hass Properties. All rights reserved.
             </p>
           </div>
         </div>

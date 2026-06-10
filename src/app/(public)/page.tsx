@@ -4,15 +4,15 @@ import { getFeaturedProperties, getPropertiesGallery } from '@/lib/repositories/
 import { getBaseUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'Hass Quality Properties - Homes, Lands, Plots, Cars & Rentals in Fort Portal',
+  title: 'Hass Properties - Homes, Lands, Plots, Cars & Rentals in Fort Portal',
   description: 'Find your dream property in Fort Portal Tourism City. Browse houses, land, apartments, commercial properties, cars and motorcycles for sale and rent.',
   openGraph: {
-    title: 'Hass Quality Properties - Fort Portal Properties',
+    title: 'Hass Properties - Fort Portal Properties',
     description: 'Find your dream property in Fort Portal Tourism City. Browse houses, land, apartments, commercial properties, cars and motorcycles.',
     url: '/',
   },
   twitter: {
-    title: 'Hass Quality Properties - Fort Portal Properties',
+    title: 'Hass Properties - Fort Portal Properties',
     description: 'Find your dream property in Fort Portal Tourism City.',
   },
   alternates: { canonical: '/' },
@@ -24,11 +24,11 @@ const baseUrl = getBaseUrl();
 const localBusinessJsonLd = {
   '@context': 'https://schema.org',
   '@type': 'RealEstateAgent',
-  name: 'Hass Quality Properties',
+  name: 'Hass Properties',
   image: `${baseUrl}/logo.png`,
   url: baseUrl,
   telephone: '+256791715573',
-  email: 'hassqualityproperties@gmail.com',
+  email: 'info@hassproperties.com',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Fort Portal Tourism City',

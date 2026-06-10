@@ -6,7 +6,7 @@ import { FavoritesProvider } from '@/hooks/useFavorites';
 import PWARegister from '@/components/PWARegister';
 import { getBaseUrl } from '@/lib/config';
 
-const siteName = 'Hass Quality Properties';
+const siteName = 'Hass Properties';
 const siteDescription = 'Find your perfect property, rental, or vehicle in Fort Portal, Uganda. Browse houses, apartments, land, commercial properties, cars, and motorcycles.';
 
 export const metadata: Metadata = {
@@ -59,7 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="antialiased">
         <noscript>
           <div style={{ padding: '20px', textAlign: 'center' }}>
-            <h1>Hass Quality Properties</h1>
+            <h1>Hass Properties</h1>
             <p>Homes, Lands, Plots, Cars & Rentals in Fort Portal, Uganda</p>
             <nav>
               <a href="/">Home</a> | <a href="/properties">Properties</a> | <a href="/about">About</a> | <a href="/contact">Contact</a> | <a href="/testimonials">Testimonials</a>

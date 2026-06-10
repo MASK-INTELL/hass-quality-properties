@@ -18,7 +18,7 @@ export async function sendEmail({ to, subject, html }: SendEmailParams) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        from: 'Hass Quality Properties <notifications@hassqualityproperties.xyz>',
+        from: 'Hass Properties <notifications@hassproperties.com>',
         to,
         subject,
         html,
@@ -63,7 +63,7 @@ export function sendInquiryNotification(inquiry: {
       </blockquote>
       <hr>
       <p style="color:#999;font-size:12px">
-        View all inquiries: <a href="https://hassqualityproperties.xyz/admin/inquiries">admin dashboard</a>
+        View all inquiries: <a href="https://hassproperties.com/admin/inquiries">admin dashboard</a>
       </p>
     `.trim(),
   });

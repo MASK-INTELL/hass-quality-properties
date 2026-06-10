@@ -80,7 +80,7 @@ export default function TestimonialForm() {
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 md:p-12">
       <h2 className="text-2xl font-bold text-gray-900 mb-2">Share Your Experience</h2>
-      <p className="text-gray-500 mb-8">Tell us about your experience with Hass Quality Properties.</p>
+      <p className="text-gray-500 mb-8">Tell us about your experience with Hass Properties.</p>
 
       <form onSubmit={handleSubmit} className="space-y-5">
         {error && (

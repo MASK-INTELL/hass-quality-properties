@@ -23,7 +23,7 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
       const url = window.URL.createObjectURL(blob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = `hass-quality-properties-logo.png`;
+      link.download = `hass-properties-logo.png`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -37,8 +37,8 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
   const handleShare = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const shareData = {
-      title: 'Hass Quality Properties Logo',
-      text: `Check out the Hass Quality Properties logo!`,
+      title: 'Hass Properties Logo',
+      text: `Check out the Hass Properties logo!`,
       url: logoUrl,
     };
 
@@ -91,7 +91,7 @@ export default function LogoLightbox({ isOpen, onClose, logoUrl }: LogoLightboxP
           <Image
             fill
             src={logoUrl}
-            alt="Hass Quality Properties Logo Fullscreen"
+            alt="Hass Properties Logo Fullscreen"
             className="object-contain select-none bg-white/5 rounded-2xl p-8"
             sizes="100vw"
             onClick={(e) => e.stopPropagation()}

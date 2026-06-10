@@ -70,7 +70,7 @@ export default function WelcomeOnboarding() {
         <div className="p-6 md:p-10 overflow-y-auto flex-1">
           {step === 1 ? (
             <div className="animate-in slide-in-from-right-4 duration-500">
-              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 pr-8">Welcome to Hass Quality!</h2>
+              <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 pr-8">Welcome to Hass Properties!</h2>
               <p className="text-gray-600 mb-6">To help us personalize your experience, what are you looking for today?</p>
 
               <div className="space-y-3">

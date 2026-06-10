@@ -78,7 +78,7 @@ export default function AdminDashboard() {
         <div>
           <h1 className="text-3xl font-bold text-gray-900">Dashboard</h1>
           <p className="text-gray-500 mt-1 text-sm">
-            Welcome to Hass Quality Properties Admin
+            Welcome to Hass Properties Admin
           </p>
         </div>
         <Link

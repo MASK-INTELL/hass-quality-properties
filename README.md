@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🏠 HASS Quality Properties
+# 🏠 Hass Properties
 ### The Ultimate Real Estate Management Template for Premium Properties.
 
 [![License: Unlicense](https://img.shields.io/badge/license-Unlicense-blue.svg)](https://unlicense.org/)
@@ -9,7 +9,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/maskintell/hassqualityproperties?style=flat-square)](https://github.com/maskintell/hassqualityproperties/commits/main)
 [![Top Language](https://img.shields.io/github/languages/top/maskintell/hassqualityproperties?style=flat-square&color=blueviolet)](https://github.com/maskintell/hassqualityproperties)
 
-[**View Live Demo »**](https://hassqualityproperties.vercel.app) | [**Report Bug »**](https://github.com/maskintell/hassqualityproperties/issues)
+[**View Live Demo »**](https://hassproperties.com) | [**Report Bug »**](https://github.com/maskintell/hassqualityproperties/issues)
 
 </div>
 

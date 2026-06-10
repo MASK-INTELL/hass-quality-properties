@@ -109,9 +109,9 @@ export default function Contact() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-gray-900 text-lg mb-1">Email Us</h3>
-                    <p className="text-gray-600 break-all mb-3">hassqualityproperties@gmail.com</p>
+                    <p className="text-gray-600 break-all mb-3">info@hassproperties.com</p>
                     <a
-                      href="mailto:hassqualityproperties@gmail.com"
+                      href="mailto:info@hassproperties.com"
                       className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-lg text-sm font-semibold hover:bg-emerald-200 transition-colors"
                     >
                       Send Email <Mail className="h-4 w-4" />

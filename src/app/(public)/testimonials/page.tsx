@@ -18,14 +18,14 @@ interface Testimonial {
 
 export const metadata: Metadata = {
   title: 'Client Testimonials',
-  description: 'Read what our clients say about Hass Quality Properties. Over 11 years of trusted real estate service in Fort Portal, Uganda.',
+  description: 'Read what our clients say about Hass Properties. Over 11 years of trusted real estate service in Fort Portal, Uganda.',
   openGraph: {
-    title: 'Client Success Stories | Hass Quality Properties',
-    description: 'Read what our clients say about their experience with Hass Quality Properties in Fort Portal, Uganda.',
+    title: 'Client Success Stories | Hass Properties',
+    description: 'Read what our clients say about their experience with Hass Properties in Fort Portal, Uganda.',
     url: '/testimonials',
   },
   twitter: {
-    title: 'Client Success Stories | Hass Quality Properties',
+    title: 'Client Success Stories | Hass Properties',
     description: 'Read what our clients say about their experience with us.',
   },
   alternates: { canonical: '/testimonials' },
@@ -41,7 +41,7 @@ export default async function Testimonials() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Organization',
-            name: 'Hass Quality Properties',
+            name: 'Hass Properties',
             review: testimonials.slice(0, 10).map((t) => ({
               '@type': 'Review',
               author: { '@type': 'Person', name: t.name },

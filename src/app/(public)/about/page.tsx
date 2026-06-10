@@ -10,14 +10,14 @@ import { getBaseUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about Hass Quality Properties — your trusted real estate partner in Fort Portal Tourism City, Uganda with over 11 years of experience.',
+  description: 'Learn about Hass Properties — your trusted real estate partner in Fort Portal Tourism City, Uganda with over 11 years of experience.',
   openGraph: {
-    title: 'About Hass Quality Properties',
+    title: 'About Hass Properties',
     description: 'Your trusted real estate partner in Fort Portal Tourism City, Uganda.',
     url: '/about',
   },
   twitter: {
-    title: 'About Hass Quality Properties',
+    title: 'About Hass Properties',
     description: 'Your trusted real estate partner in Fort Portal Tourism City, Uganda.',
   },
   alternates: { canonical: '/about' },
@@ -37,7 +37,7 @@ export default async function About() {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'Organization',
-            name: 'Hass Quality Properties',
+            name: 'Hass Properties',
             url: baseUrl,
             logo: `${baseUrl}/logo.png`,
             description: 'Realible Brokers in Fort Portal Tourism City, Uganda specializing in homes, lands, plots, cars, and motorcycles.',
@@ -47,7 +47,7 @@ export default async function About() {
               addressCountry: 'UG',
             },
             telephone: '+256791715573',
-            email: 'hassqualityproperties@gmail.com',
+            email: 'info@hassproperties.com',
             sameAs: [
               'https://wa.me/256791715573',
             ],
@@ -75,7 +75,7 @@ export default async function About() {
           <div>
             <h1 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
-              Hass Quality Properties is your reliable Real Estate partner based in Fort Portal Tourism City, Uganda. We specialize in connecting buyers with their dream properties and helping sellers get the best value for their investments.
+              Hass Properties is your reliable Real Estate partner based in Fort Portal Tourism City, Uganda. We specialize in connecting buyers with their dream properties and helping sellers get the best value for their investments.
             </p>
             <p className="text-gray-600 text-lg leading-relaxed">
               With years of experience in the local market, our team of Brokers understands the unique landscape of Fort Portal and the surrounding regions. Whether you are looking for a residential home, commercial land, or an agricultural investment, we have the expertise to guide you every step of the way.
@@ -97,7 +97,7 @@ export default async function About() {
             />
           </div>
           <div>
-            <h2 className="text-3xl font-bold text-gray-900 mb-6">Why Choose Hass Quality Properties?</h2>
+            <h2 className="text-3xl font-bold text-gray-900 mb-6">Why Choose Hass Properties?</h2>
             <p className="text-gray-600 mb-8 text-lg leading-relaxed">
               We are more than just a real estate Brokers. We are your partners in finding the perfect place to call home or the ideal investment opportunity in Fort Portal.
             </p>
@@ -161,7 +161,7 @@ export default async function About() {
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold text-gray-900 mb-4">Meet Our Team</h2>
               <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-                Get to know few dedicated professionals behind Hass Quality Properties.
+                Get to know few dedicated professionals behind Hass Properties.
               </p>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 max-w-5xl mx-auto">

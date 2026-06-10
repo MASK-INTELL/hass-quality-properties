@@ -23,7 +23,7 @@ export default function CompanyLogo({ className = "" }: CompanyLogoProps) {
     <>
       <Image
         src={logoUrl}
-        alt="Hass Quality Properties Logo"
+        alt="Hass Properties Logo"
         width={400}
         height={400}
         className={`cursor-pointer transition-transform hover:scale-105 ${className}`}
