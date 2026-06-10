@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Home, Key, Map, Building2, Car, Bike, X } from 'lucide-react';
 
 const goalToCategory: Record<string, string> = {
-  homes: 'Homes',
-  rentals: 'Rentals',
-  lands: 'Lands',
+  buy_home: 'Homes',
+  rent: 'Rentals',
+  land: 'Lands',
   commercial: 'Homes',
   cars: 'Cars',
   motorcycles: 'Motorcycles',
