@@ -11,7 +11,7 @@ export default function Footer() {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-3 mb-6">
-              <CompanyLogo className="h-14 w-auto object-contain bg-white/10 rounded-lg p-1" />
+              <CompanyLogo className="h-14 w-auto object-contain bg-white rounded-lg p-1" />
               <div className="flex flex-col items-center leading-tight">
                 <span className="font-bold text-2xl tracking-tight text-white">HASS</span>
                 <span className="text-sm font-semibold tracking-widest text-emerald-500">PROPERTIES</span>
