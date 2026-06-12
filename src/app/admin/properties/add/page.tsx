@@ -390,7 +390,7 @@ export default function AddProperty() {
             Cancel
           </button>
           <button type="submit" disabled={loading}
-            className="flex items-center gap-2 bg-emerald-600 text-white px-8 py-2.5 rounded-lg font-medium hover:bg-emerald-700 transition-colors shadow-sm disabled:opacity-75 disabled:cursor-not-allowed text-sm">
+            className="flex items-center gap-2 bg-emerald-700 text-white px-8 py-2.5 rounded-lg font-medium hover:bg-emerald-800 transition-colors shadow-sm disabled:opacity-75 disabled:cursor-not-allowed text-sm">
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />}
             {loading ? 'Saving...' : 'Save Property'}
           </button>

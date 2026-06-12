@@ -159,7 +159,7 @@ export default function InquiryCard({ property, defaultExpanded = false }: Inqui
               <button
                 type="submit"
                 disabled={submitting || !name.trim() || !phone.trim() || !!phoneError}
-                className="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-600 text-white rounded-lg font-semibold hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+                className="w-full flex items-center justify-center gap-2 py-2.5 bg-emerald-700 text-white rounded-lg font-semibold hover:bg-emerald-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed text-sm"
               >
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <MessageSquare className="h-4 w-4" />}
                 {submitting ? 'Sending...' : 'Request Inspection'}

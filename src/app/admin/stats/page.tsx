@@ -47,7 +47,7 @@ function StatModal({ stat, onSave, onClose }: StatModalProps) {
           </div>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">Cancel</button>
-            <button type="submit" className="flex-1 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium disabled:opacity-50" disabled={!label.trim() || !value.trim()}>
+            <button type="submit" className="flex-1 px-4 py-2.5 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors font-medium disabled:opacity-50" disabled={!label.trim() || !value.trim()}>
               {stat ? 'Update' : 'Add'}
             </button>
           </div>
@@ -119,7 +119,7 @@ export default function AdminStatsPage() {
           <h1 className="text-2xl font-bold text-gray-900">Site Statistics</h1>
           <p className="text-gray-500 mt-1">Manage the stats shown on the About page</p>
         </div>
-        <button onClick={() => setModalStat(null)} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium shadow-sm">
+        <button onClick={() => setModalStat(null)} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors font-medium shadow-sm">
           <Plus className="h-5 w-5" /> Add Stat
         </button>
       </div>

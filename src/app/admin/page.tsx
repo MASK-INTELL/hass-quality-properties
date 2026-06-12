@@ -83,7 +83,7 @@ export default function AdminDashboard() {
         </div>
         <Link
           href="/admin/properties/add"
-          className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-700 transition-colors shadow-sm text-sm"
+          className="flex items-center gap-2 bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-800 transition-colors shadow-sm text-sm"
         >
           <Plus className="h-4 w-4" /> Add Listing
         </Link>

@@ -49,7 +49,7 @@ export default function TestimonialForm() {
         </p>
         <button
           onClick={() => setShowForm(true)}
-          className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 text-white rounded-full font-bold hover:bg-emerald-700 transition-colors shadow-sm"
+          className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-700 text-white rounded-full font-bold hover:bg-emerald-800 transition-colors shadow-sm"
         >
           Write a Testimonial
         </button>
@@ -132,7 +132,7 @@ export default function TestimonialForm() {
 
         <button
           type="submit" disabled={submitting}
-          className="w-full py-3.5 px-6 rounded-lg text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-700 hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
+          className="w-full py-3.5 px-6 rounded-lg text-white font-bold text-sm transition-all shadow-md flex items-center justify-center gap-2 bg-emerald-700 hover:bg-emerald-800 hover:shadow-lg disabled:opacity-75 disabled:cursor-not-allowed"
         >
           {submitting ? <><Loader2 className="h-5 w-5 animate-spin" /> Submitting...</> : 'Submit Testimonial'}
         </button>

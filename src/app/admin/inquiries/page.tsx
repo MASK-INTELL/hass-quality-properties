@@ -188,7 +188,7 @@ export default function AdminInquiries() {
               {selectedInquiry.phone && (
                 <a
                   href={`tel:${selectedInquiry.phone}`}
-                  className="flex-1 py-2 text-center bg-emerald-600 text-white rounded-lg text-sm font-medium hover:bg-emerald-700 transition-colors"
+                  className="flex-1 py-2 text-center bg-emerald-700 text-white rounded-lg text-sm font-medium hover:bg-emerald-800 transition-colors"
                 >
                   Call
                 </a>

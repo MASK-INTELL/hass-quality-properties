@@ -341,7 +341,7 @@ export default function MediaPicker({
               type="button"
               onClick={handleConfirm}
               disabled={selected.size === 0}
-              className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="px-4 py-2 text-sm font-medium text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {mode === 'single' ? 'Select' : `Add Selected (${selected.size})`}
             </button>

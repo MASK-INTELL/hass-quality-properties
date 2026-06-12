@@ -78,7 +78,7 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link
               href="/properties"
-              className="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              className="px-8 py-4 bg-emerald-700 hover:bg-emerald-800 text-white rounded-full font-semibold text-lg transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
             >
               Browse Properties <Search className="h-5 w-5" />
             </Link>
@@ -117,7 +117,7 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
           <div className="mt-16 text-center">
             <Link
               href="/properties"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-emerald-600 text-white rounded-full font-bold text-lg hover:bg-emerald-700 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-emerald-700 text-white rounded-full font-bold text-lg hover:bg-emerald-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-1"
             >
               View All Properties <ArrowRight className="h-5 w-5" />
             </Link>
@@ -182,7 +182,7 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
             </Link>
             <Link
               href="/testimonials"
-              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-emerald-600 text-white rounded-full font-bold text-lg hover:bg-emerald-700 transition-all shadow-sm hover:shadow-md w-full sm:w-auto"
+              className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-emerald-700 text-white rounded-full font-bold text-lg hover:bg-emerald-800 transition-all shadow-sm hover:shadow-md w-full sm:w-auto"
             >
               Share Your Story
             </Link>

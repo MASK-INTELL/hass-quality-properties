@@ -64,7 +64,7 @@ function TestimonialModal({ testimonial, onSave, onClose }: TestimonialModalProp
           </div>
           <div className="flex gap-3 pt-2">
             <button type="button" onClick={onClose} className="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors font-medium">Cancel</button>
-            <button type="submit" className="flex-1 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium disabled:opacity-50" disabled={!name.trim() || !role.trim() || !quote.trim()}>
+            <button type="submit" className="flex-1 px-4 py-2.5 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors font-medium disabled:opacity-50" disabled={!name.trim() || !role.trim() || !quote.trim()}>
               {testimonial ? 'Update' : 'Add'}
             </button>
           </div>
@@ -176,7 +176,7 @@ export default function AdminTestimonialsPage() {
               <CheckCircle2 className="h-4 w-4" /> Approve All ({pendingCount})
             </button>
           )}
-          <button onClick={() => setModalTestimonial(null)} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium shadow-sm">
+          <button onClick={() => setModalTestimonial(null)} className="flex items-center gap-2 px-4 py-2.5 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors font-medium shadow-sm">
             <Plus className="h-5 w-5" /> Add Testimonial
           </button>
         </div>

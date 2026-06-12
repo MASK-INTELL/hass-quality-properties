@@ -28,7 +28,7 @@ export default function AdminLogin() {
                 card: 'shadow-none p-0',
                 socialButtons: 'hidden',
                 dividerRow: 'hidden',
-                formButtonPrimary: 'bg-emerald-600 hover:bg-emerald-700 text-sm font-medium rounded-lg',
+                formButtonPrimary: 'bg-emerald-700 hover:bg-emerald-800 text-sm font-medium rounded-lg',
                 footerActionLink: 'text-emerald-600 hover:text-emerald-700',
                 identityPreviewEditButton: 'text-emerald-600',
                 formFieldInput: 'rounded-lg border-gray-300 focus:border-emerald-500 focus:ring-emerald-500 text-sm',

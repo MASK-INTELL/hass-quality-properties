@@ -59,7 +59,7 @@ export default function PropertyCard({ property }: PropertyCardProps) {
             <p className="text-white font-bold text-lg">{property.price}</p>
           </div>
         </Link>
-        <div className="absolute top-4 left-4 bg-emerald-600 text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide pointer-events-none">
+        <div className="absolute top-4 left-4 bg-emerald-700 text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide pointer-events-none">
           {property.status}
         </div>
         <button

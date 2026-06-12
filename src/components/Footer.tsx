@@ -75,10 +75,10 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 pt-8">
           <div className="text-center">
-            <p className="text-gray-500 text-sm mb-2">
+            <p className="text-gray-400 text-sm mb-2">
               Built with ⚡ by <a href="https://mask-intelligence.web.app" target="_blank" rel="noopener noreferrer" className="text-emerald-500 hover:text-emerald-400 transition-colors">Mask Intelligence</a>
             </p>
-            <p className="text-gray-500 text-sm">
+            <p className="text-gray-400 text-sm">
               &copy; {new Date().getFullYear()} Hass Properties. All rights reserved.
             </p>
           </div>

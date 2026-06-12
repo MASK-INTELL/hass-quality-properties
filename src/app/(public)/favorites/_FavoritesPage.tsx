@@ -69,7 +69,7 @@ export default function FavoritesPage({ initialProperties }: { initialProperties
             </p>
             <Link
               href="/properties"
-              className="inline-flex items-center gap-2 bg-emerald-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-700 transition-colors shadow-sm"
+              className="inline-flex items-center gap-2 bg-emerald-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-emerald-800 transition-colors shadow-sm"
             >
               Browse Properties
             </Link>

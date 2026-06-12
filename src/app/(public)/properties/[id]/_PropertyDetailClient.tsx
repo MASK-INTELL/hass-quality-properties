@@ -184,7 +184,7 @@ export default function PropertyDetails({
           <div className="lg:hidden">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 mb-6">
               <div>
-                <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold mb-3 uppercase tracking-wide">
+                <span className="inline-block px-3 py-1 bg-emerald-700 text-white rounded-full text-sm font-semibold mb-3 uppercase tracking-wide">
                   {property.status}
                 </span>
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2 lg:hidden">{property.title}</h1>
@@ -307,7 +307,7 @@ export default function PropertyDetails({
               </div>
 
               <div className="space-y-6">
-                <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold uppercase tracking-wide">
+                <span className="inline-block px-3 py-1 bg-emerald-700 text-white rounded-full text-sm font-semibold uppercase tracking-wide">
                   {property.status}
                 </span>
                 <h1 className="text-3xl font-bold text-gray-900 hidden lg:block">{property.title}</h1>

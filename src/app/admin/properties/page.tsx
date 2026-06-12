@@ -100,7 +100,7 @@ export default function AdminProperties() {
         </div>
         <button
           onClick={() => router.push('/admin/properties/add')}
-          className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-700 transition-colors shadow-sm text-sm"
+          className="flex items-center gap-2 bg-emerald-700 text-white px-4 py-2 rounded-lg font-medium hover:bg-emerald-800 transition-colors shadow-sm text-sm"
         >
           <Plus className="h-4 w-4" /> Add Property
         </button>
@@ -134,7 +134,7 @@ export default function AdminProperties() {
             >
               <Filter className="h-4 w-4" /> Filters
               {activeFilters > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-emerald-600 text-white text-xs flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 h-4 w-4 rounded-full bg-emerald-700 text-white text-xs flex items-center justify-center">
                   {activeFilters}
                 </span>
               )}
@@ -314,7 +314,7 @@ export default function AdminProperties() {
                     key={p}
                     onClick={() => setPage(p)}
                     className={`h-8 w-8 rounded-lg text-sm font-medium transition-colors ${
-                      page === p ? 'bg-emerald-600 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
+                      page === p ? 'bg-emerald-700 text-white' : 'border border-gray-300 text-gray-700 hover:bg-gray-50'
                     }`}
                   >
                     {p}

@@ -83,7 +83,7 @@ export default function PropertyGallery({ items }: Props) {
 
           <div className="absolute bottom-0 left-0 right-0 p-8 md:p-12 pointer-events-none">
             <div className="pointer-events-auto max-w-3xl">
-              <span className="inline-block px-3 py-1 bg-emerald-600 text-white rounded-full text-sm font-semibold mb-4 uppercase tracking-wide shadow-lg">
+              <span className="inline-block px-3 py-1 bg-emerald-700 text-white rounded-full text-sm font-semibold mb-4 uppercase tracking-wide shadow-lg">
                 {currentItem.status}
               </span>
               <h3 className="text-3xl md:text-5xl font-bold mb-4 drop-shadow-lg">

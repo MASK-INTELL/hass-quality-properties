@@ -230,7 +230,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
                     }}
                     className={`flex items-center gap-2 px-4 sm:px-6 py-3 rounded-lg font-semibold transition-all whitespace-nowrap ${
                       isActive
-                        ? 'bg-emerald-600 text-white shadow-md'
+                        ? 'bg-emerald-700 text-white shadow-md'
                         : 'text-gray-600 hover:text-emerald-600 hover:bg-emerald-50'
                     } ${isAll ? 'hidden lg:flex' : ''}`}
                   >
@@ -291,7 +291,7 @@ export default function Properties({ initialProperties }: { initialProperties: P
                     onClick={() => goToPage(p)}
                     className={`min-w-[40px] h-10 rounded-lg text-sm font-semibold transition-all ${
                       p === currentPage
-                        ? 'bg-emerald-600 text-white shadow-md'
+                        ? 'bg-emerald-700 text-white shadow-md'
                         : 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
                     }`}
                   >

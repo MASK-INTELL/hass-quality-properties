@@ -173,7 +173,7 @@ export default function AdminMediaPage() {
         </div>
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-3">
-            <label className={`flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium shadow-sm cursor-pointer ${uploading ? 'opacity-75 pointer-events-none' : ''}`}>
+            <label className={`flex items-center gap-2 px-4 py-2.5 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors font-medium shadow-sm cursor-pointer ${uploading ? 'opacity-75 pointer-events-none' : ''}`}>
               <input
                 ref={fileInputRef}
                 type="file"
@@ -231,7 +231,7 @@ export default function AdminMediaPage() {
             {!search && (
               <button
                 onClick={() => fileInputRef.current?.click()}
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors font-medium text-sm"
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-emerald-700 text-white rounded-lg hover:bg-emerald-800 transition-colors font-medium text-sm"
               >
                 <Upload className="h-4 w-4" /> Upload your first file
               </button>

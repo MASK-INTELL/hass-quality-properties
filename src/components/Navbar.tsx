@@ -80,7 +80,7 @@ export default function Navbar() {
             ))}
             <Link
               href="/contact"
-              className="bg-emerald-600 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-emerald-700 transition-colors shadow-sm"
+              className="bg-emerald-700 text-white px-5 py-2 rounded-full text-sm font-medium hover:bg-emerald-800 transition-colors shadow-sm"
             >
               Get in Touch
             </Link>
@@ -128,7 +128,7 @@ export default function Navbar() {
             <Link
               href="/contact"
               onClick={() => setIsOpen(false)}
-              className="block px-3 py-2 rounded-md text-base font-medium bg-emerald-600 text-white hover:bg-emerald-700 transition-colors mt-2"
+              className="block px-3 py-2 rounded-md text-base font-medium bg-emerald-700 text-white hover:bg-emerald-800 transition-colors mt-2"
             >
               Get in Touch
             </Link>

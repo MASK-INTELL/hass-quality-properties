@@ -150,7 +150,7 @@ export default function AdminAgents() {
         </div>
         <button
           onClick={openAdd}
-          className="flex items-center gap-2 bg-emerald-600 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-emerald-700 transition-colors text-sm shadow-sm"
+          className="flex items-center gap-2 bg-emerald-700 text-white px-4 py-2.5 rounded-lg font-medium hover:bg-emerald-800 transition-colors text-sm shadow-sm"
         >
           <Plus className="h-4 w-4" /> Add Agent
         </button>
@@ -340,7 +340,7 @@ export default function AdminAgents() {
               <button
                 onClick={handleSave}
                 disabled={!form.name || !form.title || !form.photo_url || saving}
-                className="px-4 py-2 text-sm font-medium text-white bg-emerald-600 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-4 py-2 text-sm font-medium text-white bg-emerald-700 rounded-lg hover:bg-emerald-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {saving ? <><Loader2 className="h-4 w-4 animate-spin inline mr-1" /> Saving</> : 'Save'}
               </button>
