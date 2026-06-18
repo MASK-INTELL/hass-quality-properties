@@ -9,7 +9,7 @@
 [![Last Commit](https://img.shields.io/github/last-commit/maskintell/hassqualityproperties?style=flat-square)](https://github.com/maskintell/hassqualityproperties/commits/main)
 [![Top Language](https://img.shields.io/github/languages/top/maskintell/hassqualityproperties?style=flat-square&color=blueviolet)](https://github.com/maskintell/hassqualityproperties)
 
-[**View Live Demo »**](https://hassproperties.com) | [**Report Bug »**](https://github.com/maskintell/hassqualityproperties/issues)
+[**View Live Demo »**](https://hassproperties.online) | [**Report Bug »**](https://github.com/maskintell/hassqualityproperties/issues)
 
 </div>
 
@@ -59,7 +59,7 @@ We have architected a centralized "Source of Truth" for premium listings. By lev
 ## ✨ Key Features
 
 ### 🏢 Property Listing Management
-Dynamic CRUD operations for properties. Admins can upload high-resolution images, set pricing tiers, and define specific property attributes (e.g., acreage, number of bedrooms, proximity to Kampala CBD).
+Dynamic CRUD operations for properties. Admins can upload high-resolution images, set pricing tiers, and define specific property attributes (e.g., acreage, number of bedrooms, proximity to Kampal[...]
 
 ### 🔍 Advanced Search & Filtering
 A multi-faceted search engine allowing users to filter by:
@@ -75,18 +75,18 @@ A comprehensive command center for stakeholders.
 - **User Activity**: Heatmaps of which properties are gaining the most traction.
 
 ### 🔐 User Authentication, Security & Configuration.
-Implemented using battle tested supabase auth, Go to *Supabase.com*, **Create an account** - **Create a project** in that account with your preferred name, After creating the project, copy these **"your supabase project url"** & **"your supabase publishable key"** they are available in supabase dashboard in the project you created, After that update **src/lib/supabase.ts**
+Implemented using battle tested supabase auth, Go to *Supabase.com*, **Create an account** - **Create a project** in that account with your preferred name, After creating the project, copy these *[...]
 VITE_SUPABASE_URL="your_supabase_project_url"
 VITE_SUPABASE_ANON_KEY="your_supabase_anon_key"
 
-Inside your project in supabase, Click Menu located at top right - then Go to **Authentication**, Click Add user and create a user using your **email address** + a **password** you will remember, Cause you will need them to access the **Admin Dashboard**...
+Inside your project in supabase, Click Menu located at top right - then Go to **Authentication**, Click Add user and create a user using your **email address** + a **password** you will remember, [...]
 
 ### The Admin is Available at https://your-domain.com/#/admin
 You Just Need To Add **/#/admin** at the end of your site domain, whether you deployed the site with **GitHub pages**, **Vercel** or anywhere, Just add that at the end of the url you're provided.
 
 ### For database tables: Copy and Paste (DATABASE SCHEMA)
     In your supabase Project, Click the Menu icon at top right then Go to SQL Editor, paste what you copied in DATABASE SCHEMA file and Click run to create the needed schemas...
- 
+  
 
 ### 📱 Responsive Web UI
 A "Mobile-First" design philosophy ensuring that the platform looks stunning on everything from high-end desktop monitors to entry-level smartphones used by field agents.
@@ -120,8 +120,8 @@ Before you begin, ensure you have the following installed:
 3.  **Database Setup**
     Copy and Paste (DATABASE SCHEMA)
     in your supabase SQL Editor and run in to create the needed schemas...
- 
- 5.  **Start Development Server**
+  
+  5.  **Start Development Server**
     ```bash
     npm run dev
     ```
