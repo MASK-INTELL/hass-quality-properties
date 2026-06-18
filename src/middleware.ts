@@ -1,58 +1,59 @@
-import { clerkMiddleware, createRouteMatcher, clerkClient } from '@clerk/nextjs/server';
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
+import { updateSession } from '@/lib/supabase/middleware';
 
-const isPublicRoute = createRouteMatcher([
+const publicRoutes = [
   '/',
   '/favorites',
-  '/properties(.*)',
+  '/properties',
   '/about',
   '/contact',
-  '/testimonials(.*)',
-  '/admin/login(.*)',
-  '/api/webhooks(.*)',
-  '/api/properties(.*)',
-  '/api/inquiries(.*)',
-  '/api/testimonials(.*)',
-]);
+  '/testimonials',
+  '/admin/login',
+  '/api/webhooks',
+  '/api/properties',
+  '/api/inquiries',
+  '/api/testimonials',
+];
 
-const isAdminRoute = createRouteMatcher(['/admin(.*)']);
-const isAdminApiRoute = createRouteMatcher(['/api/admin(.*)']);
+const adminRoutes = ['/admin', '/api/admin'];
 
 const adminEmails = (process.env.ADMIN_EMAILS || '')
   .split(',')
   .map(s => s.trim().toLowerCase())
   .filter(Boolean);
 
-async function isAdminUser(userId: string): Promise<boolean> {
-  if (adminEmails.length === 0) return true;
-  try {
-    const client = await clerkClient();
-    const user = await client.users.getUser(userId);
-    const email = user.emailAddresses?.[0]?.emailAddress?.toLowerCase();
-    return !!email && adminEmails.includes(email);
-  } catch {
-    console.error('Clerk API error in isAdminUser — denying access (fail-closed)');
-    return false;
-  }
+function isPublicRoute(pathname: string): boolean {
+  return publicRoutes.some(
+    route => pathname === route || pathname.startsWith(route + '/')
+  );
 }
 
-export default clerkMiddleware(async (auth, req) => {
-  const { userId } = await auth();
+function isAdminRoute(pathname: string): boolean {
+  return adminRoutes.some(
+    route => pathname === route || pathname.startsWith(route + '/')
+  );
+}
 
-  const response = NextResponse.next();
+export async function middleware(request: NextRequest) {
+  const pathname = request.nextUrl.pathname;
 
+  // Update session and get fresh supabase response
+  let response = await updateSession(request);
+
+  // Set security headers
   response.headers.set('Content-Security-Policy', [
     `default-src 'self'`,
-    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.clerk.accounts.dev https://*.clerk.com https://www.googletagmanager.com`,
+    `script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.supabase.co https://www.googletagmanager.com`,
     `style-src 'self' 'unsafe-inline'`,
-    `img-src 'self' data: blob: https://*.r2.dev https://images.unsplash.com https://img.clerk.com https://*.clerk.accounts.dev`,
+    `img-src 'self' data: blob: https://*.r2.dev https://images.unsplash.com https://*.supabase.co`,
     `font-src 'self' data:`,
     `object-src 'none'`,
     `base-uri 'self'`,
-    `frame-src 'self' https://vercel.live https://*.clerk.accounts.dev https://*.clerk.com https://*.r2.dev`,
+    `frame-src 'self' https://vercel.live https://*.supabase.co https://*.r2.dev`,
     `media-src 'self' https://*.r2.dev`,
     `frame-ancestors 'none'`,
-    `connect-src 'self' https://*.clerk.accounts.dev https://*.clerk.com wss://*.clerk.com https://*.r2.cloudflarestorage.com https://www.google-analytics.com`,
+    `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.r2.cloudflarestorage.com https://www.google-analytics.com`,
     `manifest-src 'self'`,
     `worker-src 'self' blob:`,
   ].join('; '));
@@ -62,43 +63,34 @@ export default clerkMiddleware(async (auth, req) => {
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
-  // Redirect authenticated users away from login page
-  if (userId && req.nextUrl.pathname === '/admin/login') {
-    return NextResponse.redirect(new URL('/admin', req.url));
+  // Get auth cookie to check if user is authenticated
+  const authCookie = request.cookies.get('sb-auth-token')?.value || 
+                     request.cookies.get('sb-' + process.env.NEXT_PUBLIC_SUPABASE_URL?.split('.')[0] + '-auth-token')?.value;
+  const hasAuth = !!authCookie;
+
+  // Redirect authenticated users away from login
+  if (hasAuth && pathname === '/admin/login') {
+    return NextResponse.redirect(new URL('/admin', request.url));
   }
 
-  // Protect admin page routes — redirect to login
-  if (isAdminRoute(req) && !isPublicRoute(req)) {
-    if (!userId) {
-      return NextResponse.redirect(new URL('/admin/login', req.url));
-    }
-    if (adminEmails.length > 0 && !(await isAdminUser(userId))) {
-      return NextResponse.redirect(new URL('/admin/login', req.url));
-    }
-  }
-
-  // Protect admin API routes — return 401/403
-  if (isAdminApiRoute(req)) {
-    if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-    }
-    if (adminEmails.length > 0 && !(await isAdminUser(userId))) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  // Protect admin routes - redirect to login if not authenticated
+  if (isAdminRoute(pathname) && !isPublicRoute(pathname)) {
+    if (!hasAuth) {
+      return NextResponse.redirect(new URL('/admin/login', request.url));
     }
   }
 
-  // Catch-all for any other non-public route
-  if (!isPublicRoute(req) && !userId) {
-    return NextResponse.redirect(new URL('/admin/login', req.url));
+  // Protect non-public routes
+  if (!isPublicRoute(pathname) && !hasAuth) {
+    return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
   return response;
-});
+}
 
 export const config = {
   matcher: [
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest|txt|xml)).*)',
-    '/__clerk/(.*)',
     '/(api|trpc)(.*)',
   ],
 };
