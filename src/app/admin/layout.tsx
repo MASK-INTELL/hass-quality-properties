@@ -1,6 +1,5 @@
 'use client';
 
-import { ClerkProvider, useUser, useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import {
@@ -8,6 +7,7 @@ import {
 } from 'lucide-react';
 import CompanyLogo from '@/components/CompanyLogo';
 import { useEffect, useState } from 'react';
+import { useAuth } from '@/lib/supabase/hooks';
 
 const navItems = [
   { path: '/admin', label: 'Dashboard', icon: LayoutDashboard, exact: true },
@@ -20,19 +20,18 @@ const navItems = [
 ];
 
 function AdminLayoutInner({ children }: { children: React.ReactNode }) {
-  const { isLoaded, isSignedIn, user } = useUser();
-  const { signOut } = useAuth();
+  const { session, loading, signOut } = useAuth();
   const pathname = usePathname();
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   useEffect(() => {
-    if (isLoaded && !isSignedIn && pathname !== '/admin/login') {
+    if (!loading && !session && pathname !== '/admin/login') {
       router.push('/admin/login');
     }
-  }, [isLoaded, isSignedIn, pathname, router]);
+  }, [loading, session, pathname, router]);
 
-  if (!isLoaded) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-emerald-600" />
@@ -40,7 +39,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
     );
   }
 
-  if (!isSignedIn && pathname !== '/admin/login') {
+  if (!session && pathname !== '/admin/login') {
     return null;
   }
 
@@ -55,6 +54,8 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
     await signOut();
     router.push('/admin/login');
   };
+
+  const userEmail = session?.user?.email || 'Admin';
 
   const SidebarContent = () => (
     <>
@@ -88,7 +89,7 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
 
       <div className="p-3 border-t border-gray-100 flex-shrink-0">
         <div className="px-3 py-2 mb-1">
-          <p className="text-xs text-gray-400 truncate">{user?.primaryEmailAddress?.emailAddress}</p>
+          <p className="text-xs text-gray-400 truncate">{userEmail}</p>
         </div>
         <button
           onClick={handleSignOut}
@@ -137,9 +138,5 @@ function AdminLayoutInner({ children }: { children: React.ReactNode }) {
 }
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return (
-    <ClerkProvider>
-      <AdminLayoutInner>{children}</AdminLayoutInner>
-    </ClerkProvider>
-  );
+  return <AdminLayoutInner>{children}</AdminLayoutInner>;
 }

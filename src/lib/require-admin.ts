@@ -1,4 +1,4 @@
-import { auth, clerkClient } from '@clerk/nextjs/server';
+import { createClient } from '@/lib/supabase/server';
 import { NextResponse } from 'next/server';
 
 const adminEmails = (process.env.ADMIN_EMAILS || '')
@@ -8,16 +8,16 @@ const adminEmails = (process.env.ADMIN_EMAILS || '')
 
 export async function requireAdmin() {
   try {
-    const { userId } = await auth();
-    if (!userId) {
+    const supabase = await createClient();
+    const { data: { session } } = await supabase.auth.getSession();
+    
+    if (!session?.user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     if (adminEmails.length > 0) {
-      const client = await clerkClient();
-      const user = await client.users.getUser(userId);
-      const email = user.emailAddresses?.[0]?.emailAddress?.toLowerCase();
-      if (!email || !adminEmails.includes(email)) {
+      const userEmail = session.user.email?.toLowerCase();
+      if (!userEmail || !adminEmails.includes(userEmail)) {
         return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
       }
     }
@@ -25,4 +25,10 @@ export async function requireAdmin() {
     console.error('require-admin error:', error);
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
   }
+}
+
+export async function getSession() {
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  return session;
 }

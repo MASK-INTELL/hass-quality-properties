@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '@clerk/nextjs/server';
 import { PutObjectCommand } from '@aws-sdk/client-s3';
 import { fileTypeFromBuffer } from 'file-type';
-import { requireAdmin } from '@/lib/require-admin';
+import { requireAdmin } from '@/lib/require-admin-supabase';
 import { r2Client, R2_CONFIG } from '@/lib/r2';
+import { createClient } from '@/lib/supabase/server';
 
 function slugify(text: string): string {
   return text
@@ -33,7 +33,9 @@ export async function POST(request: NextRequest) {
   const unauthorized = await requireAdmin();
   if (unauthorized) return unauthorized;
 
-  const { userId } = await auth();
+  const supabase = await createClient();
+  const { data: { session } } = await supabase.auth.getSession();
+  const userId = session?.user?.id;
 
   try {
     const formData = await request.formData();
