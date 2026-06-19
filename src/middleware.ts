@@ -38,7 +38,6 @@ function isAdminRoute(pathname: string): boolean {
 
 function isApprovedAdmin(user: User | null): boolean {
   if (!user?.email) return false;
-  // If no admin emails configured, deny everyone
   if (adminEmails.length === 0) return false;
   return adminEmails.includes(user.email.toLowerCase());
 }
@@ -83,18 +82,11 @@ export async function middleware(request: NextRequest) {
   // Protect admin routes
   if (isAdminRoute(pathname) && !isPublicRoute(pathname)) {
     if (!hasAuth) {
-      // Not logged in → go to login
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
     if (!isAdmin) {
-      // Logged in but email not in ADMIN_EMAILS → back to home
       return NextResponse.redirect(new URL('/', request.url));
     }
-  }
-
-  // Protect non-public routes
-  if (!isPublicRoute(pathname) && !hasAuth) {
-    return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
   return response;
