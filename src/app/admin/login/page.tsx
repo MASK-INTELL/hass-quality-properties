@@ -31,6 +31,7 @@ export default function AdminLogin() {
         return;
       }
 
+      router.refresh();
       router.push('/admin');
     } catch (err) {
       setError('An unexpected error occurred');
