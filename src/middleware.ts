@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/request';
+import type { NextRequest } from 'next/server';
 import type { User } from '@supabase/supabase-js';
 import { updateSession } from '@/lib/supabase/middleware';
 
@@ -19,6 +19,11 @@ const publicRoutes = [
 
 const adminRoutes = ['/admin', '/api/admin'];
 
+const adminEmails = (process.env.ADMIN_EMAILS || '')
+  .split(',')
+  .map(s => s.trim().toLowerCase())
+  .filter(Boolean);
+
 function isPublicRoute(pathname: string): boolean {
   return publicRoutes.some(
     route => pathname === route || pathname.startsWith(route + '/')
@@ -31,13 +36,22 @@ function isAdminRoute(pathname: string): boolean {
   );
 }
 
+function isApprovedAdmin(user: User | null): boolean {
+  if (!user?.email) return false;
+  // If no admin emails configured, deny everyone
+  if (adminEmails.length === 0) return false;
+  return adminEmails.includes(user.email.toLowerCase());
+}
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Update session and get authenticated user
   const result = await updateSession(request) as { response: NextResponse; user: User | null };
   const response = result.response;
-  const hasAuth = !!result.user;
+  const user = result.user;
+  const hasAuth = !!user;
+  const isAdmin = isApprovedAdmin(user);
 
   // Set security headers
   response.headers.set('Content-Security-Policy', [
@@ -61,16 +75,26 @@ export async function middleware(request: NextRequest) {
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
 
-  // Redirect authenticated users away from login
-  if (hasAuth && pathname === '/admin/login') {
+  // Redirect approved admins away from login page
+  if (isAdmin && pathname === '/admin/login') {
     return NextResponse.redirect(new URL('/admin', request.url));
   }
 
-  // Protect admin routes - redirect to login if not authenticated
+  // Protect admin routes
   if (isAdminRoute(pathname) && !isPublicRoute(pathname)) {
     if (!hasAuth) {
+      // Not logged in → go to login
       return NextResponse.redirect(new URL('/admin/login', request.url));
     }
+    if (!isAdmin) {
+      // Logged in but email not in ADMIN_EMAILS → back to home
+      return NextResponse.redirect(new URL('/', request.url));
+    }
+  }
+
+  // Protect non-public routes
+  if (!isPublicRoute(pathname) && !hasAuth) {
+    return NextResponse.redirect(new URL('/admin/login', request.url));
   }
 
   return response;
