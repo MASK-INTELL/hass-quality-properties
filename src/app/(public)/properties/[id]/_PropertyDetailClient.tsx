@@ -311,9 +311,11 @@ export default function PropertyDetails({
                   {property.status}
                 </span>
                 <h1 className="text-3xl font-bold text-gray-900 hidden lg:block">{property.title}</h1>
-                <p className="text-gray-600 leading-relaxed text-base">
-                  {property.description}
-                </p>
+                <div className="text-gray-600 leading-relaxed text-base space-y-3">
+                  {property.description.split('\n').map((line, i) =>
+                    line.trim() === '' ? <br key={i} /> : <p key={i}>{line}</p>
+                  )}
+                </div>
                 <p className="text-3xl font-bold text-emerald-600">{property.price}</p>
                 <div className="flex items-center gap-2 text-gray-600">
                   <MapPin className="h-5 w-5" />
