@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import type { User } from '@supabase/supabase-js';
 import { updateSession } from '@/lib/supabase/middleware';
 
 const publicRoutes = [
@@ -18,11 +19,6 @@ const publicRoutes = [
 
 const adminRoutes = ['/admin', '/api/admin'];
 
-const adminEmails = (process.env.ADMIN_EMAILS || '')
-  .split(',')
-  .map(s => s.trim().toLowerCase())
-  .filter(Boolean);
-
 function isPublicRoute(pathname: string): boolean {
   return publicRoutes.some(
     route => pathname === route || pathname.startsWith(route + '/')
@@ -39,8 +35,9 @@ export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
   // Update session and get authenticated user
-  const { response, user } = await updateSession(request);
-  const hasAuth = !!user;
+  const result = await updateSession(request) as { response: NextResponse; user: User | null };
+  const response = result.response;
+  const hasAuth = !!result.user;
 
   // Set security headers
   response.headers.set('Content-Security-Policy', [
