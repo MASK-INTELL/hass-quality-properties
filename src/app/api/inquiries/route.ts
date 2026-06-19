@@ -20,7 +20,10 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const parsed = inquirySchema.parse(body);
     const inquiry = await createInquiry(parsed);
-    sendInquiryNotification(parsed);
+
+    // Await so errors surface in server logs
+    await sendInquiryNotification(parsed);
+
     return NextResponse.json(inquiry, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {
