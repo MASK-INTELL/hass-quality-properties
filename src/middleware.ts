@@ -38,8 +38,9 @@ function isAdminRoute(pathname: string): boolean {
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // Update session and get fresh supabase response
-  let response = await updateSession(request);
+  // Update session and get authenticated user
+  const { response, user } = await updateSession(request);
+  const hasAuth = !!user;
 
   // Set security headers
   response.headers.set('Content-Security-Policy', [
@@ -62,11 +63,6 @@ export async function middleware(request: NextRequest) {
   response.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
   response.headers.set('Permissions-Policy', 'camera=(), microphone=(), geolocation=()');
   response.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload');
-
-  // Get auth cookie to check if user is authenticated
-  const authCookie = request.cookies.get('sb-auth-token')?.value || 
-                     request.cookies.get('sb-' + process.env.NEXT_PUBLIC_SUPABASE_URL?.split('.')[0] + '-auth-token')?.value;
-  const hasAuth = !!authCookie;
 
   // Redirect authenticated users away from login
   if (hasAuth && pathname === '/admin/login') {
