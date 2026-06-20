@@ -30,17 +30,17 @@ const localBusinessJsonLd = {
   image: `${baseUrl}/logo.png`,
   url: baseUrl,
   telephone: '+256791715573',
-  email: 'info@hassproperties.com',
+  email: 'hello@hassproperties.online',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Fort Portal Tourism City',
     addressCountry: 'UG',
   },
-  openingHoursSpecification: [
-    { '@type': 'OpeningHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], opens: '08:00', closes: '18:00' },
+  operatingHoursSpecification: [
+    { '@type': 'OperatingHoursSpecification', dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'], active: '08:00', off: '18:00' },
   ],
   areaServed: 'Fort Portal, Uganda',
-  description: 'Premier property company in Fort Portal Tourism City, Uganda specializing in homes, lands, plots, cars, and motorcycles.',
+  description: 'Premier Real Estate Brokers in Fort Portal Tourism City, Uganda: Specializing in Buying and Selling homes, lands, plots, cars, and motorcycles.',
 };
 
 export default async function Page() {
