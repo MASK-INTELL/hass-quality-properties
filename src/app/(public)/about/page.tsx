@@ -49,16 +49,20 @@ export default async function About() {
               addressCountry: 'UG',
             },
             telephone: '+256791715573',
-            email: 'info@hassproperties.com',
+            email: 'hello@hassproperties.online',
             sameAs: [
               'https://wa.me/256791715573',
             ],
             knowsAbout: [
               'Real estate in Fort Portal Uganda',
-              'Houses for sale and rent',
-              'Land and plots for sale',
-              'Cars and motorcycles for sale',
+              'Houses for sale',
+              'Houses for rent',
+              'Land for sale',
+              'Plots for sale',
+              'Cars for sale',
+              'Motorcycles for sale',
               'Commercial properties',
+              'Investment opportunities',
             ],
           }),
         }}
@@ -94,8 +98,8 @@ export default async function About() {
             <div className="absolute -top-4 -left-4 w-24 h-24 bg-emerald-100 rounded-full -z-10" />
             <div className="absolute -bottom-4 -right-4 w-32 h-32 bg-emerald-50 rounded-full -z-10" />
             <Image
-              src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-              alt="Real Estate Agent"
+              src="https://cdn.hassproperties.online/Real_Estate%40Hass_Properties.webp"
+              alt="Real Estate Agents"
               width={800}
               height={500}
               className="rounded-2xl shadow-2xl w-full object-cover h-[500px]"
