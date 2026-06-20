@@ -48,6 +48,8 @@ export const metadata: Metadata = {
   },
 };
 
+const googleSiteVerification = process.env.GOOGLE_SITE_VERIFICATION;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
@@ -57,6 +59,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content={siteName} />
         <link rel="manifest" href="/manifest.webmanifest" />
+        {googleSiteVerification && (
+          <meta name="google-site-verification" content={googleSiteVerification} />
+        )}
       </head>
       <body className="antialiased">
         <noscript>
