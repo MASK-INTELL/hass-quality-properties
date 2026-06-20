@@ -2,7 +2,7 @@
 
 import { Facebook, Twitter, Linkedin, Link as LinkIcon, Check } from 'lucide-react';
 import WhatsAppIcon from '@/components/WhatsAppIcon';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 interface ShareButtonsProps {
   quote: string;
@@ -14,9 +14,12 @@ interface ShareButtonsProps {
 
 export default function ShareButtons({ quote, name, role, id, showCopy = false }: ShareButtonsProps) {
   const [copied, setCopied] = useState(false);
-  const pageUrl = typeof window !== 'undefined'
-    ? `${window.location.origin}/testimonials${id ? `/${id}` : ''}`
-    : '';
+  const [pageUrl, setPageUrl] = useState('');
+
+  useEffect(() => {
+    setPageUrl(`${window.location.origin}/testimonials${id ? `/${id}` : ''}`);
+  }, [id]);
+
   const text = encodeURIComponent(`"${quote}" — ${name}, ${role}`);
   const url = encodeURIComponent(pageUrl);
 
