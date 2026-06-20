@@ -78,7 +78,7 @@ export default async function About() {
             </div>
           </div>
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-6">Who We Are</h1>
+            <h1 className="text-3xl font-bold text-gray-900 mb-6">Real Estate Agents in Fort Portal, Uganda</h1>
             <p className="text-gray-600 text-lg leading-relaxed mb-6">
               Hass Properties is your reliable Real Estate partner based in Fort Portal Tourism City, Uganda. We specialize in connecting buyers with their dream properties and helping sellers get the best value for their investments.
             </p>
