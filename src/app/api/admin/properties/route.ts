@@ -42,7 +42,10 @@ export async function POST(request: NextRequest) {
     revalidatePath('/properties');
     revalidatePath('/about');
     revalidatePath('/');
-    pingIndexNow([`${getBaseUrl()}/properties`]);
+    pingIndexNow([
+      `${getBaseUrl()}/properties`,
+      `${getBaseUrl()}/properties/${property.id}`,
+    ]);
     return NextResponse.json(property, { status: 201 });
   } catch (error) {
     if (error instanceof z.ZodError) {

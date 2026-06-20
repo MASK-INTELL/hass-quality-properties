@@ -5,6 +5,7 @@ import { validateCsrf } from '@/lib/csrf';
 import sql from '@/lib/db';
 import { Testimonial, getPendingTestimonials, createTestimonial } from '@/lib/repositories/testimonials';
 import { pingIndexNow } from '@/lib/indexnow';
+import { getBaseUrl } from '@/lib/config';
 
 export async function GET(request: NextRequest) {
   const unauthorized = await requireAdmin();
@@ -31,7 +32,10 @@ export async function POST(request: NextRequest) {
     revalidatePath('/api/testimonials');
     revalidatePath('/testimonials');
     revalidatePath('/about');
-    pingIndexNow([`${process.env.APP_URL || 'https://hassproperties.online'}/testimonials`]);
+    pingIndexNow([
+      `${getBaseUrl()}/testimonials`,
+      `${getBaseUrl()}/testimonials/${testimonial.id}`,
+    ]);
     return NextResponse.json(testimonial, { status: 201 });
   } catch (error) {
     return NextResponse.json({ error: 'Failed to create testimonial' }, { status: 500 });

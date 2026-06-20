@@ -45,7 +45,10 @@ export async function PUT(
     revalidatePath(`/properties/${id}`);
     revalidatePath('/about');
     revalidatePath('/');
-    pingIndexNow([`${getBaseUrl()}/properties`]);
+    pingIndexNow([
+      `${getBaseUrl()}/properties`,
+      `${getBaseUrl()}/properties/${id}`,
+    ]);
     return NextResponse.json(property);
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -70,7 +73,10 @@ export async function DELETE(
     revalidatePath(`/properties/${id}`);
     revalidatePath('/about');
     revalidatePath('/');
-    pingIndexNow([`${getBaseUrl()}/properties`]);
+    pingIndexNow([
+      `${getBaseUrl()}/properties`,
+      `${getBaseUrl()}/properties/${id}`,
+    ]);
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Error deleting property:', error);
