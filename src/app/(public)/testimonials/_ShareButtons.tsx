@@ -73,7 +73,7 @@ export default function ShareButtons({ quote, name, role, id, showCopy = false }
   };
 
   return (
-    <div className="flex items-center gap-1 pt-4 mt-4 border-t border-gray-100 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+    <div className="flex items-center gap-1 pt-4 mt-4 border-t border-gray-100 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-200">
       <span className="text-xs text-gray-400 mr-1">Share</span>
       {shareLinks.map((link) => (
         <a
