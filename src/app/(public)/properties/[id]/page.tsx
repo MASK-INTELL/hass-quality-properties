@@ -10,6 +10,12 @@ export const revalidate = 3600;
 
 const BASE_URL = getBaseUrl();
 
+// Keep SEO title under 50 chars so "| Hass Properties" keeps total under 70
+function seoTitle(str: string, max = 50): string {
+  if (str.length <= max) return str;
+  return str.slice(0, max).trimEnd() + '…';
+}
+
 export async function generateStaticParams() {
   const rows = await sql`SELECT id FROM properties ORDER BY created_at DESC LIMIT 500`;
   const properties = rows as unknown as { id: string }[];
@@ -28,21 +34,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     return { title: 'Property Not Found' };
   }
 
-  const title = `${property.title} - ${property.price}`;
-  const description = property.description.slice(0, 160);
+  const title = seoTitle(`${property.title} — ${property.location}`);
+  const description = property.description.slice(0, 155).trimEnd() + (property.description.length > 155 ? '…' : '');
   const imageUrl = property.images?.[0] || property.image_url;
 
   return {
     title,
     description,
     openGraph: {
-      title,
+      title: `${property.title} — ${property.price}`,
       description,
       url: `/properties/${id}`,
       images: imageUrl ? [{ url: imageUrl, width: 1200, height: 630, alt: property.title }] : undefined,
     },
     twitter: {
-      title,
+      title: `${property.title} — ${property.price}`,
       description,
       images: imageUrl ? [imageUrl] : undefined,
     },
