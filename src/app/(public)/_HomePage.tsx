@@ -56,8 +56,8 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
       <section className="relative h-[600px] flex items-center justify-center">
         <div className="absolute inset-0 z-0">
           <Image
-            src="https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80"
-            alt="Luxury Home in Uganda"
+            src="https://cdn.hassproperties.online/Hass_Properties_Hero_Image.webp"
+            alt="Luxury Homes in Uganda"
             fill
             className="object-cover"
             priority
