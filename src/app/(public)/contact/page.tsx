@@ -21,6 +21,7 @@ export default function Page() {
   return (
     <>
       <Breadcrumbs items={[{ label: 'Home', href: '/' }, { label: 'Contact Us' }]} />
+      <h1 className="sr-only">Contact Hass Properties — Fort Portal, Uganda</h1>
       <ContactPage />
     </>
   );
