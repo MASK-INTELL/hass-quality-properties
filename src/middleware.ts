@@ -51,7 +51,7 @@ export async function middleware(request: NextRequest) {
     `frame-src 'self' https://vercel.live https://*.supabase.co https://*.r2.dev`,
     `media-src 'self' https://*.r2.dev`,
     `frame-ancestors 'none'`,
-    `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.r2.cloudflarestorage.com https://www.google-analytics.com`,
+    `connect-src 'self' https://*.supabase.co wss://*.supabase.co https://*.r2.cloudflarestorage.com https://*.google-analytics.com`,
     `manifest-src 'self'`,
     `worker-src 'self' blob:`,
   ].join('; '));
