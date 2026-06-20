@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { Upload, Trash2, Copy, Search, Image as ImageIcon, Loader2, Check, X, FileText, Film } from 'lucide-react';
+import { Upload, Trash2, Copy, Search, Image as ImageIcon, Loader2, Check, X, FileText, Film, MoreHorizontal } from 'lucide-react';
 
 interface MediaFile {
   key: string;
@@ -55,12 +55,26 @@ export default function AdminMediaPage() {
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [previewFile, setPreviewFile] = useState<MediaFile | null>(null);
+  const [activeMenuKey, setActiveMenuKey] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const t = setTimeout(() => { setDebouncedSearch(search); setFiles([]); setNextCursor(null); }, 350);
     return () => clearTimeout(t);
   }, [search]);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    if (!activeMenuKey) return;
+    const handleClickOutside = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
+        setActiveMenuKey(null);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, [activeMenuKey]);
 
   const fetchFiles = useCallback(async (cursor?: string | null) => {
     const isLoadMore = !!cursor;
@@ -154,6 +168,7 @@ export default function AdminMediaPage() {
     try {
       await navigator.clipboard.writeText(file.url);
       setCopiedKey(key);
+      setActiveMenuKey(null);
       setTimeout(() => setCopiedKey(null), 2000);
     } catch {
       console.error('Copy failed');
@@ -277,7 +292,9 @@ export default function AdminMediaPage() {
                           {Icon ? <Icon className="h-10 w-10 text-gray-400" /> : <FileText className="h-10 w-10 text-gray-400" />}
                         </div>
                       )}
-                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
+                      
+                      {/* Desktop hover overlay - hidden on touch devices */}
+                      <div className="hidden md:flex absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors items-center justify-center gap-2 opacity-0 group-hover:opacity-100">
                         <button
                           onClick={e => { e.stopPropagation(); handleCopy(file.key); }}
                           className="p-2 bg-white/90 rounded-lg hover:bg-white transition-colors"
@@ -293,8 +310,58 @@ export default function AdminMediaPage() {
                           <Trash2 className="h-4 w-4 text-red-600" />
                         </button>
                       </div>
+                      
+                      {/* Mobile menu button */}
+                      <div className="md:hidden absolute top-2 right-2" ref={activeMenuKey === file.key ? menuRef : null}>
+                        <button
+                          onClick={e => {
+                            e.stopPropagation();
+                            setActiveMenuKey(activeMenuKey === file.key ? null : file.key);
+                          }}
+                          className="p-1.5 bg-black/40 rounded-lg hover:bg-black/60 transition-colors"
+                        >
+                          <MoreHorizontal className="h-4 w-4 text-white" />
+                        </button>
+                        
+                        {/* Mobile dropdown menu */}
+                        {activeMenuKey === file.key && (
+                          <div className="absolute right-0 top-full mt-1 bg-white rounded-lg shadow-lg border border-gray-200 py-1 min-w-[120px] z-10">
+                            <button
+                              onClick={e => {
+                                e.stopPropagation();
+                                handleCopy(file.key);
+                              }}
+                              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                            >
+                              {copiedKey === file.key ? (
+                                <>
+                                  <Check className="h-4 w-4 text-emerald-600" />
+                                  <span className="text-emerald-600">Copied!</span>
+                                </>
+                              ) : (
+                                <>
+                                  <Copy className="h-4 w-4" />
+                                  <span>Copy URL</span>
+                                </>
+                              )}
+                            </button>
+                            <button
+                              onClick={e => {
+                                e.stopPropagation();
+                                setDeleteTarget(file);
+                                setActiveMenuKey(null);
+                              }}
+                              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                            >
+                              <Trash2 className="h-4 w-4" />
+                              <span>Delete</span>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                      
                       {isImage(file.type) && (
-                        <div className="absolute top-2 right-2 bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="absolute top-2 left-2 md:top-2 md:right-2 md:left-auto bg-black/50 text-white text-[10px] px-1.5 py-0.5 rounded font-medium">
                           {formatSize(file.size)}
                         </div>
                       )}
