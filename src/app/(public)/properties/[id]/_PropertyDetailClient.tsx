@@ -495,9 +495,11 @@ export default function PropertyDetails({
 
             <div className="lg:hidden bg-white rounded-xl shadow-sm p-8 border border-gray-100">
               <h2 className="text-2xl font-bold text-gray-900 mb-4">Description</h2>
-              <p className="text-gray-600 leading-relaxed text-lg">
-                {property.description}
-              </p>
+              <div className="text-gray-600 leading-relaxed text-lg space-y-3">
+                {property.description.split('\n').map((line, i) =>
+                  line.trim() === '' ? <br key={i} /> : <p key={i}>{line}</p>
+                )}
+              </div>
             </div>
 
             {property.video_url ? (
