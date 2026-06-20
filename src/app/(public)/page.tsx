@@ -4,7 +4,9 @@ import { getFeaturedProperties, getPropertiesGallery } from '@/lib/repositories/
 import { getBaseUrl } from '@/lib/config';
 
 export const metadata: Metadata = {
-  title: 'Hass Properties - Homes, Lands, Plots, Cars & Rentals in Fort Portal',
+  title: {
+    absolute: 'Hass Properties - Homes, Lands, Plots, Cars & Rentals in Fort Portal',
+  },
   description: 'Find your dream property in Fort Portal Tourism City. Browse houses, land, apartments, commercial properties, cars and motorcycles for sale and rent.',
   openGraph: {
     title: 'Hass Properties - Fort Portal Properties',

@@ -10,8 +10,8 @@ export const revalidate = 3600;
 
 const BASE_URL = getBaseUrl();
 
-// Keep SEO title under 50 chars so "| Hass Properties" keeps total under 70
-function seoTitle(str: string, max = 50): string {
+// Keep SEO title under 48 chars so "| Hass Properties" stays well under 70
+function seoTitle(str: string, max = 48): string {
   if (str.length <= max) return str;
   return str.slice(0, max).trimEnd() + '…';
 }
