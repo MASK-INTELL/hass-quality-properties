@@ -125,6 +125,58 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
         </div>
       </section>
 
+      {/* Local Content & SEO Section */}
+<section className="py-16 bg-white border-t border-b border-gray-100">
+  <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="prose prose-lg max-w-none text-gray-700">
+      <h2 className="text-3xl font-bold text-gray-900 mb-6">
+        Why Invest in Fort Portal Tourism City – Uganda's Rising Real Estate Hub
+      </h2>
+      
+      <p className="lead text-xl text-gray-600 mb-6">
+        Nestled in the heart of the Pearl of Africa, <strong>Fort Portal</strong> is rapidly transforming into a premier destination for property investment. As the only tourism city in Uganda, it offers a unique blend of natural beauty, growing infrastructure, and unmatched potential for capital growth.
+      </p>
+
+      <h3 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+        Prime Location &amp; Growing Demand
+      </h3>
+      <p>
+        Fort Portal's strategic position near <strong>Kibale National Park</strong>—home to the highest concentration of primates in East Africa—and the breathtaking <strong>Rwenzori Mountains</strong> makes it a magnet for both tourists and expatriates. This constant influx of visitors and new residents drives a <strong>high demand for quality housing, commercial spaces, and land</strong>. By investing here, you are not just buying property; you are securing a piece of Uganda's most scenic and economically vibrant region.
+      </p>
+
+      <h3 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+        Affordable Luxury &amp; High Rental Yields
+      </h3>
+      <p>
+        Compared to Kampala, Fort Portal offers significantly <strong>lower entry prices</strong> for premium properties while delivering <strong>competitive rental yields</strong>. Whether you are looking for a <strong>luxury 4-bedroom residential home</strong>, a <strong>half-finished 2-bedroom house</strong> to complete to your taste, or a commercial plot in the town center, your investment here goes further. The growing tourism sector ensures a steady stream of short-term and long-term tenants, providing you with reliable passive income.
+      </p>
+
+      <h3 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+        A Safe, Green, and Connected Community
+      </h3>
+      <p>
+        Fort Portal is renowned for its <strong>clean, green environment</strong> and friendly community. With improving road networks, reliable utilities, and the upcoming Fort Portal Airport expansion, connectivity to the rest of Uganda and the East African region is set to improve dramatically. This makes it an <strong>ideal place for families, retirees, and entrepreneurs</strong> looking to enjoy a high quality of life away from the congestion of the capital.
+      </p>
+
+      <h3 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
+        Why Choose Hass Properties?
+      </h3>
+      <p>
+        At <strong>Hass Properties</strong>, we are not just agents; we are local experts dedicated to guiding you through every step of your property journey. From identifying the perfect plot to navigating legal processes and securing the best deals, our team offers <strong>personalized, transparent, and reliable service</strong>. We understand the Fort Portal market inside out and are committed to helping you find a property that perfectly matches your vision, budget, and lifestyle.
+      </p>
+
+      <div className="bg-emerald-50 p-6 rounded-xl mt-10 border border-emerald-200">
+        <h4 className="text-xl font-bold text-emerald-800 mb-2">
+          🏡 Ready to Make Your Move in Fort Portal?
+        </h4>
+        <p className="text-emerald-700 mb-0">
+          Contact Hass Properties today to <strong>schedule a private viewing</strong> or discuss your real estate needs. Let us help you unlock the door to your dream property in the heart of the Pearl of Africa.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
       {/* Property Gallery */}
       <PropertyGallery items={galleryProperties} />
 
