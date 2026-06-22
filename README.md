@@ -34,62 +34,69 @@
 
 ## 🧐 About The Project
 
-**HASS Quality Properties** is a high-performance, enterprise-grade real estate management ecosystem. 
+**Hass Properties** is a high-performance, enterprise-grade real estate management ecosystem.
 Developed by **MASK INTELLIGENCE**, this platform bridges the gap between premium property owners and discerning buyers/renters through a sophisticated digital interface.
 
 ### The Problem
-Real estate market has traditionally relied on fragmented brokerage systems and informal listings, leading to transparency issues, outdated data, and poor user experiences for high-end clients.
+The Ugandan (and broader East African) real estate market has traditionally relied on fragmented brokerage systems and informal listings, leading to transparency issues, outdated data, and poor user experiences for high-end clients.
 
 ### Our Solution
-We have architected a centralized "Source of Truth" for premium listings. By leveraging a modern tech stack (React, TypeScript, and PostgreSQL), we ensure:
+We have architected a centralized "Source of Truth" for premium listings. By leveraging a modern tech stack (Next.js, TypeScript, and PostgreSQL), we ensure:
 - **Data Integrity**: Type-safe operations across the entire stack.
 - **Performance**: Optimized rendering and lightning-fast search queries.
 - **Scalability**: A modular architecture ready to handle thousands of concurrent listings and inquiries.
 
 ### 🛠 Built With
 
+*   ![Next.js](https://img.shields.io/badge/next.js-%23000000.svg?style=for-the-badge&logo=next.js&logoColor=white) - React Framework
 *   ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) - Frontend UI Library
 *   ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) - Type Safety & Developer Experience
 *   ![PostgreSQL](https://img.shields.io/badge/postgres-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white) - Relational Database
+*   ![Neon](https://img.shields.io/badge/neon-%234169E1.svg?style=for-the-badge&logo=neon&logoColor=white) - Serverless PostgreSQL
 *   ![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white) - Styling & Responsive Design
-*   ![Prisma](https://img.shields.io/badge/Prisma-3982CE?style=for-the-badge&logo=Prisma&logoColor=white) - Modern ORM (Recommended for the stack)
+*   ![Supabase](https://img.shields.io/badge/supabase-%233FCF8E.svg?style=for-the-badge&logo=supabase&logoColor=white) - Authentication
+*   ![Cloudflare R2](https://img.shields.io/badge/cloudflare%20r2-%23F38020.svg?style=for-the-badge&logo=cloudflare&logoColor=white) - Object Storage
+*   ![Zod](https://img.shields.io/badge/zod-%233067B1.svg?style=for-the-badge&logo=zod&logoColor=white) - Schema Validation
 
 ---
 
 ## ✨ Key Features
 
 ### 🏢 Property Listing Management
-Dynamic CRUD operations for properties. Admins can upload high-resolution images, set pricing tiers, and define specific property attributes (e.g., acreage, number of bedrooms, proximity to Kampal[...]
+Dynamic CRUD operations for properties. Admins can upload high-resolution images, set pricing tiers, and define specific property attributes (e.g., acreage, number of bedrooms, property type).
 
 ### 🔍 Advanced Search & Filtering
 A multi-faceted search engine allowing users to filter by:
 - **Location**: Specific districts and suburbs within Uganda.
 - **Price Range**: Flexible currency handling.
-- **Property Type**: Commercial, Residential, or Land.
-- **Status**: Available, Under Contract, or Sold.
+- **Property Type**: Land, Homes, Rentals, Vehicles.
+- **Status**: For Sale, For Rent, Sold.
 
 ### 📊 Admin Dashboard & Analytics
 A comprehensive command center for stakeholders.
 - **Inquiry Tracking**: Monitor lead conversion rates.
-- **Inventory Overview**: Visual representation of property distribution.
-- **User Activity**: Heatmaps of which properties are gaining the most traction.
+- **Inventory Overview**: Manage all property listings.
+- **Testimonials**: Approve/reject client reviews.
+- **Site Statistics**: Manage displayed metrics (experience, properties sold, clients, etc.).
+- **Media Manager**: Upload and manage images/videos.
 
-### 🔐 User Authentication, Security & Configuration.
-Implemented using battle tested supabase auth, Go to *Supabase.com*, **Create an account** - **Create a project** in that account with your preferred name, After creating the project, copy these *[...]
-VITE_SUPABASE_URL="your_supabase_project_url"
-VITE_SUPABASE_ANON_KEY="your_supabase_anon_key"
-
-Inside your project in supabase, Click Menu located at top right - then Go to **Authentication**, Click Add user and create a user using your **email address** + a **password** you will remember, [...]
-
-### The Admin is Available at https://your-domain.com/#/admin
-You Just Need To Add **/#/admin** at the end of your site domain, whether you deployed the site with **GitHub pages**, **Vercel** or anywhere, Just add that at the end of the url you're provided.
-
-### For database tables: Copy and Paste (DATABASE SCHEMA)
-    In your supabase Project, Click the Menu icon at top right then Go to SQL Editor, paste what you copied in DATABASE SCHEMA file and Click run to create the needed schemas...
-  
+### 🔐 User Authentication & Security
+- Supabase Auth with email/password authentication.
+- Admin access restricted by email whitelist (`ADMIN_EMAILS`).
+- CSRF protection on all public API routes.
+- Rate limiting on inquiry submission and file upload.
+- Security headers (CSP, HSTS, X-Frame-Options) set via middleware.
+- File upload validation with magic byte detection.
 
 ### 📱 Responsive Web UI
 A "Mobile-First" design philosophy ensuring that the platform looks stunning on everything from high-end desktop monitors to entry-level smartphones used by field agents.
+
+### 🌐 SEO & PWA
+- Dynamic XML sitemap generation.
+- OpenGraph and Twitter Card meta tags.
+- JSON-LD structured data (RealEstateListing, Product schemas).
+- Bing IndexNow instant search notification.
+- Progressive Web App with service worker for offline support.
 
 ---
 
@@ -98,33 +105,49 @@ A "Mobile-First" design philosophy ensuring that the platform looks stunning on 
 ### Prerequisites
 Before you begin, ensure you have the following installed:
 - **Node.js**: v18.x or higher
-- **npm** or **pnpm**: v8.x or higher
-- **PostgreSQL**: v14.x or higher (or Docker)
+- **npm**: v8.x or higher
 - **Git**
 
 ### Installation
 
-1.  **Clone or simply Fork the repository**
+1.  **Clone or fork the repository**
     ```bash
     git clone https://github.com/maskintell/hassqualityproperties.git
-    cd hassqualityproperties
+    cd hass-properties
     ```
 
 2.  **Install Dependencies**
     ```bash
     npm install
-    # or if using pnpm
-    pnpm install
     ```
 
-3.  **Database Setup**
-    Copy and Paste (DATABASE SCHEMA)
-    in your supabase SQL Editor and run in to create the needed schemas...
-  
-  5.  **Start Development Server**
+3.  **Set Up Environment Variables**
+    Copy `.env.example` to `.env` and fill in your credentials:
+    ```bash
+    cp .env.example .env
+    ```
+    Required variables:
+    - `DATABASE_URL` — Your Neon (PostgreSQL) connection string
+    - `NEXT_PUBLIC_SUPABASE_URL` — Your Supabase project URL
+    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` — Your Supabase anonymous key
+    - `SUPABASE_SERVICE_ROLE_KEY` — Your Supabase service role key
+    - `ADMIN_EMAILS` — Comma-separated admin email addresses
+    - `R2_*` — Cloudflare R2 storage credentials (account ID, access key, secret, bucket name, public URL)
+
+4.  **Set Up the Database**
+    Run the schema file in your Neon database's SQL editor or via `psql`:
+    ```bash
+    psql $DATABASE_URL -f src/db/schema.sql
+    ```
+
+5.  **Start Development Server**
     ```bash
     npm run dev
     ```
+    The app will be available at `http://localhost:3000`.
+
+6.  **Create an Admin User**
+    In your Supabase dashboard, go to **Authentication > Users** and create a user using the email you added to `ADMIN_EMAILS`. The admin dashboard is available at `http://localhost:3000/admin`.
 
 ---
 
@@ -134,12 +157,10 @@ Before you begin, ensure you have the following installed:
 To fetch the latest premium listings from the backend:
 
 ```typescript
-import axios from 'axios';
-
 const fetchProperties = async (filter: string) => {
   try {
-    const response = await axios.get(`/api/properties?category=${filter}`);
-    return response.data;
+    const response = await fetch(`/api/properties?category=${filter}`);
+    return await response.json();
   } catch (error) {
     console.error("Failed to fetch properties:", error);
   }
@@ -148,20 +169,20 @@ const fetchProperties = async (filter: string) => {
 
 ### Creating a New Listing (Admin)
 The platform uses a multi-step form for property creation to ensure data completeness:
-1. **Basic Info**: Title, Description, Price.
-2. **Media**: Image uploads via Cloudinary.
-3. **Location**: Integration with Google Maps API for precise coordinates.
+1. **Basic Info**: Title, Description, Price, Location.
+2. **Media**: Image uploads via Cloudflare R2.
+3. **Details**: Property attributes (bedrooms, acreage, etc.).
 4. **Publish**: Toggle visibility on the public marketplace.
 
 ---
 
 ## 🗺 Roadmap
 
-- [ ]  **Phase 1**: Core MVP - Listing and Search functionality. (Completed)
-- [ ]  **Phase 2**: Advanced Analytics Dashboard for Admins.
-- [ ]  **Phase 3**: Integration in Payment Gateway's.
-- [ ]  **Phase 4**: AI-powered Property Valuation Tool.
-- [ ]  **Phase 5**: Mobile App (React Native) for iOS and Android.
+- [x] **Phase 1**: Core MVP - Listing, Search, Admin Dashboard. (Completed)
+- [ ] **Phase 2**: Advanced Analytics Dashboard for Admins.
+- [ ] **Phase 3**: Payment Gateway Integration.
+- [ ] **Phase 4**: AI-powered Property Valuation Tool.
+- [ ] **Phase 5**: Mobile App (React Native) for iOS and Android.
 
 ---
 
@@ -196,12 +217,18 @@ Distributed under the **Unlicense**. See `LICENSE` for more information.
 
 ## 💖 Acknowledgments
 
-*   [Lucide React](https://lucide.dev/) - For the beautiful iconography.
-*   [React Query](https://tanstack.com/query/latest) - For powerful data fetching.
-*   [Shadcn/UI](https://ui.shadcn.com/) - For the accessible UI components.
-*   [Prisma](https://www.prisma.io/) - For making database management effortless.
+*   [Next.js](https://nextjs.org/) - React framework for production.
+*   [Tailwind CSS](https://tailwindcss.com/) - Utility-first CSS framework.
+*   [Neon](https://neon.tech/) - Serverless PostgreSQL.
+*   [Supabase](https://supabase.com/) - Authentication and backend.
+*   [Cloudflare R2](https://www.cloudflare.com/developer-platform/r2/) - Object storage.
+*   [Zod](https://zod.dev/) - TypeScript-first schema validation.
+*   [Motion](https://motion.dev/) - Animation library.
+*   [Lucide React](https://lucide.dev/) - Beautiful iconography.
+*   [Resend](https://resend.com/) - Email API.
 
 ---
+
 <div align="center">
     <i>Built with ❤️ in Uganda by MASK INTELLIGENCE.</i>
 </div>
