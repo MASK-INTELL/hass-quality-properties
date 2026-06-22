@@ -10,7 +10,7 @@ function restoreScroll(key: string) {
   if (targetY <= 0) return;
 
   let attempts = 0;
-  const maxAttempts = 30;
+  const maxAttempts = 50;
   const poll = () => {
     if (document.body.scrollHeight > targetY || attempts >= maxAttempts) {
       window.scrollTo(0, targetY);
@@ -24,25 +24,25 @@ function restoreScroll(key: string) {
 
 export default function ScrollRestore() {
   const pathname = usePathname();
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>(undefined);
+  const restoreKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
     history.scrollRestoration = 'manual';
-
-    const onPageShow = () => {
-      restoreScroll(window.location.pathname);
-    };
-    window.addEventListener('pageshow', onPageShow);
-    return () => {
-      window.removeEventListener('pageshow', onPageShow);
-      history.scrollRestoration = 'auto';
-    };
-  }, [pathname]);
+    return () => { history.scrollRestoration = 'auto'; };
+  }, []);
 
   useEffect(() => {
-    restoreScroll(pathname);
+    const key = pathname;
+    restoreKeyRef.current = key;
+    requestAnimationFrame(() => {
+      if (restoreKeyRef.current === key) {
+        restoreScroll(key);
+      }
+    });
+
     return () => {
-      sessionStorage.setItem('scroll:' + pathname, String(window.scrollY));
+      sessionStorage.setItem('scroll:' + key, String(window.scrollY));
     };
   }, [pathname]);
 

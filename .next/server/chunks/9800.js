@@ -1,0 +1,63 @@
+"use strict";exports.id=9800,exports.ids=[9800],exports.modules={15379:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("maximize",[["path",{d:"M8 3H5a2 2 0 0 0-2 2v3",key:"1dcmit"}],["path",{d:"M21 8V5a2 2 0 0 0-2-2h-3",key:"1e4gt3"}],["path",{d:"M3 16v3a2 2 0 0 0 2 2h3",key:"wsl5sc"}],["path",{d:"M16 21h3a2 2 0 0 0 2-2v-3",key:"18trek"}]])},15982:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("mail",[["path",{d:"m22 7-8.991 5.727a2 2 0 0 1-2.009 0L2 7",key:"132q7q"}],["rect",{x:"2",y:"4",width:"20",height:"16",rx:"2",key:"izxlao"}]])},23673:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("heart",[["path",{d:"M2 9.5a5.5 5.5 0 0 1 9.591-3.676.56.56 0 0 0 .818 0A5.49 5.49 0 0 1 22 9.5c0 2.29-1.5 4-3 5.5l-5.492 5.313a2 2 0 0 1-3 .019L5 15c-1.5-1.5-3-3.2-3-5.5",key:"mvr1a0"}]])},30087:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("car",[["path",{d:"M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2",key:"5owen"}],["circle",{cx:"7",cy:"17",r:"2",key:"u2ysq9"}],["path",{d:"M9 17h6",key:"r8uit2"}],["circle",{cx:"17",cy:"17",r:"2",key:"axvx0g"}]])},35430:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("bed",[["path",{d:"M2 4v16",key:"vw9hq8"}],["path",{d:"M2 8h18a2 2 0 0 1 2 2v10",key:"1dgv2r"}],["path",{d:"M2 17h20",key:"18nfp3"}],["path",{d:"M6 8v9",key:"1yriud"}]])},35552:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(9608).lw)(process.env.DATABASE_URL)},43718:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("key",[["path",{d:"m15.5 7.5 2.3 2.3a1 1 0 0 0 1.4 0l2.1-2.1a1 1 0 0 0 0-1.4L19 4",key:"g0fldk"}],["path",{d:"m21 2-9.6 9.6",key:"1j0ho8"}],["circle",{cx:"7.5",cy:"15.5",r:"5.5",key:"yqb3hr"}]])},43988:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("bike",[["circle",{cx:"18.5",cy:"17.5",r:"3.5",key:"15x4ox"}],["circle",{cx:"5.5",cy:"17.5",r:"3.5",key:"1noe27"}],["circle",{cx:"15",cy:"5",r:"1",key:"19l28e"}],["path",{d:"M12 17.5V14l-3-3 4-3 2 3h2",key:"1npguv"}]])},49407:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("map",[["path",{d:"M14.106 5.553a2 2 0 0 0 1.788 0l3.659-1.83A1 1 0 0 1 21 4.619v12.764a1 1 0 0 1-.553.894l-4.553 2.277a2 2 0 0 1-1.788 0l-4.212-2.106a2 2 0 0 0-1.788 0l-3.659 1.83A1 1 0 0 1 3 19.381V6.618a1 1 0 0 1 .553-.894l4.553-2.277a2 2 0 0 1 1.788 0z",key:"169xi5"}],["path",{d:"M15 5.764v15",key:"1pn4in"}],["path",{d:"M9 3.236v15",key:"1uimfh"}]])},66284:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("bath",[["path",{d:"M10 4 8 6",key:"1rru8s"}],["path",{d:"M17 19v2",key:"ts1sot"}],["path",{d:"M2 12h20",key:"9i4pu4"}],["path",{d:"M7 19v2",key:"12npes"}],["path",{d:"M9 5 7.621 3.621A2.121 2.121 0 0 0 4 5v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5",key:"14ym8i"}]])},69200:(a,b,c)=>{c.d(b,{$x:()=>k,BJ:()=>l,IL:()=>j,Xc:()=>e,cL:()=>m,pw:()=>h,qz:()=>g,ty:()=>i,wH:()=>f,wx:()=>n});var d=c(35552);async function e(){return await (0,d.A)`SELECT * FROM properties ORDER BY CASE WHEN status = 'Sold' THEN 1 ELSE 0 END, created_at DESC`}async function f(a=6){return await (0,d.A)`SELECT * FROM properties WHERE featured = true ORDER BY created_at DESC LIMIT ${a}`}async function g(a){let[b]=await (0,d.A)`SELECT * FROM properties WHERE id = ${a}`;return b||null}async function h(a,b,c,e=12){return await (0,d.A)`
+    SELECT *
+    FROM properties
+    WHERE id != ${c} AND status != 'Sold'
+    ORDER BY
+      CASE
+        WHEN category = ${a} AND location ILIKE '%' || COALESCE(${b}, '') || '%' THEN 0
+        WHEN category = ${a} THEN 1
+        ELSE 2
+      END,
+      created_at DESC
+    LIMIT ${e}
+  `}async function i(a,b,c){let e=await (0,d.A)`SELECT * FROM properties ORDER BY CASE WHEN status = 'Sold' THEN 1 ELSE 0 END, created_at DESC`;if(c?.search){let a=c.search.toLowerCase();e=e.filter(b=>b.title.toLowerCase().includes(a)||b.location.toLowerCase().includes(a))}c?.category&&"All"!==c.category&&(e=e.filter(a=>a.category===c.category)),c?.status&&"All"!==c.status&&(e=e.filter(a=>a.status===c.status));let f=e.length,g=(a-1)*b;return{data:e.slice(g,g+b),total:f}}async function j(a){let b=a.image_metadata?JSON.stringify(a.image_metadata):null,c=Array.isArray(a.images)?a.images:null,[e]=await (0,d.A)`
+    INSERT INTO properties (
+      title, description, price, location, category, type, status, featured,
+      image_url, images, image_metadata, video_url, beds, baths, area,
+      make, model, year, mileage, transmission, fuel_type
+    ) VALUES (
+      ${a.title}, ${a.description}, ${a.price}, ${a.location},
+      ${a.category}, ${a.type}, ${a.status}, ${a.featured??!1},
+      ${a.image_url}, ${c}::text[], ${b}, ${a.video_url||null},
+      ${a.beds||null}, ${a.baths||null}, ${a.area||null},
+      ${a.make||null}, ${a.model||null}, ${a.year||null},
+      ${a.mileage||null}, ${a.transmission||null}, ${a.fuel_type||null}
+    ) RETURNING *
+  `;return e}async function k(a,b){let c=void 0!==b.image_metadata?JSON.stringify(b.image_metadata):null,e=Array.isArray(b.images)?b.images:null,[f]=await (0,d.A)`
+    UPDATE properties SET
+      title = COALESCE(${b.title}, title),
+      description = COALESCE(${b.description}, description),
+      price = COALESCE(${b.price}, price),
+      location = COALESCE(${b.location}, location),
+      category = COALESCE(${b.category}, category),
+      type = COALESCE(${b.type}, type),
+      status = COALESCE(${b.status}, status),
+      image_url = COALESCE(${b.image_url}, image_url),
+      featured = COALESCE(${b.featured}, featured),
+      images = COALESCE(${e}::text[], images),
+      image_metadata = COALESCE(${c}::jsonb, image_metadata),
+      video_url = COALESCE(${b.video_url||null}, video_url),
+      beds = COALESCE(${b.beds||null}, beds),
+      baths = COALESCE(${b.baths||null}, baths),
+      area = COALESCE(${b.area||null}, area),
+      make = COALESCE(${b.make||null}, make),
+      model = COALESCE(${b.model||null}, model),
+      year = COALESCE(${b.year||null}, year),
+      mileage = COALESCE(${b.mileage||null}, mileage),
+      transmission = COALESCE(${b.transmission||null}, transmission),
+      fuel_type = COALESCE(${b.fuel_type||null}, fuel_type),
+      updated_at = NOW()
+    WHERE id = ${a}
+    RETURNING *
+  `;return f||null}async function l(a){return(await (0,d.A)`DELETE FROM properties WHERE id = ${a} RETURNING id`).length>0}async function m(a=10){return await (0,d.A)`
+    SELECT id, title, price, status, image_url 
+    FROM properties 
+    ORDER BY CASE WHEN status = 'Sold' THEN 1 ELSE 0 END, created_at DESC LIMIT ${a}
+  `}async function n(){let[a]=await (0,d.A)`
+    SELECT
+      COUNT(*)::int AS "totalProperties",
+      COUNT(*) FILTER (WHERE status = 'For Sale')::int AS "forSale",
+      COUNT(*) FILTER (WHERE status = 'For Rent')::int AS "forRent",
+      COUNT(*) FILTER (WHERE category IN ('Cars', 'Motorcycles'))::int AS "vehicles"
+    FROM properties
+  `;return a}},69957:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("map-pin",[["path",{d:"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0",key:"1r0f0z"}],["circle",{cx:"12",cy:"10",r:"3",key:"ilqhr7"}]])},71213:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("phone",[["path",{d:"M13.832 16.568a1 1 0 0 0 1.213-.303l.355-.465A2 2 0 0 1 17 15h3a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2A18 18 0 0 1 2 4a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v3a2 2 0 0 1-.8 1.6l-.468.351a1 1 0 0 0-.292 1.233 14 14 0 0 0 6.392 6.384",key:"9njp5v"}]])},72510:(a,b,c)=>{c.d(b,{A:()=>t});var d=c(21124),e=c(24515),f=c(23673),g=c(87278),h=c(69957),i=c(35430),j=c(66284),k=c(15379),l=c(23339);let m=(0,l.A)("calendar",[["path",{d:"M8 2v4",key:"1cmpym"}],["path",{d:"M16 2v4",key:"4m81vk"}],["rect",{width:"18",height:"18",x:"3",y:"4",rx:"2",key:"1hopcy"}],["path",{d:"M3 10h18",key:"8toen8"}]]),n=(0,l.A)("gauge",[["path",{d:"m12 14 4-4",key:"9kzdfg"}],["path",{d:"M3.34 19a10 10 0 1 1 17.32 0",key:"19p75a"}]]),o=(0,l.A)("settings-2",[["path",{d:"M14 17H5",key:"gfn3mx"}],["path",{d:"M19 7h-9",key:"6i9tg"}],["circle",{cx:"17",cy:"17",r:"3",key:"18b49y"}],["circle",{cx:"7",cy:"7",r:"3",key:"dfmy0x"}]]);var p=c(75535),q=c(3991),r=c.n(q),s=c(46032);function t({property:a}){let{isFavorite:b,toggleFavorite:c}=(0,s.r)(),l=b(a.id),q=()=>{sessionStorage.setItem("propertiesSearchParams",window.location.search)};return(0,d.jsxs)("article",{className:"bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col h-full",children:[(0,d.jsxs)("div",{className:"relative h-64 overflow-hidden group",children:[(0,d.jsxs)(r(),{href:`/properties/${a.id}`,className:"block w-full h-full",onClick:q,children:[(0,d.jsx)(e.default,{fill:!0,src:a.image_url,alt:a.image_metadata?.find(b=>b.url===a.image_url)?.alt||a.title,className:"object-cover transform group-hover:scale-105 transition-transform duration-500",sizes:"(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"}),(0,d.jsx)("div",{className:"absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4",children:(0,d.jsx)("p",{className:"text-white font-bold text-lg",children:a.price})})]}),(0,d.jsx)("div",{className:"absolute top-4 left-4 bg-emerald-700 text-white px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide pointer-events-none",children:a.status}),(0,d.jsx)("button",{onClick:b=>c(a.id,b),className:"absolute top-4 right-4 p-2 rounded-full bg-white/80 hover:bg-white text-gray-500 hover:text-red-500 transition-colors backdrop-blur-sm z-10",children:(0,d.jsx)(f.A,{className:`h-5 w-5 ${l?"fill-red-500 text-red-500":""}`})}),a.video_url&&(0,d.jsx)("div",{className:"absolute top-4 right-14 p-2 rounded-full bg-black/50 text-white backdrop-blur-sm z-10 pointer-events-none",title:"Video Tour Available",children:(0,d.jsx)(g.A,{className:"h-5 w-5"})})]}),(0,d.jsxs)("div",{className:"p-5 flex flex-col flex-grow",children:[(0,d.jsx)("div",{className:"flex items-center gap-2 text-emerald-600 text-xs font-semibold uppercase tracking-wider mb-2",children:(0,d.jsx)("span",{children:a.type})}),(0,d.jsx)(r(),{href:`/properties/${a.id}`,onClick:q,children:(0,d.jsx)("h3",{className:"text-xl font-bold text-gray-900 mb-2 line-clamp-3 hover:text-emerald-600 transition-colors",title:a.title,children:a.title})}),(0,d.jsxs)("div",{className:"flex items-center gap-1 text-gray-500 text-sm mb-4",children:[(0,d.jsx)(h.A,{className:"h-4 w-4"}),(0,d.jsx)("span",{className:"truncate",children:a.location})]}),(0,d.jsxs)("div",{className:"flex items-center justify-between border-t border-gray-100 pt-4 mt-auto",children:[(0,d.jsx)("div",{className:"flex gap-4",children:["Homes","Lands","Plots","Rentals"].includes(a.category)?(0,d.jsxs)(d.Fragment,{children:[a.beds&&(0,d.jsxs)("div",{className:"flex items-center gap-1 text-gray-600 text-sm",title:"Bedrooms",children:[(0,d.jsx)(i.A,{className:"h-4 w-4"}),(0,d.jsx)("span",{children:a.beds})]}),a.baths&&(0,d.jsxs)("div",{className:"flex items-center gap-1 text-gray-600 text-sm",title:"Bathrooms",children:[(0,d.jsx)(j.A,{className:"h-4 w-4"}),(0,d.jsx)("span",{children:a.baths})]}),a.area&&(0,d.jsxs)("div",{className:"flex items-center gap-1 text-gray-600 text-sm",title:"Area",children:[(0,d.jsx)(k.A,{className:"h-4 w-4"}),(0,d.jsx)("span",{children:a.area})]})]}):(0,d.jsxs)(d.Fragment,{children:[a.year&&(0,d.jsxs)("div",{className:"flex items-center gap-1 text-gray-600 text-sm",title:"Year",children:[(0,d.jsx)(m,{className:"h-4 w-4"}),(0,d.jsx)("span",{children:a.year})]}),a.mileage&&(0,d.jsxs)("div",{className:"flex items-center gap-1 text-gray-600 text-sm",title:"Mileage",children:[(0,d.jsx)(n,{className:"h-4 w-4"}),(0,d.jsx)("span",{children:a.mileage})]}),a.transmission&&(0,d.jsxs)("div",{className:"flex items-center gap-1 text-gray-600 text-sm",title:"Transmission",children:[(0,d.jsx)(o,{className:"h-4 w-4"}),(0,d.jsx)("span",{children:a.transmission})]})]})}),(0,d.jsx)(r(),{href:`/properties/${a.id}`,className:"p-2 rounded-full bg-gray-50 text-emerald-600 hover:bg-emerald-50 transition-colors",onClick:q,children:(0,d.jsx)(p.A,{className:"h-5 w-5"})})]})]})]})}},75535:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("arrow-right",[["path",{d:"M5 12h14",key:"1ays0h"}],["path",{d:"m12 5 7 7-7 7",key:"xquz4c"}]])},78733:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("house",[["path",{d:"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8",key:"5wwlr5"}],["path",{d:"M3 10a2 2 0 0 1 .709-1.528l7-6a2 2 0 0 1 2.582 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z",key:"r6nss1"}]])},87278:(a,b,c)=>{c.d(b,{A:()=>d});let d=(0,c(23339).A)("video",[["path",{d:"m16 13 5.223 3.482a.5.5 0 0 0 .777-.416V7.87a.5.5 0 0 0-.752-.432L16 10.5",key:"ftymec"}],["rect",{x:"2",y:"6",width:"14",height:"12",rx:"2",key:"158x01"}]])}};
