@@ -1,0 +1,7 @@
+{
+  "name": "OpenCode Web Environment",
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "features": { "ghcr.io/devcontainers/features/node:1": { "version": "lts" } },
+  "forwardPorts": [3000],
+  "postStartCommand": "npx -y opencode-ai@latest web --mdns --port 3000"
+}
