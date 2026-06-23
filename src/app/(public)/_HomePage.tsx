@@ -164,15 +164,6 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
       <p>
         At <strong>Hass Properties</strong>, we are not just agents; we are local experts dedicated to guiding you through every step of your property journey. From identifying the perfect plot to navigating legal processes and securing the best deals, our team offers <strong>personalized, transparent, and reliable service</strong>. We understand the Fort Portal market inside out and are committed to helping you find a property that perfectly matches your vision, budget, and lifestyle.
       </p>
-
-      <div className="bg-emerald-50 p-6 rounded-xl mt-10 border border-emerald-200">
-        <h4 className="text-xl font-bold text-emerald-800 mb-2">
-          🏡 Ready to Make Your Move in Fort Portal?
-        </h4>
-        <p className="text-emerald-700 mb-0">
-          Contact Hass Properties today to <strong>schedule a private viewing</strong> or discuss your real estate needs. Let us help you unlock the door to your dream property in the heart of the Pearl of Africa.
-        </p>
-      </div>
     </div>
   </div>
 </section>
@@ -253,7 +244,7 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
             href="/contact"
             className="inline-block px-8 py-4 bg-white text-emerald-900 rounded-full font-bold text-lg hover:bg-gray-100 transition-colors shadow-lg"
           >
-            Get Started Now
+            Book A Free Viewing Now
           </Link>
         </div>
       </section>
