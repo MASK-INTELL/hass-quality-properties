@@ -125,7 +125,7 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
         </div>
       </section>
 
-      {/* Local Content & SEO Section */}
+      {/* Local Knowledge Section */}
 <section className="py-16 bg-white border-t border-b border-gray-100">
   <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div className="prose prose-lg max-w-none text-gray-700">
@@ -159,7 +159,7 @@ export default function Home({ featuredProperties, galleryProperties }: HomePage
       </p>
 
       <h3 className="text-2xl font-semibold text-gray-800 mt-8 mb-4">
-        Why Choose Hass Properties?
+        Became A Partner Of Hass Properties Today?
       </h3>
       <p>
         At <strong>Hass Properties</strong>, we are not just agents; we are local experts dedicated to guiding you through every step of your property journey. From identifying the perfect plot to navigating legal processes and securing the best deals, our team offers <strong>personalized, transparent, and reliable service</strong>. We understand the Fort Portal market inside out and are committed to helping you find a property that perfectly matches your vision, budget, and lifestyle.
